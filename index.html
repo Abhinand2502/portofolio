@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="dark"> <!-- Default opens in dark mode -->
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -8,226 +8,96 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
+    /* =====================
+       Theme variables
+       ===================== */
     :root{
       --header-h:64px;
       --primary:#e14a2a;
-      --white:#ffffff;
-      --black:#0b0b0b;
-      --muted:#f3f4f3;
-      --glass-bg: rgba(255,255,255,0.06);
+      --bg:#ffffff;
+      --panel:#f5f7fa;
+      --muted:#f3f4f6;
+      --text:#0b0b0b;
+      --glass: rgba(0,0,0,0.06);
+      --glass-strong: rgba(0,0,0,0.08);
+      --card-shadow: 0 8px 30px rgba(16,24,40,0.06);
+    }
+    html[data-theme="dark"]{
+      --bg:#0b0b0b;
+      --panel:#0f0f12;
+      --muted:#0f0f12;
+      --text:#f7f7f8;
+      --glass: rgba(255,255,255,0.04);
+      --glass-strong: rgba(255,255,255,0.06);
+      --card-shadow: 0 10px 40px rgba(0,0,0,0.6);
     }
 
-    /* RESET + layout basics */
+    /* reset */
     *,*::before,*::after{box-sizing:border-box}
     html,body{height:100%;margin:0;padding:0}
-    html{scroll-behavior:smooth}
-    body{
-      font-family:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;
-      -webkit-font-smoothing:antialiased;
-      overscroll-behavior-y:contain;
-      background:var(--white);
-      color:var(--black);
-      scroll-snap-type: none !important;
-    }
+    body{font-family:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;background:var(--bg);color:var(--text);line-height:1.45}
 
-    /* Dark / light basics */
-    html.dark body{background:var(--black);color:var(--white)}
-    header{
-      position:fixed;top:0;left:0;right:0;height:var(--header-h);
-      display:flex;align-items:center;justify-content:space-between;
-      padding:0 20px;z-index:1200;
-      background: rgba(0,0,0,0.55);
-      color:var(--white);
-      border-bottom:1px solid rgba(255,255,255,0.08);
-      backdrop-filter: blur(6px);
-    }
-    html:not(.dark) header{
-      background: #fff !important;
-      color: var(--black) !important;
-      border-bottom:1px solid rgba(0,0,0,0.06) !important;
-    }
+    /* fullpage snap */
+    body{scroll-snap-type:y mandatory; scroll-padding-top:var(--header-h); overflow:auto}
+    section{scroll-snap-align:start;min-height:100vh}
 
-    .logo{font-family:'Playfair Display',serif;font-size:22px;color:var(--white)}
-    html:not(.dark) .logo{ color: var(--black) !important; }
-    nav{display:flex;gap:20px;align-items:center}
-    nav a{color:var(--white);text-decoration:none;font-weight:500}
-    html:not(.dark) nav a{ color:rgba(0,0,0,0.85) !important; }
+    /* header */
+    header{position:fixed;top:0;left:0;right:0;height:var(--header-h);display:flex;align-items:center;justify-content:space-between;padding:0 22px;z-index:1200;background:linear-gradient(180deg, rgba(255,255,255,0.65), rgba(255,255,255,0.5));backdrop-filter:blur(6px);box-shadow:var(--card-shadow)}
+    html[data-theme="dark"] header{background:linear-gradient(180deg, rgba(8,8,8,0.6), rgba(8,8,8,0.45));}
+
+    .logo{font-family:'Playfair Display',serif;font-size:20px;color:var(--text)}
+    nav{display:flex;gap:16px;align-items:center}
+    nav a{color:var(--text);text-decoration:none;padding:8px;border-radius:8px;font-weight:600}
+    nav a:hover{background:var(--panel)}
 
     .controls{display:flex;gap:12px;align-items:center}
-    .theme-btn{
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
-      color:var(--white);
-      font-size:16px;
-      cursor:pointer;
-      padding:8px 10px;
-      border-radius:10px;
-      display:inline-flex;align-items:center;gap:8px;
-      backdrop-filter: blur(4px);
-    }
-    html:not(.dark) .theme-btn{
-      background: rgba(0,0,0,0.04);
-      color:var(--black);
-      border-color: rgba(0,0,0,0.06);
-    }
+    .theme-btn{display:inline-flex;gap:10px;align-items:center;padding:8px 12px;border-radius:12px;border:1px solid var(--glass-strong);background:transparent;color:var(--text);cursor:pointer}
+    .menu-btn{display:none;background:none;border:0;color:var(--text);font-size:20px;cursor:pointer}
 
-    .menu-btn{display:none;background:none;border:0;color:var(--white);font-size:20px;cursor:pointer}
-    html:not(.dark) .menu-btn{ color:var(--black) !important; }
+    .section-inner{height:calc(100vh - var(--header-h));padding-top:var(--header-h);display:flex;align-items:center;position:relative;overflow:hidden}
 
-    section{min-height:100vh;display:block}
-    .section-inner{
-      height:calc(100vh - var(--header-h));
-      padding-top:var(--header-h);
-      display:flex;align-items:center;
-      overflow:hidden;
-      position:relative;
-    }
+    /* hero: 50/50 columns so right half is image */
+    .hero{display:grid;grid-template-columns:1fr 1fr;min-height:100%}
+    .hero-left{padding:72px 7vw;display:flex;align-items:flex-start}
+    .content{max-width:720px}
+    .kicker{letter-spacing:3px;color:var(--primary);font-weight:800;margin-bottom:14px;font-size:13px}
+    h1.headline{font-family:'Playfair Display',serif;font-size:48px;line-height:1.04;margin:0;color:var(--text)}
 
-    /* HERO layout */
-    .hero{display:flex;width:100%;max-width:100%;position:relative;overflow:hidden}
-    .hero-left{
-      flex: 1 1 55%;
-      min-width:0;
-      padding:56px 8vw;
-      display:flex;
-      align-items:flex-start;
-      z-index:5;
-      background: transparent;
-    }
-    .content{max-width:700px}
-    .kicker{letter-spacing:3px;color:var(--primary);font-weight:700;margin-bottom:18px;font-size:13px}
-    h1.headline{font-family:'Playfair Display',serif;font-size:48px;line-height:1.06;margin:0}
+    .hero-buttons{margin-top:24px;display:flex;gap:14px;flex-wrap:wrap}
+    .btn{padding:12px 20px;border-radius:10px;border:2px solid var(--glass);background:transparent;color:var(--text);font-weight:700;cursor:pointer}
+    .btn.primary{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 12px 30px rgba(225,74,42,0.12)}
 
-    .hero-buttons{margin-top:24px;display:flex;gap:18px;flex-wrap:wrap}
-    .btn{
-      padding:12px 22px;
-      border:2px solid currentColor;
-      background:transparent;
-      color:inherit;
-      font-weight:700;
-      cursor:pointer;
-      border-radius:8px;
-    }
-    .btn.primary{
-      background:var(--primary);
-      color:#fff;
-      border-color:var(--primary);
-      box-shadow: 0 8px 30px rgba(225,74,42,0.18);
-    }
+    .hero-right{position:relative;overflow:hidden;display:flex;align-items:stretch}
+    .hero-img{width:100%;height:100%;display:block;object-fit:cover;object-position:center;border-radius:0;min-height:100%;transition:transform .6s ease,opacity .35s}
+    .hero-placeholder{width:100%;height:100%;min-height:100%;background:linear-gradient(120deg,#222 0%, #333 100%)}
 
-    /* Right column */
-    .hero-right{
-      flex: 0 0 45%;
-      max-width:45%;
-      min-width:0;
-      position:relative;
-      display:flex;
-      align-items:stretch;
-      height:100%;
-      overflow:hidden;
-      z-index:3;
-    }
+    /* socials: top of image (left) large */
+    .socials{position:absolute;left:28px;top:24px;display:flex;flex-direction:row;gap:12px;z-index:18;padding:6px}
+    .socials a{display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:12px;background:rgba(0,0,0,0.5);color:#fff;text-decoration:none;font-size:20px;box-shadow:0 6px 18px rgba(0,0,0,0.3)}
+    html[data-theme="dark"] .socials a{background:rgba(255,255,255,0.06);color:var(--text)}
 
-    .hero-img{
-      width:100%;
-      height:100%;
-      background-position:center center;
-      background-size:cover;
-      background-repeat:no-repeat;
-      display:block;
-      flex:1 1 100%;
-      position:relative;
-      min-height: calc(100vh - var(--header-h));
-      transition:opacity .35s ease, transform .45s ease;
-    }
-    .hero-img::after{
-      /* gentle overlay to keep text readable when stacked on mobile */
-      content:'';
-      position:absolute;inset:0;
-      background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.45) 100%);
-      pointer-events:none;
-      opacity: .0;
-      transition:opacity .3s ease;
-    }
-    html.dark .hero-img::after{ opacity: 0.45; }
-    html:not(.dark) .hero-img::after{ opacity: 0.15; background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.06)); }
+    .cv-wrap{position:absolute;left:18px;bottom:18px;z-index:6}
+    .cv-btn{border:1px solid var(--glass-strong);background:transparent;color:var(--text);padding:8px 12px;border-radius:10px}
 
-    /* socials */
-    .socials{
-      position:absolute;
-      right:22px;
-      top:50%;
-      transform:translateY(-50%);
-      display:flex;flex-direction:column;gap:12px;
-      z-index:6;
-    }
-    .socials a{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:var(--glass-bg);color:#fff;text-decoration:none}
-    html:not(.dark) .socials a{ background: rgba(0,0,0,0.06); color: var(--black); }
-    .socials a:hover{opacity:.95; transform: translateY(-2px); transition: transform .18s ease, opacity .18s ease}
-
-    /* CV bottom-left */
-    .cv-wrap{
-      position:absolute;
-      left:22px;
-      bottom:22px;
-      z-index:6;
-      display:flex;align-items:center;justify-content:center;
-    }
-    .cv-line{height:1px;background:rgba(255,255,255,0.6);width:120px;margin-right:18px}
-    .cv-btn{border:2px solid rgba(255,255,255,0.9);background:transparent;color:#fff;padding:10px 22px;border-radius:8px}
-    html:not(.dark) .cv-btn{ color: var(--black); border-color: rgba(0,0,0,0.6); }
-
-    /* Animations */
-    .anim{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.9,.2,1)}
-    .in-view{opacity:1;transform:none}
-
-    /* Sections */
-    #about,#works,#contact{display:flex;align-items:center;justify-content:center;background:var(--muted)}
-    html.dark #about,html.dark #works,html.dark #contact{background:#111}
+    /* sections */
+    #about,#works,#contact{display:flex;align-items:center;justify-content:center;background:transparent}
     .box{max-width:980px;padding:44px}
 
-    /* Responsive: mobile stacks; now shows hero-right on mobile as a stacked image */
+    /* small screens: stack but keep image visible on top */
     @media(max-width:980px){
-      .hero{flex-direction:column;color:var(--white)}
-      /* show image on mobile above content */
-      .hero-right{
-        display:flex;
-        order:-1; /* show before hero-left */
-        width:100%;
-        max-width:100%;
-        height:40vh;
-      }
-      .hero-img{min-height:40vh;height:40vh;}
-      .hero-left{
-        flex:1;padding:28px 6vw;
-        /* keep a subtle translucent background so text is readable over the stacked image */
-        background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.0) 100%);
-      }
-      h1.headline{font-size:30px;color:inherit}
-      .btn{border-color:rgba(0,0,0,0.08);color:inherit}
-      .btn.primary{background:var(--primary)}
-      .logo{display:block}
+      .hero{display:flex;flex-direction:column-reverse}
+      .hero-right{height:44vh;order:-1}
+      .hero-left{padding:28px 6vw}
+      h1.headline{font-size:28px}
       .menu-btn{display:block}
       nav{display:none}
-      .mobile-nav{position:fixed;left:0;right:0;top:var(--header-h);background:#fff;display:none;z-index:1300}
-      .mobile-nav.open{display:block}
-      .mobile-nav a{display:block;padding:14px 18px;color:#111;text-decoration:none;border-top:1px solid rgba(0,0,0,0.06)}
-      html.dark .mobile-nav{background:#111;}
-      html.dark .mobile-nav a{color:#fff}
-      .section-inner{overflow:visible}
-      .hero { height: auto; min-height: calc(100vh - var(--header-h)); }
-      .socials{right:12px}
       .cv-wrap{display:none}
+      .socials{left:12px;top:12px}
+      .socials a{width:48px;height:48px;font-size:18px}
     }
 
-    @media(min-width:1400px){
-      .hero-left{padding:90px 12vw}
-      h1.headline{font-size:56px}
-    }
-
-    /* fallback gradient when no image found */
-    .hero-no-image { background: linear-gradient(120deg,#222 0%, #333 100%); }
-    .hero-img.hero-no-image::after{ opacity: 0.3; }
+    /* ensure contrast for light mode */
+    html:not([data-theme="dark"]) h1, html:not([data-theme="dark"]) p, html:not([data-theme="dark"]) nav a{color:var(--text)}
   </style>
 </head>
 <body>
@@ -244,53 +114,42 @@
 
     <div class="controls">
       <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
-        <span id="themeIcon"><i class="fa-solid fa-sun"></i></span>
+        <i id="themeIco" class="fa-solid fa-moon" aria-hidden="true"></i>
         <span id="themeLabel" style="font-size:13px;opacity:.9">Theme</span>
       </button>
     </div>
   </header>
 
-  <div class="mobile-nav" id="mobileNav" aria-hidden="true">
-    <a href="#intro">Intro</a>
-    <a href="#about">About</a>
-    <a href="#works">Works</a>
-    <a href="#contact">Contact</a>
-  </div>
-
   <!-- HERO -->
   <section id="intro">
     <div class="section-inner hero" id="heroSection">
-      <div class="hero-right" aria-hidden="false">
-        <!-- Right column image (desktop) — now visible on mobile too (stacked) -->
-        <div class="hero-img hero-no-image" id="heroImg" role="img" aria-label="Background image"></div>
-
-        <!-- socials -->
-        <div class="socials" aria-hidden="true">
-          <a href="#" title="facebook"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" title="twitter"><i class="fab fa-twitter"></i></a>
-          <a href="#" title="instagram"><i class="fab fa-instagram"></i></a>
-          <a href="#" title="github"><i class="fab fa-github"></i></a>
-        </div>
-      </div>
-
       <div class="hero-left">
         <div class="content">
           <div class="kicker anim">HELLO</div>
-
-          <!-- HOME description -->
           <h1 class="headline anim">I'm Jonathan Doe<br>a product designer<br>based in Somewhere.</h1>
-
+          <p class="anim" style="margin-top:16px;max-width:54ch;opacity:.92">I craft interfaces and build delightful, usable experiences. Replace this copy with your own intro — short and punchy.</p>
           <div class="hero-buttons anim">
-            <button class="btn primary">MORE ABOUT ME</button>
-            <button class="btn">GET IN TOUCH</button>
+            <!-- added ids to hook behavior -->
+            <button id="moreBtn" type="button" class="btn primary">MORE ABOUT ME</button>
+            <button id="contactBtn" type="button" class="btn">GET IN TOUCH</button>
           </div>
         </div>
+      </div>
 
-        <!-- cv bottom-left visually (kept inside left block for mobile) -->
-        <div class="cv-wrap" style="position:relative;left:auto;bottom:auto;margin-left:12px;display:none">
-          <div class="cv-line" style="display:none"></div>
-          <button class="cv-btn">GET MY CV</button>
+      <div class="hero-right">
+        <!-- image tag for reliability: update paths in JS below if image not found -->
+        <img id="heroImgTag" class="hero-img" alt="Hero image" src="" />
+        <div id="heroPlaceholder" class="hero-placeholder" aria-hidden="true"></div>
+
+        <!-- socials: mail, linkedin, instagram, github -->
+        <div class="socials" aria-hidden="false">
+          <a href="mailto:your.email@example.com" title="Email" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+          <a href="https://www.linkedin.com/in/yourprofile" title="LinkedIn" aria-label="LinkedIn" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="https://www.instagram.com/yourprofile" title="Instagram" aria-label="Instagram" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://github.com/yourprofile" title="GitHub" aria-label="GitHub" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i></a>
         </div>
+
+        <div class="cv-wrap"><button class="cv-btn">GET MY CV</button></div>
       </div>
     </div>
   </section>
@@ -305,74 +164,24 @@
   <section id="contact"><div class="section-inner"><div class="box anim"><h2>Contact</h2><p>Contact details or form.</p></div></div></section>
 
   <script>
-    /* ----------------------
-       Theme toggle + persistence
-       - initial icon set according to html.dark presence
-       ---------------------- */
+    // THEME init & toggle
     const themeBtn = document.getElementById('themeBtn');
-    const themeIcon = document.getElementById('themeIcon');
+    const themeIco = document.getElementById('themeIco');
+    function setTheme(theme){ document.documentElement.setAttribute('data-theme', theme); localStorage.setItem('site-theme', theme); themeIco.className = theme === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun'; themeBtn.setAttribute('aria-pressed', theme === 'dark'); }
+    (function(){ const stored = localStorage.getItem('site-theme'); if(stored==='dark' || stored==='light'){ setTheme(stored); } else { const prefers = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; setTheme(prefers ? 'dark' : 'light'); } })();
+    themeBtn.addEventListener('click', ()=>{ const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; setTheme(current==='dark' ? 'light' : 'dark'); });
 
-    function applyIcon(isDark){
-      // requested: sun icon in dark, moon in light (keeps contrast)
-      themeIcon.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
-    }
-
-    // initialize theme from localStorage if present
-    (function initTheme(){
-      const stored = localStorage.getItem('site-theme');
-      if(stored === 'dark') document.documentElement.classList.add('dark');
-      if(stored === 'light') document.documentElement.classList.remove('dark');
-      applyIcon(document.documentElement.classList.contains('dark'));
-    })();
-
-    themeBtn.addEventListener('click', ()=>{
-      document.documentElement.classList.toggle('dark');
-      const isDark = document.documentElement.classList.contains('dark');
-      applyIcon(isDark);
-      localStorage.setItem('site-theme', isDark ? 'dark' : 'light');
-    });
-
-    /* ----------------------
-       Mobile menu
-       ---------------------- */
-    const menuBtn = document.getElementById('menuBtn');
-    const mobileNav = document.getElementById('mobileNav');
-    menuBtn.addEventListener('click', ()=>{
-      mobileNav.classList.toggle('open');
-      mobileNav.setAttribute('aria-hidden', !mobileNav.classList.contains('open'));
-    });
-    mobileNav.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=> mobileNav.classList.remove('open')));
-
-    /* ----------------------
-       Intersection animations
-       ---------------------- */
+    // Animations
     const animItems = document.querySelectorAll('.anim');
-    const io = new IntersectionObserver(entries=>{
-      entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in-view'); });
-    },{threshold:0.18});
+    const io = new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in-view'); }); },{threshold:0.18});
     animItems.forEach(i=>io.observe(i));
 
-    /* ----------------------
-       Smooth anchor scroll
-       ---------------------- */
-    document.querySelectorAll('a[href^="#"]').forEach(a=>{
-      a.addEventListener('click', ev=>{
-        const el = document.querySelector(a.getAttribute('href'));
-        if(el){
-          ev.preventDefault();
-          el.scrollIntoView({behavior:'smooth', block:'start'});
-          mobileNav.classList.remove('open');
-        }
-      });
-    });
-
-    /* ----------------------
-       Robust hero image loader
-       - tries candidate paths; if none found, shows gradient fallback
-       - ensures image visible on mobile as well
-       ---------------------- */
+    // HERO image loader using <img> tag for better debug and visibility
     (function(){
-      const candidatePaths = [
+      const heroImg = document.getElementById('heroImgTag');
+      const placeholder = document.getElementById('heroPlaceholder');
+      const candidate = [
+        '/static/images/bg.jpg',
         '/images/bg.jpg',
         '/assets/bg.jpg',
         'images/bg.jpg',
@@ -380,41 +189,46 @@
         'images/bg.jpeg',
         'assets/bg.jpeg',
         'images/bg.png',
-        'assets/bg.png',
-        // you can add more paths (CMS/static folder) as needed
+        'assets/bg.png'
       ];
 
-      const heroDiv = document.getElementById('heroImg');
+      function test(p){ return new Promise((res,rej)=>{ const img = new Image(); img.onload = ()=> res(p); img.onerror = ()=> rej(p); img.src = p + '?v=' + Date.now(); }); }
 
-      function testImage(path){
-        return new Promise((resolve, reject)=>{
-          const img = new Image();
-          img.onload = ()=> resolve(path);
-          img.onerror = ()=> reject(path);
-          // cache-buster to avoid stale results during dev
-          img.src = path + '?v=' + (new Date().getTime());
-        });
-      }
-
-      (async function tryPaths(){
-        // ensure we show the gradient while checking
-        heroDiv.classList.add('hero-no-image');
-        for(const p of candidatePaths){
-          try{
-            const ok = await testImage(p);
-            heroDiv.style.backgroundImage = `url("${ok}")`;
-            heroDiv.classList.remove('hero-no-image');
-            console.log('Hero image loaded from:', ok);
-            return;
-          } catch(e){
-            // try next
-          }
+      (async()=>{
+        for(const p of candidate){
+          try{ const ok = await test(p); heroImg.src = ok; heroImg.style.display = 'block'; placeholder.style.display = 'none'; return; } catch(e){ /* try next */ }
         }
-        // none loaded -> keep placeholder gradient (hero-no-image class)
-        heroDiv.style.backgroundImage = 'none';
-        console.warn('Hero image not found. Tried:', candidatePaths.join(', '));
+        // if none found, keep placeholder; optionally set a data-URI or instruct user
+        placeholder.style.display = 'block'; heroImg.style.display = 'none';
+        console.warn('No hero image loaded — check candidate paths in the JS (developer: update to your static folder path).');
       })();
     })();
+
+    // Buttons -> anchor behavior (scroll to sections)
+    document.getElementById('moreBtn').addEventListener('click', ()=> {
+      const el = document.getElementById('about');
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+    document.getElementById('contactBtn').addEventListener('click', ()=> {
+      const el = document.getElementById('contact');
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+
+    // Fullpage one-by-one scrolling (wheel + touch)
+    (function(){
+      const sections = Array.from(document.querySelectorAll('section'));
+      let anim = false; let touchStartY = null;
+      function idx(){ const sTop = window.scrollY + 8; for(let i=0;i<sections.length;i++){ const t=sections[i].offsetTop; const b=t+sections[i].offsetHeight; if(sTop>=t && sTop<b) return i;} return 0; }
+      function goto(i){ if(i<0) i=0; if(i>=sections.length) i=sections.length-1; anim=true; sections[i].scrollIntoView({behavior:'smooth',block:'start'}); setTimeout(()=>anim=false,700); }
+      window.addEventListener('wheel', e=>{ if(anim) return; if(Math.abs(e.deltaY)<20) return; const dir = e.deltaY>0?1:-1; const i=idx(); if(dir>0 && i<sections.length-1) goto(i+1); else if(dir<0 && i>0) goto(i-1); },{passive:true});
+      window.addEventListener('touchstart', e=>{ touchStartY = e.touches[0].clientY; },{passive:true});
+      window.addEventListener('touchend', e=>{ if(anim||touchStartY===null) return; const end = (e.changedTouches && e.changedTouches[0])? e.changedTouches[0].clientY : null; if(end===null) return; const diff = touchStartY - end; if(Math.abs(diff)<40) return; const i=idx(); if(diff>0 && i<sections.length-1) goto(i+1); else if(diff<0 && i>0) goto(i-1); touchStartY=null; },{passive:true});
+      window.addEventListener('keydown', e=>{ if(anim) return; const i=idx(); if(e.key==='ArrowDown'||e.key==='PageDown') goto(i+1); if(e.key==='ArrowUp'||e.key==='PageUp') goto(i-1); });
+    })();
+
+    // Smooth anchors
+    document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click', ev=>{ const el=document.querySelector(a.getAttribute('href')); if(el){ ev.preventDefault(); el.scrollIntoView({behavior:'smooth',block:'start'}); } }));
+
   </script>
 </body>
 </html>
