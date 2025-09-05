@@ -15,15 +15,16 @@
       --black:#0b0b0b;
       --muted:#f3f4f3;
     }
-    html,body{height:100%;margin:0;padding:0;} /* remove unwanted link gap */
+    html,body{height:100%;margin:0;padding:0;box-sizing:border-box;}
+    *,*::before,*::after{box-sizing:inherit;}
     html{scroll-behavior:smooth;}
 
     body{
       font-family:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;
       -webkit-font-smoothing:antialiased;
-      scroll-snap-type: y mandatory;
-      overflow-y: auto;
-      overscroll-behavior-y: contain;
+      scroll-snap-type:y mandatory;
+      overflow-y:auto;
+      overscroll-behavior-y:contain;
       background:var(--white);
       color:var(--black);
     }
@@ -53,11 +54,25 @@
     .menu-btn{display:none;background:none;border:0;color:var(--white);font-size:22px;cursor:pointer}
 
     section{height:100vh;scroll-snap-align:start;display:block}
-    .section-inner{height:calc(100vh - var(--header-h));padding-top:var(--header-h);display:flex;align-items:center}
+    .section-inner{
+      height:calc(100vh - var(--header-h));
+      padding-top:var(--header-h);
+      display:flex;align-items:center;
+      /* clip any overflow from children */
+      overflow:hidden;
+      position:relative;
+    }
 
     /* HERO */
-    .hero{display:flex;width:100%}
-    .hero-left{flex:0 0 55%;padding:56px 8vw;display:flex;align-items:flex-start}
+    .hero{display:flex;width:100%;max-width:100%;position:relative;overflow:hidden;}
+    .hero-left{
+      flex: 0 1 55%;
+      min-width:0; /* critical so flex child can shrink */
+      padding:56px 8vw;
+      display:flex;
+      align-items:flex-start;
+      z-index:5;
+    }
     .content{max-width:700px}
     .kicker{letter-spacing:3px;color:var(--primary);font-weight:700;margin-bottom:18px;font-size:14px}
     h1.headline{font-family:'Playfair Display',serif;font-size:48px;line-height:1.06;margin:0}
@@ -66,18 +81,59 @@
     .btn{padding:12px 22px;border:2px solid #111;background:transparent;color:#111;font-weight:700;cursor:pointer}
     .btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
 
-    .hero-right{flex:0 0 45%;position:relative;display:flex;align-items:stretch}
+    /* Right column: fixed max-width, cannot overflow, and clips image */
+    .hero-right{
+      flex: 0 0 45%;
+      max-width:45%;
+      min-width:0; /* allow shrinking on small screens */
+      position:relative;
+      display:flex;
+      align-items:stretch;
+      height:100%;
+      overflow:hidden;
+      z-index:3;
+    }
+
     .hero-img{
-      width:100%;height:100%;
-      background-image:url('assets/bg.jpg'); /* fallback image */
-      background-position:center center;background-size:cover
+      width:100%;
+      height:100%;
+      background-position:center center;
+      background-size:cover;
+      background-repeat:no-repeat;
+      display:block;
+      /* ensure it's inside the right column */
+      flex:1 1 100%;
+      position:relative;
+    }
+
+    /* Fallback <img> that will be visible if you prefer */
+    .hero-img img.hero-img-fallback{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:none; /* JS may show it if needed */
     }
 
     /* Socials */
-    .socials{position:absolute;right:22px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:12px}
-    .socials a{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:6px;background:rgba(255,255,255,0.1);color:#fff;text-decoration:none}
+    .socials{
+      position:absolute;
+      right:22px;
+      top:50%;
+      transform:translateY(-50%);
+      display:flex;flex-direction:column;gap:12px;
+      z-index:6;
+    }
+    .socials a{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:6px;background:rgba(255,255,255,0.06);color:#fff;text-decoration:none}
+    .socials a:hover{background:rgba(255,255,255,0.12)}
 
-    .cv-wrap{position:absolute;left:0;right:0;bottom:48px;display:flex;align-items:center;justify-content:center}
+    /* CV bottom-left (relative to the whole hero but visually bottom-left) */
+    .cv-wrap{
+      position:absolute;
+      left:22px;
+      bottom:22px;
+      z-index:6;
+      display:flex;align-items:center;justify-content:center;
+    }
     .cv-line{height:1px;background:rgba(255,255,255,0.6);width:120px;margin-right:18px}
     .cv-btn{border:2px solid rgba(255,255,255,0.9);background:transparent;color:#fff;padding:10px 22px}
 
@@ -92,8 +148,8 @@
 
     /* Responsive */
     @media(max-width:980px){
-      .hero{flex-direction:column;background-image:url('assets/bg.jpg');background-size:cover;background-position:center center;color:#fff}
-      .hero-left{flex:1;padding:36px 5vw;background:transparent}
+      .hero{flex-direction:column;background-size:cover;background-position:center center;color:#fff}
+      .hero-left{flex:1;padding:36px 5vw;background:rgba(0,0,0,0.5);}
       h1.headline{font-size:34px;color:#fff;text-shadow:0 6px 20px rgba(0,0,0,0.6)}
       .hero-right{display:none}
       .btn{border-color:rgba(255,255,255,0.9);color:#fff}
@@ -107,11 +163,20 @@
       .mobile-nav a{display:block;padding:14px 18px;color:#111;text-decoration:none;border-top:1px solid rgba(0,0,0,0.06)}
       html.dark .mobile-nav{background:#111;}
       html.dark .mobile-nav a{color:#fff}
+      .section-inner{overflow:visible;} /* allow stacked mobile background */
+      .hero { height: auto; min-height: calc(100vh - var(--header-h)); }
+      .hero-img { display:none; } /* use background on .hero if needed on mobile */
     }
 
     @media(min-width:1400px){
       .hero-left{padding:90px 12vw}
       h1.headline{font-size:56px}
+    }
+
+    /* placeholder gradient if image fails to load */
+    .hero-no-image {
+      background: linear-gradient(120deg, rgba(20,20,20,1) 0%, rgba(40,40,40,1) 100%);
+      display:block;
     }
   </style>
 </head>
@@ -126,7 +191,7 @@
       <a href="#contact">Contact</a>
     </nav>
     <div class="controls">
-      <button class="theme-btn" id="themeBtn"><i class="fa-solid fa-sun"></i></button>
+      <button class="theme-btn" id="themeBtn" aria-label="Toggle theme"><i class="fa-solid fa-sun"></i></button>
     </div>
   </header>
 
@@ -150,16 +215,25 @@
           </div>
         </div>
       </div>
+
       <div class="hero-right" aria-hidden="true">
-        <div class="hero-img"></div>
-        <div class="socials">
-          <a href="#"><i class="fab fa-facebook-f"></i></a>
-          <a href="#"><i class="fab fa-twitter"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-github"></i></a>
+        <!-- background will be set by JS (tries multiple paths) -->
+        <div class="hero-img" id="heroImg">
+          <!-- optional img fallback (hidden unless JS chooses) -->
+          <img class="hero-img-fallback" id="heroImgFallback" alt="Hero image">
         </div>
+
+        <!-- socials -->
+        <div class="socials" aria-hidden="true">
+          <a href="#" title="facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" title="twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" title="instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" title="github"><i class="fab fa-github"></i></a>
+        </div>
+
+        <!-- cv at bottom-left (visual bottom-left of the whole screen) -->
         <div class="cv-wrap">
-          <div class="cv-line"></div>
+          <div class="cv-line" style="display:none"></div>
           <button class="cv-btn">GET MY CV</button>
         </div>
       </div>
@@ -176,9 +250,13 @@
   <section id="contact"><div class="section-inner"><div class="box anim"><h2>Contact</h2><p>Contact details or form.</p></div></div></section>
 
   <script>
-    // Theme toggle
+    // Theme toggle with icon change
     const themeBtn = document.getElementById('themeBtn');
-    themeBtn.addEventListener('click', ()=> document.documentElement.classList.toggle('dark'));
+    themeBtn.addEventListener('click', ()=>{
+      document.documentElement.classList.toggle('dark');
+      const isDark = document.documentElement.classList.contains('dark');
+      themeBtn.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+    });
 
     // Mobile menu
     const menuBtn = document.getElementById('menuBtn');
@@ -200,6 +278,53 @@
         if(el){ ev.preventDefault(); el.scrollIntoView({behavior:'smooth'}); mobileNav.classList.remove('open'); }
       });
     });
+
+    // ----- Robust hero image loader -----
+    (function(){
+      const candidatePaths = [
+        'images/bg.jpg',
+        'assets/bg.jpg',
+        'images/bg.jpeg',
+        'assets/bg.jpeg',
+        'images/bg.png',
+        'assets/bg.png'
+      ];
+
+      const heroDiv = document.getElementById('heroImg');
+      const heroImgFallback = document.getElementById('heroImgFallback');
+
+      function testImage(path){
+        return new Promise((resolve, reject)=>{
+          const img = new Image();
+          img.onload = ()=> resolve(path);
+          img.onerror = ()=> reject(path);
+          img.src = path + '?v=' + Date.now(); // bust cache during dev
+        });
+      }
+
+      (async function tryPaths(){
+        for(const p of candidatePaths){
+          try{
+            const ok = await testImage(p);
+            // set as background
+            heroDiv.style.backgroundImage = `url("${ok}")`;
+            heroDiv.classList.remove('hero-no-image');
+            // set fallback img src (if you want to display the <img>, uncomment next line)
+            heroImgFallback.src = ok;
+            // if you prefer to use the <img> instead of background, uncomment:
+            // heroImgFallback.style.display = 'block';
+            console.log('Hero image loaded from:', ok);
+            return;
+          } catch(e){
+            // try next
+          }
+        }
+        // none loaded -> placeholder
+        heroDiv.style.backgroundImage = 'none';
+        heroDiv.classList.add('hero-no-image');
+        console.warn('Hero image not found. Tried:', candidatePaths.join(', '));
+      })();
+    })();
   </script>
 </body>
 </html>
