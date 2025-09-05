@@ -52,7 +52,21 @@
     nav a:hover{background:var(--panel)}
 
     .controls{display:flex;gap:12px;align-items:center}
-    .theme-btn{display:inline-flex;gap:10px;align-items:center;padding:8px 12px;border-radius:12px;border:1px solid var(--glass-strong);background:transparent;color:var(--text);cursor:pointer}
+    /* larger theme button */
+    .theme-btn{
+      display:inline-flex;
+      gap:12px;
+      align-items:center;
+      padding:10px 16px;
+      border-radius:14px;
+      border:1px solid var(--glass-strong);
+      background:transparent;
+      color:var(--text);
+      cursor:pointer;
+      font-weight:700;
+      font-size:15px;
+    }
+    .theme-btn i{font-size:18px}
     .menu-btn{display:none;background:none;border:0;color:var(--text);font-size:20px;cursor:pointer}
 
     /* responsive nav overlay for mobile */
@@ -62,6 +76,7 @@
       .menu-btn{display:block}
       /* keep header controls compact */
       .controls{gap:8px}
+      .theme-btn{padding:8px 12px;font-size:14px}
     }
 
     .section-inner{height:calc(100vh - var(--header-h));padding-top:var(--header-h);display:flex;align-items:center;position:relative;overflow:hidden}
@@ -86,15 +101,58 @@
     /* socials: top-center of the image - icons only (no background) */
     .image-socials{
       position:absolute;left:50%;top:22px;transform:translateX(-50%);
-      z-index:18;display:flex;gap:14px;align-items:center;padding:4px;border-radius:999px;pointer-events:auto;
+      z-index:18;display:flex;gap:16px;align-items:center;padding:6px;border-radius:999px;pointer-events:auto;
       background:transparent; border: none; box-shadow:none;
+      flex-wrap:wrap;
     }
 
+    /* larger social icons */
     .image-socials a{
-      display:inline-grid;place-items:center;width:48px;height:48px;border-radius:8px;text-decoration:none;color:var(--text);font-size:20px;background:transparent;border:none;transition:transform .18s ease,filter .18s ease;
+      display:inline-grid;place-items:center;width:56px;height:56px;border-radius:12px;text-decoration:none;color:var(--text);font-size:22px;background:transparent;border:none;transition:transform .18s ease,filter .18s ease;
     }
     .image-socials a i{color:inherit}
-    .image-socials a:hover{transform:translateY(-6px);filter:drop-shadow(0 8px 20px rgba(225,74,42,0.08))}
+    .image-socials a:hover{transform:translateY(-6px);filter:drop-shadow(0 10px 24px rgba(225,74,42,0.08))}
+
+    /* center CV button below socials — now styled as a large primary CTA */
+    .cv-center{
+      position:absolute;
+      left:50%;
+      top:calc(22px + 56px + 16px); /* socials top + icon size + gap */
+      transform:translateX(-50%);
+      z-index:18;
+      display:inline-block;
+    }
+
+    /* PRIMARY CV BUTTON STYLE */
+    .cv-primary {
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:12px 20px;
+      border-radius:999px;
+      border:2px solid transparent;
+      background: linear-gradient(180deg, var(--primary), #c43a1f);
+      color:#fff;
+      text-decoration:none;
+      font-weight:800;
+      letter-spacing:0.2px;
+      box-shadow:0 18px 40px rgba(225,74,42,0.18), 0 6px 18px rgba(16,24,40,0.06);
+      transform:translateY(0);
+      transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease, opacity .12s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .cv-primary i{font-size:16px}
+    .cv-primary:hover{ transform:translateY(-4px); box-shadow:0 26px 60px rgba(225,74,42,0.20); }
+    .cv-primary:active{ transform:translateY(-1px); }
+    .cv-primary:focus{ outline:3px solid rgba(225,74,42,0.18); outline-offset:3px; }
+
+    /* small screens adjustments */
+    @media(max-width:980px){
+      .image-socials{top:12px}
+      .image-socials a{width:48px;height:48px;font-size:20px}
+      .cv-center{top: calc(12px + 48px + 12px)}
+      .cv-primary{padding:10px 16px;font-size:15px}
+    }
 
     .cv-wrap{position:absolute;left:18px;bottom:18px;z-index:6}
     .cv-btn{border:1px solid var(--glass-strong);background:transparent;color:var(--text);padding:8px 12px;border-radius:10px}
@@ -102,20 +160,6 @@
     /* sections */
     #about,#works,#contact{display:flex;align-items:center;justify-content:center;background:transparent}
     .box{max-width:980px;padding:44px}
-
-    /* small screens: stack with image on top and all text centered below */
-    @media(max-width:980px){
-      .hero{display:flex;flex-direction:column}
-      .hero-right{order:-1;height:100%}
-      .hero-left{padding:28px 6vw;align-items:center;text-align:center;order:1}
-      .content{margin:0 auto}
-      .hero-buttons{justify-content:center}
-      h1.headline{font-size:28px}
-      nav{display:flex} /* controlled by .open class */
-      .cv-wrap{display:none}
-      .image-socials{top:12px}
-      .image-socials a{width:44px;height:44px;font-size:18px}
-    }
 
     /* ensure contrast for light mode */
     html:not([data-theme="dark"]) h1, html:not([data-theme="dark"]) p, html:not([data-theme="dark"]) nav a{color:var(--text)}
@@ -146,7 +190,7 @@
     <div class="controls">
       <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
         <i id="themeIco" class="fa-solid fa-moon" aria-hidden="true"></i>
-        <span id="themeLabel" style="font-size:13px;opacity:.9">Theme</span>
+        <span id="themeLabel" style="font-size:13px;opacity:.95">Theme</span>
       </button>
     </div>
   </header>
@@ -180,7 +224,16 @@
           <a href="https://github.com/yourprofile" title="GitHub" aria-label="GitHub" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i></a>
         </div>
 
-        <div class="cv-wrap"><button class="cv-btn">GET MY CV</button></div>
+        <!-- CENTERED CTA BUTTON - update href to your CV path -->
+        <div class="cv-center" role="region" aria-label="Download CV">
+          <a id="cvCenterLink" class="cv-primary" href="/assets/Abhinand_CV.pdf" download="Abhinand_CV.pdf" title="Download CV">
+            <i class="fa-solid fa-download" aria-hidden="true"></i>
+            <span>GET MY CV</span>
+          </a>
+        </div>
+
+        <!-- bottom-left CV fallback -->
+       
       </div>
     </div>
   </section>
@@ -250,33 +303,97 @@
       })();
     })();
 
-    // Buttons -> anchor behavior (scroll to sections)
-    document.getElementById('moreBtn').addEventListener('click', ()=> { const el = document.getElementById('about'); if(el) smoothSnapTo(el); });
-    document.getElementById('contactBtn').addEventListener('click', ()=> { const el = document.getElementById('contact'); if(el) smoothSnapTo(el); });
-
-    // Smooth snap function used by buttons and JS scroller
-    function smoothSnapTo(el){
-      document.body.style.pointerEvents = 'none';
-      window.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
-      setTimeout(()=>{ document.body.style.pointerEvents = ''; }, 700);
+    // -------------------------
+    // Smooth snap with easing
+    // -------------------------
+    function easeInOutCubic(t){
+      return t < 0.5
+        ? 4 * t * t * t
+        : 1 - Math.pow(-2 * t + 2, 3) / 2;
     }
 
-    // Fullpage one-by-one scrolling (wheel + touch) — optimized & throttled
+    function smoothSnapTo(el, duration = 900){
+      return new Promise((resolve) => {
+        // Respect reduced-motion preference
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          window.scrollTo(0, el.offsetTop);
+          resolve();
+          return;
+        }
+
+        const start = window.scrollY || window.pageYOffset;
+        const target = el.offsetTop;
+        const distance = target - start;
+        const startTime = performance.now();
+
+        function frame(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = easeInOutCubic(progress);
+          window.scrollTo(0, Math.round(start + distance * eased));
+          if (progress < 1) {
+            requestAnimationFrame(frame);
+          } else {
+            resolve();
+          }
+        }
+        requestAnimationFrame(frame);
+      });
+    }
+
+    // Buttons -> anchor behavior (scroll to sections)
+    document.getElementById('moreBtn').addEventListener('click', async ()=> {
+      const el = document.getElementById('about');
+      if(el){
+        // disable pointer events briefly (keeps existing UX)
+        const prev = document.body.style.pointerEvents;
+        document.body.style.pointerEvents = 'none';
+        await smoothSnapTo(el);
+        document.body.style.pointerEvents = prev;
+      }
+    });
+    document.getElementById('contactBtn').addEventListener('click', async ()=> {
+      const el = document.getElementById('contact');
+      if(el){
+        const prev = document.body.style.pointerEvents;
+        document.body.style.pointerEvents = 'none';
+        await smoothSnapTo(el);
+        document.body.style.pointerEvents = prev;
+      }
+    });
+
+    // -------------------------
+    // Fullpage one-by-one scrolling (wheel + touch) using the new smoothSnapTo
+    // -------------------------
     (function(){
       const sections = Array.from(document.querySelectorAll('section'));
       let anim = false; let touchStartY = null; let lastScroll = 0;
 
-      function idx(){ const sTop = window.scrollY + 8; for(let i=0;i<sections.length;i++){ const t=sections[i].offsetTop; const b=t+sections[i].offsetHeight; if(sTop>=t && sTop<b) return i;} return 0; }
-      function goto(i){ if(i<0) i=0; if(i>=sections.length) i=sections.length-1; anim=true; window.scrollTo({ top: sections[i].offsetTop, behavior: 'smooth' }); // set a safe delay based on prefers-reduced-motion
-        const delay = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 450 : 700;
-        setTimeout(()=>{ anim=false; }, delay);
+      function idx(){
+        const sTop = window.scrollY + 8;
+        for(let i=0;i<sections.length;i++){
+          const t = sections[i].offsetTop;
+          const b = t + sections[i].offsetHeight;
+          if(sTop >= t && sTop < b) return i;
+        }
+        return 0;
+      }
+
+      async function goto(i){
+        if(i < 0) i = 0;
+        if(i >= sections.length) i = sections.length - 1;
+        anim = true;
+        await smoothSnapTo(sections[i], 820);
+        // small safety delay to keep scroll from jumping when keys/wheel fire in quick succession
+        const safety = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 250 : 350;
+        setTimeout(()=>{ anim = false; }, safety);
       }
 
       // throttle wheel events to avoid excessive calculations
       window.addEventListener('wheel', function(e){
         if(anim){ e.preventDefault(); return; }
         const now = Date.now();
-        if(now - lastScroll < 600) { /* throttle */ return; }
+        if(now - lastScroll < 700) { /* throttle */ return; }
         if(Math.abs(e.deltaY) < 20) return;
         const dir = e.deltaY > 0 ? 1 : -1;
         const i = idx();
@@ -285,14 +402,75 @@
       }, {passive: false});
 
       window.addEventListener('touchstart', e=>{ touchStartY = e.touches[0].clientY; },{passive:true});
-      window.addEventListener('touchend', e=>{ if(anim || touchStartY === null) return; const end = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientY : null; if(end === null) return; const diff = touchStartY - end; if(Math.abs(diff) < 40) { touchStartY = null; return; } const i = idx(); if(diff > 0 && i < sections.length - 1) goto(i + 1); else if(diff < 0 && i > 0) goto(i - 1); touchStartY = null; },{passive:true});
+      window.addEventListener('touchend', e=>{ 
+        if(anim || touchStartY === null) return; 
+        const end = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientY : null; 
+        if(end === null) return; 
+        const diff = touchStartY - end; 
+        if(Math.abs(diff) < 40) { touchStartY = null; return; } 
+        const i = idx(); 
+        if(diff > 0 && i < sections.length - 1) goto(i + 1); 
+        else if(diff < 0 && i > 0) goto(i - 1); 
+        touchStartY = null; 
+      },{passive:true});
 
-      window.addEventListener('keydown', e=>{ if(anim) return; const i = idx(); if(e.key === 'ArrowDown' || e.key === 'PageDown') goto(i + 1); if(e.key === 'ArrowUp' || e.key === 'PageUp') goto(i - 1); });
+      window.addEventListener('keydown', e=>{
+        if(anim) return;
+        const i = idx();
+        if(e.key === 'ArrowDown' || e.key === 'PageDown') goto(i + 1);
+        if(e.key === 'ArrowUp' || e.key === 'PageUp') goto(i - 1);
+      });
     })();
 
-    // Smooth anchors
-    document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click', ev=>{ const el=document.querySelector(a.getAttribute('href')); if(el){ ev.preventDefault(); smoothSnapTo(el); } }));
+    // Smooth anchors for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click', async ev=>{
+      const el = document.querySelector(a.getAttribute('href'));
+      if(el){
+        ev.preventDefault();
+        const prev = document.body.style.pointerEvents;
+        document.body.style.pointerEvents = 'none';
+        await smoothSnapTo(el);
+        document.body.style.pointerEvents = prev;
+      }
+    }));
 
+    // -------------------------
+    // Subtle parallax for hero image (disabled if prefers-reduced-motion)
+    // -------------------------
+    (function(){
+      const heroSection = document.getElementById('heroSection');
+      const heroImg = document.getElementById('heroImgTag');
+      if(!heroSection || !heroImg) return;
+      if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+        // Do nothing if user prefers reduced motion
+        return;
+      }
+
+      let ticking = false;
+      function onScroll(){
+        if(ticking) return;
+        ticking = true;
+        requestAnimationFrame(()=>{
+          const rect = heroSection.getBoundingClientRect();
+          // when on-screen, compute a small translateY value
+          if(rect.bottom > 0 && rect.top < window.innerHeight){
+            // amount: -10 to +10 px based on section position (subtle)
+            const progress = Math.min(Math.max((window.innerHeight - rect.top) / (window.innerHeight + rect.height), 0), 1);
+            const maxShift = 18; // px max shift
+            const shift = (progress - 0.5) * 2 * maxShift * 0.25; // reduce magnitude
+            heroImg.style.transform = `translateY(${shift}px)`;
+          } else {
+            heroImg.style.transform = 'translateY(0)';
+          }
+          ticking = false;
+        });
+      }
+
+      window.addEventListener('scroll', onScroll, {passive: true});
+      window.addEventListener('resize', onScroll);
+      // initial call to set position
+      onScroll();
+    })();
   </script>
 </body>
 </html>
