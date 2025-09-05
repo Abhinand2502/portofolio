@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Hudson — Portfolio</title>
+  <title>Abhinand — Portfolio</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
@@ -15,27 +15,24 @@
       --black:#0b0b0b;
       --muted:#f3f4f3;
     }
-    html,body{height:100%;margin:0;padding:0;box-sizing:border-box;}
-    *,*::before,*::after{box-sizing:inherit;}
-    html{scroll-behavior:smooth;}
 
+    /* RESET + layout basics */
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%;margin:0;padding:0}
+    html{scroll-behavior:smooth}
     body{
       font-family:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;
       -webkit-font-smoothing:antialiased;
-      scroll-snap-type:y mandatory;
-      overflow-y:auto;
       overscroll-behavior-y:contain;
       background:var(--white);
       color:var(--black);
+      /* REMOVE snapping so anchors stop where expected */
+      scroll-snap-type: none !important;
     }
 
-    /* Dark mode */
-    html.dark body{background:var(--black);color:var(--white);}
-    html.dark header{background:rgba(0,0,0,0.75);color:var(--white);}
-    html.dark nav a{color:var(--white);}
-    html.dark .btn{border-color:var(--white);color:var(--white);}
-    html.dark .btn.primary{background:var(--primary);color:#fff;}
-
+    /* Dark / light basics */
+    html.dark body{background:var(--black);color:var(--white)}
+    /* header - default translucent in dark mode, solid in light to avoid visual artifacts */
     header{
       position:fixed;top:0;left:0;right:0;height:var(--header-h);
       display:flex;align-items:center;justify-content:space-between;
@@ -45,29 +42,40 @@
       border-bottom:1px solid rgba(255,255,255,0.08);
       backdrop-filter:blur(6px);
     }
-    .logo{font-family:'Playfair Display',serif;font-size:28px;color:var(--white);}
+    /* when not dark (light mode) make header solid white to remove the blue/peek-through */
+    html:not(.dark) header{
+      background: #fff !important;
+      color: var(--black) !important;
+      border-bottom:1px solid rgba(0,0,0,0.06) !important;
+    }
+
+    .logo{font-family:'Playfair Display',serif;font-size:28px;color:var(--white)}
+    html:not(.dark) .logo{ color: var(--black) !important; }
     nav{display:flex;gap:26px;align-items:center}
     nav a{color:var(--white);text-decoration:none;font-weight:500}
+    html:not(.dark) nav a{ color:rgba(0,0,0,0.85) !important; }
 
     .controls{display:flex;gap:12px;align-items:center}
     .theme-btn{background:none;border:0;color:var(--white);font-size:18px;cursor:pointer}
-    .menu-btn{display:none;background:none;border:0;color:var(--white);font-size:22px;cursor:pointer}
+    html:not(.dark) .theme-btn{ color:var(--black) !important; }
 
-    section{height:100vh;scroll-snap-align:start;display:block}
+    .menu-btn{display:none;background:none;border:0;color:var(--white);font-size:22px;cursor:pointer}
+    html:not(.dark) .menu-btn{ color:var(--black) !important; }
+
+    section{height:100vh;display:block}
     .section-inner{
       height:calc(100vh - var(--header-h));
       padding-top:var(--header-h);
       display:flex;align-items:center;
-      /* clip any overflow from children */
       overflow:hidden;
       position:relative;
     }
 
     /* HERO */
-    .hero{display:flex;width:100%;max-width:100%;position:relative;overflow:hidden;}
+    .hero{display:flex;width:100%;max-width:100%;position:relative;overflow:hidden}
     .hero-left{
       flex: 0 1 55%;
-      min-width:0; /* critical so flex child can shrink */
+      min-width:0;
       padding:56px 8vw;
       display:flex;
       align-items:flex-start;
@@ -79,13 +87,14 @@
 
     .hero-buttons{margin-top:24px;display:flex;gap:18px}
     .btn{padding:12px 22px;border:2px solid #111;background:transparent;color:#111;font-weight:700;cursor:pointer}
+    html:not(.dark) .btn{ border-color: rgba(0,0,0,0.8); color: var(--black); }
     .btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
 
-    /* Right column: fixed max-width, cannot overflow, and clips image */
+    /* Right column */
     .hero-right{
       flex: 0 0 45%;
       max-width:45%;
-      min-width:0; /* allow shrinking on small screens */
+      min-width:0;
       position:relative;
       display:flex;
       align-items:stretch;
@@ -101,20 +110,12 @@
       background-size:cover;
       background-repeat:no-repeat;
       display:block;
-      /* ensure it's inside the right column */
       flex:1 1 100%;
       position:relative;
+      min-height: calc(100vh - var(--header-h));
     }
 
-    /* Fallback <img> that will be visible if you prefer */
-    .hero-img img.hero-img-fallback{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:none; /* JS may show it if needed */
-    }
-
-    /* Socials */
+    /* socials */
     .socials{
       position:absolute;
       right:22px;
@@ -124,9 +125,10 @@
       z-index:6;
     }
     .socials a{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:6px;background:rgba(255,255,255,0.06);color:#fff;text-decoration:none}
+    html:not(.dark) .socials a{ background: rgba(0,0,0,0.06); color: var(--black); }
     .socials a:hover{background:rgba(255,255,255,0.12)}
 
-    /* CV bottom-left (relative to the whole hero but visually bottom-left) */
+    /* CV bottom-left (visual bottom-left of page) */
     .cv-wrap{
       position:absolute;
       left:22px;
@@ -136,6 +138,7 @@
     }
     .cv-line{height:1px;background:rgba(255,255,255,0.6);width:120px;margin-right:18px}
     .cv-btn{border:2px solid rgba(255,255,255,0.9);background:transparent;color:#fff;padding:10px 22px}
+    html:not(.dark) .cv-btn{ color: var(--black); border-color: rgba(0,0,0,0.6); }
 
     /* Animations */
     .anim{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.9,.2,1)}
@@ -143,18 +146,17 @@
 
     /* Sections */
     #about,#works,#contact{display:flex;align-items:center;justify-content:center;background:var(--muted)}
-    html.dark #about,html.dark #works,html.dark #contact{background:#1a1a1a;}
+    html.dark #about,html.dark #works,html.dark #contact{background:#1a1a1a}
     .box{max-width:980px;padding:44px}
 
-    /* Responsive */
+    /* Responsive: mobile stacks; no right image visible on mobile */
     @media(max-width:980px){
-      .hero{flex-direction:column;background-size:cover;background-position:center center;color:#fff}
-      .hero-left{flex:1;padding:36px 5vw;background:rgba(0,0,0,0.5);}
+      .hero{flex-direction:column;color:#fff}
+      .hero-left{flex:1;padding:36px 5vw;background:rgba(0,0,0,0.45)}
       h1.headline{font-size:34px;color:#fff;text-shadow:0 6px 20px rgba(0,0,0,0.6)}
-      .hero-right{display:none}
+      .hero-right{display:none} /* ensure right image is hidden on mobile */
       .btn{border-color:rgba(255,255,255,0.9);color:#fff}
       .btn.primary{background:var(--primary)}
-
       .logo{display:none}
       .menu-btn{display:block}
       nav{display:none}
@@ -163,9 +165,8 @@
       .mobile-nav a{display:block;padding:14px 18px;color:#111;text-decoration:none;border-top:1px solid rgba(0,0,0,0.06)}
       html.dark .mobile-nav{background:#111;}
       html.dark .mobile-nav a{color:#fff}
-      .section-inner{overflow:visible;} /* allow stacked mobile background */
+      .section-inner{overflow:visible}
       .hero { height: auto; min-height: calc(100vh - var(--header-h)); }
-      .hero-img { display:none; } /* use background on .hero if needed on mobile */
     }
 
     @media(min-width:1400px){
@@ -173,11 +174,8 @@
       h1.headline{font-size:56px}
     }
 
-    /* placeholder gradient if image fails to load */
-    .hero-no-image {
-      background: linear-gradient(120deg, rgba(20,20,20,1) 0%, rgba(40,40,40,1) 100%);
-      display:block;
-    }
+    /* fallback gradient when no image found */
+    .hero-no-image { background: linear-gradient(120deg,#222 0%, #333 100%); }
   </style>
 </head>
 <body>
@@ -204,11 +202,14 @@
 
   <!-- HERO -->
   <section id="intro">
-    <div class="section-inner hero">
+    <div class="section-inner hero" id="heroSection">
       <div class="hero-left">
         <div class="content">
           <div class="kicker anim">HELLO</div>
+
+          <!-- HOME description -->
           <h1 class="headline anim">I'm Jonathan Doe<br>a product designer<br>based in Somewhere.</h1>
+
           <div class="hero-buttons anim">
             <button class="btn primary">MORE ABOUT ME</button>
             <button class="btn">GET IN TOUCH</button>
@@ -217,11 +218,8 @@
       </div>
 
       <div class="hero-right" aria-hidden="true">
-        <!-- background will be set by JS (tries multiple paths) -->
-        <div class="hero-img" id="heroImg">
-          <!-- optional img fallback (hidden unless JS chooses) -->
-          <img class="hero-img-fallback" id="heroImgFallback" alt="Hero image">
-        </div>
+        <!-- ONLY this right div will contain the image (desktop). No page/background image -->
+        <div class="hero-img" id="heroImg" role="img" aria-label="Background image"></div>
 
         <!-- socials -->
         <div class="socials" aria-hidden="true">
@@ -231,7 +229,7 @@
           <a href="#" title="github"><i class="fab fa-github"></i></a>
         </div>
 
-        <!-- cv at bottom-left (visual bottom-left of the whole screen) -->
+        <!-- cv bottom-left visually -->
         <div class="cv-wrap">
           <div class="cv-line" style="display:none"></div>
           <button class="cv-btn">GET MY CV</button>
@@ -250,7 +248,7 @@
   <section id="contact"><div class="section-inner"><div class="box anim"><h2>Contact</h2><p>Contact details or form.</p></div></div></section>
 
   <script>
-    // Theme toggle with icon change
+    // Theme toggle with icon change (sun in dark, moon in light)
     const themeBtn = document.getElementById('themeBtn');
     themeBtn.addEventListener('click', ()=>{
       document.documentElement.classList.toggle('dark');
@@ -271,15 +269,21 @@
     },{threshold:0.2});
     animItems.forEach(i=>io.observe(i));
 
-    // Smooth anchor scroll
+    // Smooth anchor scroll (ensures anchor stops at section)
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
       a.addEventListener('click', ev=>{
         const el=document.querySelector(a.getAttribute('href'));
-        if(el){ ev.preventDefault(); el.scrollIntoView({behavior:'smooth'}); mobileNav.classList.remove('open'); }
+        if(el){
+          ev.preventDefault();
+          el.scrollIntoView({behavior:'smooth', block:'start'});
+          mobileNav.classList.remove('open');
+        }
       });
     });
 
     // ----- Robust hero image loader -----
+    // Only sets the right-column .hero-img (desktop). It DOES NOT set a background
+    // on the entire heroSection, so you'll have just one image — the right one.
     (function(){
       const candidatePaths = [
         'images/bg.jpg',
@@ -291,14 +295,13 @@
       ];
 
       const heroDiv = document.getElementById('heroImg');
-      const heroImgFallback = document.getElementById('heroImgFallback');
 
       function testImage(path){
         return new Promise((resolve, reject)=>{
           const img = new Image();
           img.onload = ()=> resolve(path);
           img.onerror = ()=> reject(path);
-          img.src = path + '?v=' + Date.now(); // bust cache during dev
+          img.src = path + '?v=' + Date.now();
         });
       }
 
@@ -306,20 +309,16 @@
         for(const p of candidatePaths){
           try{
             const ok = await testImage(p);
-            // set as background
+            // ONLY set the right column image
             heroDiv.style.backgroundImage = `url("${ok}")`;
             heroDiv.classList.remove('hero-no-image');
-            // set fallback img src (if you want to display the <img>, uncomment next line)
-            heroImgFallback.src = ok;
-            // if you prefer to use the <img> instead of background, uncomment:
-            // heroImgFallback.style.display = 'block';
-            console.log('Hero image loaded from:', ok);
+            console.log('Hero right-column image loaded from:', ok);
             return;
           } catch(e){
             // try next
           }
         }
-        // none loaded -> placeholder
+        // none loaded -> show placeholder gradient in the right column
         heroDiv.style.backgroundImage = 'none';
         heroDiv.classList.add('hero-no-image');
         console.warn('Hero image not found. Tried:', candidatePaths.join(', '));
