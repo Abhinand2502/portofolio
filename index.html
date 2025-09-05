@@ -14,6 +14,7 @@
       --white:#ffffff;
       --black:#0b0b0b;
       --muted:#f3f4f3;
+      --glass-bg: rgba(255,255,255,0.06);
     }
 
     /* RESET + layout basics */
@@ -26,43 +27,54 @@
       overscroll-behavior-y:contain;
       background:var(--white);
       color:var(--black);
-      /* REMOVE snapping so anchors stop where expected */
       scroll-snap-type: none !important;
     }
 
     /* Dark / light basics */
     html.dark body{background:var(--black);color:var(--white)}
-    /* header - default translucent in dark mode, solid in light to avoid visual artifacts */
     header{
       position:fixed;top:0;left:0;right:0;height:var(--header-h);
       display:flex;align-items:center;justify-content:space-between;
-      padding:0 28px;z-index:1200;
-      background:rgba(0,0,0,0.55);
+      padding:0 20px;z-index:1200;
+      background: rgba(0,0,0,0.55);
       color:var(--white);
       border-bottom:1px solid rgba(255,255,255,0.08);
-      backdrop-filter:blur(6px);
+      backdrop-filter: blur(6px);
     }
-    /* when not dark (light mode) make header solid white to remove the blue/peek-through */
     html:not(.dark) header{
       background: #fff !important;
       color: var(--black) !important;
       border-bottom:1px solid rgba(0,0,0,0.06) !important;
     }
 
-    .logo{font-family:'Playfair Display',serif;font-size:28px;color:var(--white)}
+    .logo{font-family:'Playfair Display',serif;font-size:22px;color:var(--white)}
     html:not(.dark) .logo{ color: var(--black) !important; }
-    nav{display:flex;gap:26px;align-items:center}
+    nav{display:flex;gap:20px;align-items:center}
     nav a{color:var(--white);text-decoration:none;font-weight:500}
     html:not(.dark) nav a{ color:rgba(0,0,0,0.85) !important; }
 
     .controls{display:flex;gap:12px;align-items:center}
-    .theme-btn{background:none;border:0;color:var(--white);font-size:18px;cursor:pointer}
-    html:not(.dark) .theme-btn{ color:var(--black) !important; }
+    .theme-btn{
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color:var(--white);
+      font-size:16px;
+      cursor:pointer;
+      padding:8px 10px;
+      border-radius:10px;
+      display:inline-flex;align-items:center;gap:8px;
+      backdrop-filter: blur(4px);
+    }
+    html:not(.dark) .theme-btn{
+      background: rgba(0,0,0,0.04);
+      color:var(--black);
+      border-color: rgba(0,0,0,0.06);
+    }
 
-    .menu-btn{display:none;background:none;border:0;color:var(--white);font-size:22px;cursor:pointer}
+    .menu-btn{display:none;background:none;border:0;color:var(--white);font-size:20px;cursor:pointer}
     html:not(.dark) .menu-btn{ color:var(--black) !important; }
 
-    section{height:100vh;display:block}
+    section{min-height:100vh;display:block}
     .section-inner{
       height:calc(100vh - var(--header-h));
       padding-top:var(--header-h);
@@ -71,24 +83,37 @@
       position:relative;
     }
 
-    /* HERO */
+    /* HERO layout */
     .hero{display:flex;width:100%;max-width:100%;position:relative;overflow:hidden}
     .hero-left{
-      flex: 0 1 55%;
+      flex: 1 1 55%;
       min-width:0;
       padding:56px 8vw;
       display:flex;
       align-items:flex-start;
       z-index:5;
+      background: transparent;
     }
     .content{max-width:700px}
-    .kicker{letter-spacing:3px;color:var(--primary);font-weight:700;margin-bottom:18px;font-size:14px}
+    .kicker{letter-spacing:3px;color:var(--primary);font-weight:700;margin-bottom:18px;font-size:13px}
     h1.headline{font-family:'Playfair Display',serif;font-size:48px;line-height:1.06;margin:0}
 
-    .hero-buttons{margin-top:24px;display:flex;gap:18px}
-    .btn{padding:12px 22px;border:2px solid #111;background:transparent;color:#111;font-weight:700;cursor:pointer}
-    html:not(.dark) .btn{ border-color: rgba(0,0,0,0.8); color: var(--black); }
-    .btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+    .hero-buttons{margin-top:24px;display:flex;gap:18px;flex-wrap:wrap}
+    .btn{
+      padding:12px 22px;
+      border:2px solid currentColor;
+      background:transparent;
+      color:inherit;
+      font-weight:700;
+      cursor:pointer;
+      border-radius:8px;
+    }
+    .btn.primary{
+      background:var(--primary);
+      color:#fff;
+      border-color:var(--primary);
+      box-shadow: 0 8px 30px rgba(225,74,42,0.18);
+    }
 
     /* Right column */
     .hero-right{
@@ -113,7 +138,19 @@
       flex:1 1 100%;
       position:relative;
       min-height: calc(100vh - var(--header-h));
+      transition:opacity .35s ease, transform .45s ease;
     }
+    .hero-img::after{
+      /* gentle overlay to keep text readable when stacked on mobile */
+      content:'';
+      position:absolute;inset:0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.45) 100%);
+      pointer-events:none;
+      opacity: .0;
+      transition:opacity .3s ease;
+    }
+    html.dark .hero-img::after{ opacity: 0.45; }
+    html:not(.dark) .hero-img::after{ opacity: 0.15; background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.06)); }
 
     /* socials */
     .socials{
@@ -124,11 +161,11 @@
       display:flex;flex-direction:column;gap:12px;
       z-index:6;
     }
-    .socials a{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:6px;background:rgba(255,255,255,0.06);color:#fff;text-decoration:none}
+    .socials a{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:var(--glass-bg);color:#fff;text-decoration:none}
     html:not(.dark) .socials a{ background: rgba(0,0,0,0.06); color: var(--black); }
-    .socials a:hover{background:rgba(255,255,255,0.12)}
+    .socials a:hover{opacity:.95; transform: translateY(-2px); transition: transform .18s ease, opacity .18s ease}
 
-    /* CV bottom-left (visual bottom-left of page) */
+    /* CV bottom-left */
     .cv-wrap{
       position:absolute;
       left:22px;
@@ -137,7 +174,7 @@
       display:flex;align-items:center;justify-content:center;
     }
     .cv-line{height:1px;background:rgba(255,255,255,0.6);width:120px;margin-right:18px}
-    .cv-btn{border:2px solid rgba(255,255,255,0.9);background:transparent;color:#fff;padding:10px 22px}
+    .cv-btn{border:2px solid rgba(255,255,255,0.9);background:transparent;color:#fff;padding:10px 22px;border-radius:8px}
     html:not(.dark) .cv-btn{ color: var(--black); border-color: rgba(0,0,0,0.6); }
 
     /* Animations */
@@ -146,18 +183,30 @@
 
     /* Sections */
     #about,#works,#contact{display:flex;align-items:center;justify-content:center;background:var(--muted)}
-    html.dark #about,html.dark #works,html.dark #contact{background:#1a1a1a}
+    html.dark #about,html.dark #works,html.dark #contact{background:#111}
     .box{max-width:980px;padding:44px}
 
-    /* Responsive: mobile stacks; no right image visible on mobile */
+    /* Responsive: mobile stacks; now shows hero-right on mobile as a stacked image */
     @media(max-width:980px){
-      .hero{flex-direction:column;color:#fff}
-      .hero-left{flex:1;padding:36px 5vw;background:rgba(0,0,0,0.45)}
-      h1.headline{font-size:34px;color:#fff;text-shadow:0 6px 20px rgba(0,0,0,0.6)}
-      .hero-right{display:none} /* ensure right image is hidden on mobile */
-      .btn{border-color:rgba(255,255,255,0.9);color:#fff}
+      .hero{flex-direction:column;color:var(--white)}
+      /* show image on mobile above content */
+      .hero-right{
+        display:flex;
+        order:-1; /* show before hero-left */
+        width:100%;
+        max-width:100%;
+        height:40vh;
+      }
+      .hero-img{min-height:40vh;height:40vh;}
+      .hero-left{
+        flex:1;padding:28px 6vw;
+        /* keep a subtle translucent background so text is readable over the stacked image */
+        background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.0) 100%);
+      }
+      h1.headline{font-size:30px;color:inherit}
+      .btn{border-color:rgba(0,0,0,0.08);color:inherit}
       .btn.primary{background:var(--primary)}
-      .logo{display:none}
+      .logo{display:block}
       .menu-btn{display:block}
       nav{display:none}
       .mobile-nav{position:fixed;left:0;right:0;top:var(--header-h);background:#fff;display:none;z-index:1300}
@@ -167,6 +216,8 @@
       html.dark .mobile-nav a{color:#fff}
       .section-inner{overflow:visible}
       .hero { height: auto; min-height: calc(100vh - var(--header-h)); }
+      .socials{right:12px}
+      .cv-wrap{display:none}
     }
 
     @media(min-width:1400px){
@@ -176,24 +227,30 @@
 
     /* fallback gradient when no image found */
     .hero-no-image { background: linear-gradient(120deg,#222 0%, #333 100%); }
+    .hero-img.hero-no-image::after{ opacity: 0.3; }
   </style>
 </head>
 <body>
   <header>
-    <button class="menu-btn" id="menuBtn"><i class="fa-solid fa-bars"></i></button>
-    <div class="logo">Hudson.</div>
-    <nav id="mainNav">
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>
+    <div class="logo" id="logo">Hudson.</div>
+
+    <nav id="mainNav" aria-label="Main navigation">
       <a href="#intro">Intro</a>
       <a href="#about">About</a>
       <a href="#works">Works</a>
       <a href="#contact">Contact</a>
     </nav>
+
     <div class="controls">
-      <button class="theme-btn" id="themeBtn" aria-label="Toggle theme"><i class="fa-solid fa-sun"></i></button>
+      <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
+        <span id="themeIcon"><i class="fa-solid fa-sun"></i></span>
+        <span id="themeLabel" style="font-size:13px;opacity:.9">Theme</span>
+      </button>
     </div>
   </header>
 
-  <div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav" id="mobileNav" aria-hidden="true">
     <a href="#intro">Intro</a>
     <a href="#about">About</a>
     <a href="#works">Works</a>
@@ -203,6 +260,19 @@
   <!-- HERO -->
   <section id="intro">
     <div class="section-inner hero" id="heroSection">
+      <div class="hero-right" aria-hidden="false">
+        <!-- Right column image (desktop) — now visible on mobile too (stacked) -->
+        <div class="hero-img hero-no-image" id="heroImg" role="img" aria-label="Background image"></div>
+
+        <!-- socials -->
+        <div class="socials" aria-hidden="true">
+          <a href="#" title="facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" title="twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" title="instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" title="github"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+
       <div class="hero-left">
         <div class="content">
           <div class="kicker anim">HELLO</div>
@@ -215,22 +285,9 @@
             <button class="btn">GET IN TOUCH</button>
           </div>
         </div>
-      </div>
 
-      <div class="hero-right" aria-hidden="true">
-        <!-- ONLY this right div will contain the image (desktop). No page/background image -->
-        <div class="hero-img" id="heroImg" role="img" aria-label="Background image"></div>
-
-        <!-- socials -->
-        <div class="socials" aria-hidden="true">
-          <a href="#" title="facebook"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" title="twitter"><i class="fab fa-twitter"></i></a>
-          <a href="#" title="instagram"><i class="fab fa-instagram"></i></a>
-          <a href="#" title="github"><i class="fab fa-github"></i></a>
-        </div>
-
-        <!-- cv bottom-left visually -->
-        <div class="cv-wrap">
+        <!-- cv bottom-left visually (kept inside left block for mobile) -->
+        <div class="cv-wrap" style="position:relative;left:auto;bottom:auto;margin-left:12px;display:none">
           <div class="cv-line" style="display:none"></div>
           <button class="cv-btn">GET MY CV</button>
         </div>
@@ -248,31 +305,59 @@
   <section id="contact"><div class="section-inner"><div class="box anim"><h2>Contact</h2><p>Contact details or form.</p></div></div></section>
 
   <script>
-    // Theme toggle with icon change (sun in dark, moon in light)
+    /* ----------------------
+       Theme toggle + persistence
+       - initial icon set according to html.dark presence
+       ---------------------- */
     const themeBtn = document.getElementById('themeBtn');
+    const themeIcon = document.getElementById('themeIcon');
+
+    function applyIcon(isDark){
+      // requested: sun icon in dark, moon in light (keeps contrast)
+      themeIcon.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+    }
+
+    // initialize theme from localStorage if present
+    (function initTheme(){
+      const stored = localStorage.getItem('site-theme');
+      if(stored === 'dark') document.documentElement.classList.add('dark');
+      if(stored === 'light') document.documentElement.classList.remove('dark');
+      applyIcon(document.documentElement.classList.contains('dark'));
+    })();
+
     themeBtn.addEventListener('click', ()=>{
       document.documentElement.classList.toggle('dark');
       const isDark = document.documentElement.classList.contains('dark');
-      themeBtn.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+      applyIcon(isDark);
+      localStorage.setItem('site-theme', isDark ? 'dark' : 'light');
     });
 
-    // Mobile menu
+    /* ----------------------
+       Mobile menu
+       ---------------------- */
     const menuBtn = document.getElementById('menuBtn');
     const mobileNav = document.getElementById('mobileNav');
-    menuBtn.addEventListener('click', ()=> mobileNav.classList.toggle('open'));
+    menuBtn.addEventListener('click', ()=>{
+      mobileNav.classList.toggle('open');
+      mobileNav.setAttribute('aria-hidden', !mobileNav.classList.contains('open'));
+    });
     mobileNav.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=> mobileNav.classList.remove('open')));
 
-    // Intersection animations
+    /* ----------------------
+       Intersection animations
+       ---------------------- */
     const animItems = document.querySelectorAll('.anim');
     const io = new IntersectionObserver(entries=>{
       entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in-view'); });
-    },{threshold:0.2});
+    },{threshold:0.18});
     animItems.forEach(i=>io.observe(i));
 
-    // Smooth anchor scroll (ensures anchor stops at section)
+    /* ----------------------
+       Smooth anchor scroll
+       ---------------------- */
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
       a.addEventListener('click', ev=>{
-        const el=document.querySelector(a.getAttribute('href'));
+        const el = document.querySelector(a.getAttribute('href'));
         if(el){
           ev.preventDefault();
           el.scrollIntoView({behavior:'smooth', block:'start'});
@@ -281,17 +366,22 @@
       });
     });
 
-    // ----- Robust hero image loader -----
-    // Only sets the right-column .hero-img (desktop). It DOES NOT set a background
-    // on the entire heroSection, so you'll have just one image — the right one.
+    /* ----------------------
+       Robust hero image loader
+       - tries candidate paths; if none found, shows gradient fallback
+       - ensures image visible on mobile as well
+       ---------------------- */
     (function(){
       const candidatePaths = [
+        '/images/bg.jpg',
+        '/assets/bg.jpg',
         'images/bg.jpg',
         'assets/bg.jpg',
         'images/bg.jpeg',
         'assets/bg.jpeg',
         'images/bg.png',
-        'assets/bg.png'
+        'assets/bg.png',
+        // you can add more paths (CMS/static folder) as needed
       ];
 
       const heroDiv = document.getElementById('heroImg');
@@ -301,26 +391,27 @@
           const img = new Image();
           img.onload = ()=> resolve(path);
           img.onerror = ()=> reject(path);
-          img.src = path + '?v=' + Date.now();
+          // cache-buster to avoid stale results during dev
+          img.src = path + '?v=' + (new Date().getTime());
         });
       }
 
       (async function tryPaths(){
+        // ensure we show the gradient while checking
+        heroDiv.classList.add('hero-no-image');
         for(const p of candidatePaths){
           try{
             const ok = await testImage(p);
-            // ONLY set the right column image
             heroDiv.style.backgroundImage = `url("${ok}")`;
             heroDiv.classList.remove('hero-no-image');
-            console.log('Hero right-column image loaded from:', ok);
+            console.log('Hero image loaded from:', ok);
             return;
           } catch(e){
             // try next
           }
         }
-        // none loaded -> show placeholder gradient in the right column
+        // none loaded -> keep placeholder gradient (hero-no-image class)
         heroDiv.style.backgroundImage = 'none';
-        heroDiv.classList.add('hero-no-image');
         console.warn('Hero image not found. Tried:', candidatePaths.join(', '));
       })();
     })();
