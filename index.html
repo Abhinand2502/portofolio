@@ -52,21 +52,7 @@
     nav a:hover{background:var(--panel)}
 
     .controls{display:flex;gap:12px;align-items:center}
-    /* larger theme button */
-    .theme-btn{
-      display:inline-flex;
-      gap:12px;
-      align-items:center;
-      padding:10px 16px;
-      border-radius:14px;
-      border:1px solid var(--glass-strong);
-      background:transparent;
-      color:var(--text);
-      cursor:pointer;
-      font-weight:700;
-      font-size:15px;
-    }
-    .theme-btn i{font-size:18px}
+    .theme-btn{display:inline-flex;gap:10px;align-items:center;padding:8px 12px;border-radius:12px;border:1px solid var(--glass-strong);background:transparent;color:var(--text);cursor:pointer}
     .menu-btn{display:none;background:none;border:0;color:var(--text);font-size:20px;cursor:pointer}
 
     /* responsive nav overlay for mobile */
@@ -76,7 +62,6 @@
       .menu-btn{display:block}
       /* keep header controls compact */
       .controls{gap:8px}
-      .theme-btn{padding:8px 12px;font-size:14px}
     }
 
     .section-inner{height:calc(100vh - var(--header-h));padding-top:var(--header-h);display:flex;align-items:center;position:relative;overflow:hidden}
@@ -101,41 +86,15 @@
     /* socials: top-center of the image - icons only (no background) */
     .image-socials{
       position:absolute;left:50%;top:22px;transform:translateX(-50%);
-      z-index:18;display:flex;gap:16px;align-items:center;padding:6px;border-radius:999px;pointer-events:auto;
+      z-index:18;display:flex;gap:14px;align-items:center;padding:4px;border-radius:999px;pointer-events:auto;
       background:transparent; border: none; box-shadow:none;
-      flex-wrap:wrap;
     }
 
-    /* larger social icons */
     .image-socials a{
-      display:inline-grid;place-items:center;width:56px;height:56px;border-radius:12px;text-decoration:none;color:var(--text);font-size:22px;background:transparent;border:none;transition:transform .18s ease,filter .18s ease;
+      display:inline-grid;place-items:center;width:48px;height:48px;border-radius:8px;text-decoration:none;color:var(--text);font-size:20px;background:transparent;border:none;transition:transform .18s ease,filter .18s ease;
     }
     .image-socials a i{color:inherit}
-    .image-socials a:hover{transform:translateY(-6px);filter:drop-shadow(0 10px 24px rgba(225,74,42,0.08))}
-
-    /* center CV button below socials */
-    .cv-center{
-      position:absolute;
-      left:50%;
-      top:calc(22px + 56px + 16px); /* socials top + icon size + gap */
-      transform:translateX(-50%);
-      z-index:18;
-      display:inline-block;
-    }
-    .cv-center a{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:10px 16px;
-      border-radius:12px;
-      border:1px solid var(--glass-strong);
-      background: transparent;
-      color:var(--text);
-      text-decoration:none;
-      font-weight:700;
-      box-shadow:0 6px 18px rgba(0,0,0,0.04);
-    }
-    .cv-center a .fa-solid{font-size:14px}
+    .image-socials a:hover{transform:translateY(-6px);filter:drop-shadow(0 8px 20px rgba(225,74,42,0.08))}
 
     .cv-wrap{position:absolute;left:18px;bottom:18px;z-index:6}
     .cv-btn{border:1px solid var(--glass-strong);background:transparent;color:var(--text);padding:8px 12px;border-radius:10px}
@@ -155,8 +114,7 @@
       nav{display:flex} /* controlled by .open class */
       .cv-wrap{display:none}
       .image-socials{top:12px}
-      .image-socials a{width:48px;height:48px;font-size:20px}
-      .cv-center{top: calc(12px + 48px + 12px)}
+      .image-socials a{width:44px;height:44px;font-size:18px}
     }
 
     /* ensure contrast for light mode */
@@ -188,10 +146,10 @@
     <div class="controls">
       <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
         <i id="themeIco" class="fa-solid fa-moon" aria-hidden="true"></i>
-        <span id="themeLabel" style="font-size:13px;opacity:.95">Theme</span>
+        <span id="themeLabel" style="font-size:13px;opacity:.9">Theme</span>
       </button>
     </div>
-  </header> 
+  </header>
 
   <!-- HERO -->
   <section id="intro">
@@ -222,17 +180,6 @@
           <a href="https://github.com/yourprofile" title="GitHub" aria-label="GitHub" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i></a>
         </div>
 
-        <!-- Centered GET MY CV (download) -->
-        <!-- Update href to the actual path of your CV PDF. The `download` attribute suggests a filename to the browser. -->
-        <div class="cv-center" role="region" aria-label="Download CV">
-          <a id="cvCenterLink" href="/assets/Abhinand_CV.pdf" download="Abhinand_CV.pdf" title="Download CV">
-            <i class="fa-solid fa-download" aria-hidden="true"></i>
-            <span>GET MY CV</span>
-          </a>
-        </div>
-
-        <!-- bottom-left CV fallback (keeps previous design) -->
- 
       </div>
     </div>
   </section>
