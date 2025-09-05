@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hudson Portfolio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Georgia', serif;
+      background-color: var(--bg);
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* Theme Colors */
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --primary: #e94d1a;
+    }
+    .dark {
+      --bg: #0d1117;
+      --text: #f5f5f5;
+      --primary: #ff6f3c;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: var(--bg);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+    header .logo {
+      font-size: 22px;
+      font-weight: bold;
+    }
+    nav {
+      display: flex;
+      gap: 25px;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    nav a:hover { color: var(--primary); }
+
+    /* Dark/Light toggle */
+    .theme-toggle {
+      cursor: pointer;
+      font-size: 20px;
+      color: var(--text);
+      transition: color 0.3s;
+    }
+
+    /* Hero Section */
+    .hero {
+      display: flex;
+      height: 100vh;
+      margin-top: 60px;
+    }
+    .hero-left {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 50px;
+      background: var(--bg);
+    }
+    .hero-left h1 {
+      font-size: 50px;
+      line-height: 1.2;
+    }
+    .hero-left h1 span { color: var(--primary); }
+    .hero-left p { margin-top: 15px; font-size: 20px; }
+
+    .hero-buttons {
+      margin-top: 25px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 12px 20px;
+      border: 2px solid var(--text);
+      background: transparent;
+      color: var(--text);
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn.primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+    }
+    .btn:hover {
+      background: var(--text);
+      color: var(--bg);
+    }
+    .btn.primary:hover { opacity: 0.9; }
+
+    .hero-right {
+      flex: 1;
+      background: url('assets/bg.jpg') center/cover no-repeat;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      padding: 30px;
+    }
+
+    /* Socials */
+    .socials {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .socials a {
+      color: white;
+      font-size: 22px;
+      transition: opacity 0.3s;
+    }
+    .socials a:hover { opacity: 0.7; }
+
+    /* CV button */
+    .cv-btn {
+      position: absolute;
+      bottom: 30px;
+      background: transparent;
+      border: 2px solid white;
+      color: white;
+      padding: 12px 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .cv-btn:hover { background: white; color: black; }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      nav { display: none; }
+      .hero { 
+        flex-direction: column;
+        background: url('assets/bg.jpg') center/cover no-repeat;
+        color: white;
+      }
+      .hero-left, .hero-right {
+        flex: none;
+        width: 100%;
+        height: auto;
+        padding: 40px 20px;
+        background: rgba(0,0,0,0.6);
+      }
+      .hero-left h1 { font-size: 32px; color: white; }
+      .hero-left p { color: white; }
+      .hero-buttons { flex-direction: column; align-items: start; }
+      .btn { border: 2px solid white; color: white; }
+      .btn.primary { background: var(--primary); border: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="logo">Hudson.</div>
+    <nav>
+      <a href="#">Intro</a>
+      <a href="#">About</a>
+      <a href="#">Works</a>
+      <a href="#">Contact</a>
+    </nav>
+    <i class="fa-solid fa-sun theme-toggle" id="theme-toggle"></i>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-left">
+      <div>
+        <p><span>HELLO</span></p>
+        <h1>I'm Jonathan Doe<br>a product designer<br>base in Somewhere.</h1>
+        <div class="hero-buttons">
+          <button class="btn primary">MORE ABOUT ME</button>
+          <button class="btn">GET IN TOUCH</button>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <!-- Social Links -->
+      <div class="socials">
+        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
+        <a href="mailto:someone@example.com"><i class="fas fa-envelope"></i></a>
+        <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
+      </div>
+      <!-- CV Button -->
+      <button class="cv-btn">GET MY CV</button>
+    </div>
+  </section>
+
+  <script>
+    const toggle = document.getElementById("theme-toggle");
+    const html = document.documentElement;
+
+    function updateIcon() {
+      if (html.classList.contains("dark")) {
+        toggle.classList.remove("fa-sun");
+        toggle.classList.add("fa-moon");
+      } else {
+        toggle.classList.remove("fa-moon");
+        toggle.classList.add("fa-sun");
+      }
+    }
+
+    toggle.addEventListener("click", () => {
+      html.classList.toggle("dark");
+      updateIcon();
+    });
+
+    // set correct icon on load
+    updateIcon();
+  </script>
+</body>
+</html>
