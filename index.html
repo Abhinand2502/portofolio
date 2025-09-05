@@ -13,7 +13,7 @@
        ===================== */
     :root{
       --header-h:64px;
-      --primary:#e14a2a;
+      --primary: #2a33e1;
       --accent:#2563eb; /* blue accent for active nav & socials */
       --bg:#ffffff;
       --panel:#f5f7fa;
@@ -32,7 +32,7 @@
       --glass: rgba(255,255,255,0.04);
       --glass-strong: rgba(255,255,255,0.06);
       --card-shadow: 0 10px 40px rgba(0,0,0,0.6);
-      --neon: rgba(225,74,42,0.95);
+      --neon: rgba(42, 124, 225, 0.95);
     }
 
     /* reset */
@@ -264,14 +264,124 @@
   </section>
 
   <!-- ABOUT -->
-  <section id="about">
-    <div class="section-inner">
-      <div class="box">
-        <h2 class="anim">About</h2>
-        <p class="anim">Short about text — replace with your own.</p>
+   <style>/* About Card */
+.about-card {
+  background: linear-gradient(135deg, #f9f9f9, #f0f0f0);
+  border-radius: 20px;
+  padding: 28px;
+  max-width: 500px;
+  margin: auto;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  border: 2px solid var(--primary);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.about-card:hover {
+  transform: translateY(-6px);
+}
+
+/* Profile */
+.profile-pic {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid var(--primary);
+  margin-bottom: 14px;
+}
+
+.player-name {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.player-role {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 20px;
+}
+
+/* Personal Info */
+.player-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 24px;
+  text-align: left;
+  font-size: 15px;
+}
+
+/* Education */
+.edu-section {
+  text-align: left;
+}
+
+.edu-section h3 {
+  margin-bottom: 12px;
+  color: var(--primary);
+}
+
+.edu-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.edu-section li {
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .player-info {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .edu-section {
+    text-align: center;
+  }
+}
+</style>
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-card">
+
+      <!-- Profile -->
+      <div class="about-header">
+        <img src="images/profile.jpg" alt="Profile Picture" class="profile-pic">
+        <h2 class="player-name">Abhinand Babu</h2>
+        <p class="player-role">Developer</p>
       </div>
+
+      <!-- Personal Info -->
+      <div class="player-info">
+        <div><strong>Degree:</strong> B.Tech CSE</div>
+        <div><strong>DOB:</strong> 25/02/2003</div>
+        <div><strong>Experience:</strong> Fresher</div>
+        <div><strong>Country:</strong> 🇮🇳 India</div>
+      </div>
+
+      <!-- Education -->
+      <div class="edu-section">
+        <h3>🎓 Education</h3>
+        <ul>
+          <li><strong>B.Tech in CSE</strong><br>UCE, Thodupuzha (2021–2025)<br>GPA: 6.99</li>
+          <li><strong>Higher Secondary</strong><br>St. Sebastian's HSS, Vazhithala (2019–2021)<br>94%</li>
+          <li><strong>Secondary</strong><br>Bappuji Public School, Vazhithala (2018–2019)<br>80%</li>
+        </ul>
+      </div>
+
     </div>
-  </section>
+  </div>
+</section>
+
+
 
   <!-- WORKS -->
   <section id="works">
