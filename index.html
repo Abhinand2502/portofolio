@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html lang="en" class="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Hudson Portfolio</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <style>
+    /* ---------- Base ---------- */
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: 'Georgia', serif;
       background-color: var(--bg);
       color: var(--text);
-      transition: background 0.3s, color 0.3s;
-      scroll-behavior: smooth;
+      transition: background .3s, color .3s;
     }
 
-    /* Theme Colors */
+    /* Theme */
     :root {
       --bg: #ffffff;
       --text: #000000;
       --primary: #e94d1a;
+      --header-h: 60px;
     }
     .dark {
       --bg: #0d1117;
@@ -27,58 +30,52 @@
       --primary: #ff6f3c;
     }
 
-    /* Header */
+    /* ---------- Header ---------- */
     header {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: var(--header-h);
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       padding: 15px 30px;
       background: var(--bg);
-      position: fixed;
-      width: 100%;
-      top: 0;
-      left: 0;
+      border-bottom: 1px solid rgba(0,0,0,.1);
       z-index: 1000;
-      border-bottom: 1px solid rgba(0,0,0,0.1);
     }
-    header .logo {
-      font-size: 22px;
-      font-weight: bold;
-    }
-    nav {
-      display: flex;
-      gap: 25px;
-    }
+
+    .logo { font-size: 22px; font-weight: bold; }
+    nav { display: flex; gap: 25px; }
     nav a {
       text-decoration: none;
       color: var(--text);
       font-weight: 500;
-      transition: color 0.3s;
+      transition: color .3s;
     }
     nav a:hover { color: var(--primary); }
 
-    /* Dark/Light toggle */
     .theme-toggle {
       cursor: pointer;
       font-size: 20px;
       color: var(--text);
-      transition: color 0.3s;
     }
 
-    /* Sections general */
-    section {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 20px;
+    /* Hidden by default; shown on mobile (left, replacing logo) */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: 0;
+      font-size: 22px;
+      cursor: pointer;
+      color: var(--text);
     }
 
-    /* Hero Section (Desktop) */
+    /* ---------- Hero (DESKTOP kept SAME) ---------- */
     .hero {
       display: flex;
       height: 100vh;
-      margin-top: 60px;
+      margin-top: var(--header-h);
     }
     .hero-left {
       flex: 1;
@@ -88,10 +85,7 @@
       padding: 50px;
       background: var(--bg);
     }
-    .hero-left h1 {
-      font-size: 50px;
-      line-height: 1.2;
-    }
+    .hero-left h1 { font-size: 50px; line-height: 1.2; }
     .hero-left h1 span { color: var(--primary); }
     .hero-left p { margin-top: 15px; font-size: 20px; }
 
@@ -108,18 +102,11 @@
       color: var(--text);
       font-weight: bold;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: all .3s;
     }
-    .btn.primary {
-      background: var(--primary);
-      color: white;
-      border: none;
-    }
-    .btn:hover {
-      background: var(--text);
-      color: var(--bg);
-    }
-    .btn.primary:hover { opacity: 0.9; }
+    .btn.primary { background: var(--primary); color: #fff; border: none; }
+    .btn:hover { background: var(--text); color: var(--bg); }
+    .btn.primary:hover { opacity: .9; }
 
     .hero-right {
       flex: 1;
@@ -131,7 +118,7 @@
       padding: 30px;
     }
 
-    /* Socials */
+    /* Socials on image (desktop) */
     .socials {
       position: absolute;
       right: 20px;
@@ -141,153 +128,180 @@
       flex-direction: column;
       gap: 15px;
     }
-    .socials a {
-      color: white;
-      font-size: 22px;
-      transition: opacity 0.3s;
-    }
-    .socials a:hover { opacity: 0.7; }
+    .socials a { color: #fff; font-size: 22px; transition: opacity .3s; }
+    .socials a:hover { opacity: .7; }
 
-    /* CV button */
     .cv-btn {
       position: absolute;
       bottom: 30px;
       background: transparent;
-      border: 2px solid white;
-      color: white;
+      border: 2px solid #fff;
+      color: #fff;
       padding: 12px 20px;
       font-weight: bold;
       cursor: pointer;
-      transition: 0.3s;
+      transition: .3s;
     }
-    .cv-btn:hover { background: white; color: black; }
+    .cv-btn:hover { background: #fff; color: #000; }
 
-    /* --- Mobile Fix --- */
+    /* ---------- Mobile ONLY ---------- */
     @media (max-width: 768px) {
-      nav { display: none; }
+      /* header: put hamburger where the logo was */
+      .logo { display: none; }
+      .menu-toggle { display: block; }          /* left side */
+      nav { display: none; }                    /* hide desktop links */
 
+      /* slide-down mobile menu */
+      .mobile-nav {
+        position: fixed;
+        top: var(--header-h);
+        left: 0; right: 0;
+        background: var(--bg);
+        border-bottom: 1px solid rgba(0,0,0,.1);
+        display: none;
+        z-index: 999;
+      }
+      .mobile-nav.open { display: block; }
+      .mobile-nav a {
+        display: block;
+        padding: 14px 22px;
+        text-decoration: none;
+        color: var(--text);
+        border-top: 1px solid rgba(0,0,0,.05);
+      }
+      .mobile-nav a:hover { background: rgba(0,0,0,.05); }
+
+      /* hero becomes full-screen single background with centered overlay text */
       .hero {
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin-top: 0;
-        background: url('assets/bg.jpg') center/cover no-repeat;
         position: relative;
-        color: white;
+        margin-top: var(--header-h);                 /* stay below fixed header */
+        height: calc(100vh - var(--header-h));       /* EXACTLY one screen */
+        background: url('assets/bg.jpg') center/cover no-repeat;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 20px;
+        color: #fff;
+      }
+      .hero-right { display: none; }                 /* hide split image pane */
+      .socials, .cv-btn { display: none; }           /* hide floating bits */
+
+      .hero-left {
+        background: rgba(0,0,0,.55);
+        padding: 32px 22px;
+        border-radius: 10px;
+        width: 100%;
+        max-width: 680px;
+        display: block;
         text-align: center;
       }
-      .hero-left, .hero-right {
-        all: unset;
-        display: block;
-        width: 100%;
-        color: white;
-      }
-      .hero-left {
-        background: rgba(0,0,0,0.55);
-        padding: 40px 20px;
-        border-radius: 10px;
-      }
       .hero-left h1 { font-size: 32px; }
-      .hero-left p { color: white; }
+      .hero-left p { color: #fff; }
       .hero-buttons {
         flex-direction: column;
         align-items: center;
-        gap: 15px;
+        gap: 14px;
       }
       .btn {
-        border: 2px solid white;
-        color: white;
+        border: 2px solid #fff;
+        color: #fff;
         width: 80%;
-        max-width: 250px;
+        max-width: 260px;
       }
-      .btn.primary { background: var(--primary); }
-      .socials, .cv-btn { display: none; }
+      .btn.primary { background: var(--primary); border: none; }
     }
-
-    /* Example other sections */
-    #about { background: var(--bg); color: var(--text); }
-    #works { background: #f5f5f5; color: #111; }
-    #contact { background: var(--bg); color: var(--text); }
   </style>
 </head>
+
 <body>
   <!-- Header -->
   <header>
+    <!-- replaces logo on mobile -->
+    <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
     <div class="logo">Hudson.</div>
+
     <nav>
-      <a href="#hero">Intro</a>
+      <a href="#intro">Intro</a>
       <a href="#about">About</a>
       <a href="#works">Works</a>
       <a href="#contact">Contact</a>
     </nav>
-    <i class="fa-solid fa-sun theme-toggle" id="theme-toggle"></i>
+
+    <i class="fa-solid fa-sun theme-toggle" id="theme-toggle" aria-label="Toggle theme"></i>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero" id="hero">
+  <!-- Mobile dropdown menu -->
+  <div class="mobile-nav" id="mobile-nav">
+    <a href="#intro">Intro</a>
+    <a href="#about">About</a>
+    <a href="#works">Works</a>
+    <a href="#contact">Contact</a>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero" id="intro">
     <div class="hero-left">
       <div>
         <p><span>HELLO</span></p>
         <h1>I'm Jonathan Doe<br>a product designer<br>based in Somewhere.</h1>
         <div class="hero-buttons">
-          <button class="btn primary">MORE ABOUT ME</button>
-          <button class="btn">GET IN TOUCH</button>
+          <a href="#about"><button class="btn primary">MORE ABOUT ME</button></a>
+          <a href="#contact"><button class="btn">GET IN TOUCH</button></a>
         </div>
       </div>
     </div>
+
     <div class="hero-right">
-      <!-- Social Links -->
       <div class="socials">
-        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
-        <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
+        <a href="https://instagram.com" target="_blank" rel="noreferrer"><i class="fab fa-instagram"></i></a>
+        <a href="https://linkedin.com" target="_blank" rel="noreferrer"><i class="fab fa-linkedin"></i></a>
         <a href="mailto:someone@example.com"><i class="fas fa-envelope"></i></a>
-        <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="https://github.com" target="_blank" rel="noreferrer"><i class="fab fa-github"></i></a>
       </div>
-      <!-- CV Button -->
       <button class="cv-btn">GET MY CV</button>
     </div>
   </section>
 
-  <!-- About Section -->
-  <section id="about">
-    <h2>About Me</h2>
-    <p>B.Tech CSE graduate passionate about full-stack development...</p>
+  <!-- (Optional) additional sections – each will naturally be a full page if you set a 100vh height like the hero -->
+  <!--
+  <section id="about" style="min-height:100vh; padding-top:var(--header-h);">
+    ...
   </section>
-
-  <!-- Works Section -->
-  <section id="works">
-    <h2>My Projects</h2>
-    <p>Some highlights of my work...</p>
-  </section>
-
-  <!-- Contact Section -->
-  <section id="contact">
-    <h2>Contact</h2>
-    <p>Email: someone@example.com</p>
-  </section>
+  -->
 
   <script>
-    const toggle = document.getElementById("theme-toggle");
+    // Theme toggle
+    const toggle = document.getElementById('theme-toggle');
     const html = document.documentElement;
 
     function updateIcon() {
-      if (html.classList.contains("dark")) {
-        toggle.classList.remove("fa-sun");
-        toggle.classList.add("fa-moon");
+      if (html.classList.contains('dark')) {
+        toggle.classList.remove('fa-sun');
+        toggle.classList.add('fa-moon');
       } else {
-        toggle.classList.remove("fa-moon");
-        toggle.classList.add("fa-sun");
+        toggle.classList.remove('fa-moon');
+        toggle.classList.add('fa-sun');
       }
     }
-
-    toggle.addEventListener("click", () => {
-      html.classList.toggle("dark");
+    toggle.addEventListener('click', () => {
+      html.classList.toggle('dark');
       updateIcon();
     });
-
-    // set correct icon on load
     updateIcon();
+
+    // Mobile menu
+    const menuBtn = document.getElementById('menu-toggle');
+    const mobileNav = document.getElementById('mobile-nav');
+    menuBtn.addEventListener('click', () => {
+      mobileNav.classList.toggle('open');
+    });
+    // close menu after clicking a link
+    mobileNav.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => mobileNav.classList.remove('open'));
+    });
   </script>
 </body>
 </html>
