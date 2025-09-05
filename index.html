@@ -6,7 +6,7 @@
   <title>Hudson Portfolio</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
     body {
       font-family: 'Georgia', serif;
       background-color: var(--bg);
@@ -152,26 +152,98 @@
     }
     .cv-btn:hover { background: white; color: black; }
 
+    /* Sections */
+    section {
+      padding: 100px 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    section h2 {
+      text-align: center;
+      font-size: 36px;
+      margin-bottom: 40px;
+      color: var(--primary);
+    }
+    section p {
+      font-size: 18px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    /* Works Grid */
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .work-card {
+      border: 1px solid #ddd;
+      padding: 20px;
+      border-radius: 10px;
+      background: var(--bg);
+      text-align: center;
+      transition: 0.3s;
+    }
+    .work-card:hover { transform: translateY(-5px); }
+
+    /* Contact */
+    .contact-info {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .contact-info a {
+      display: inline-block;
+      margin: 10px;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
     /* Mobile */
     @media (max-width: 768px) {
       nav { display: none; }
-      .hero { 
+
+      .hero {
         flex-direction: column;
+        height: 100vh;
         background: url('assets/bg.jpg') center/cover no-repeat;
+        position: relative;
         color: white;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        padding: 0 20px;
       }
+
       .hero-left, .hero-right {
         flex: none;
         width: 100%;
         height: auto;
-        padding: 40px 20px;
-        background: rgba(0,0,0,0.6);
+        background: none;
+        padding: 0;
       }
+
       .hero-left h1 { font-size: 32px; color: white; }
-      .hero-left p { color: white; }
-      .hero-buttons { flex-direction: column; align-items: start; }
-      .btn { border: 2px solid white; color: white; }
-      .btn.primary { background: var(--primary); border: none; }
+      .hero-left p { color: var(--primary); font-weight: bold; }
+
+      .hero-buttons {
+        margin-top: 25px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+      }
+
+      .btn {
+        border: 2px solid white;
+        color: white;
+      }
+      .btn.primary {
+        background: var(--primary);
+        border: none;
+      }
+
+      .socials, .cv-btn { display: none; }
     }
   </style>
 </head>
@@ -180,23 +252,23 @@
   <header>
     <div class="logo">Hudson.</div>
     <nav>
-      <a href="#">Intro</a>
-      <a href="#">About</a>
-      <a href="#">Works</a>
-      <a href="#">Contact</a>
+      <a href="#intro">Intro</a>
+      <a href="#about">About</a>
+      <a href="#works">Works</a>
+      <a href="#contact">Contact</a>
     </nav>
     <i class="fa-solid fa-sun theme-toggle" id="theme-toggle"></i>
   </header>
 
   <!-- Hero Section -->
-  <section class="hero">
+  <section class="hero" id="intro">
     <div class="hero-left">
       <div>
         <p><span>HELLO</span></p>
         <h1>I'm Jonathan Doe<br>a product designer<br>base in Somewhere.</h1>
         <div class="hero-buttons">
-          <button class="btn primary">MORE ABOUT ME</button>
-          <button class="btn">GET IN TOUCH</button>
+          <a href="#about"><button class="btn primary">MORE ABOUT ME</button></a>
+          <a href="#contact"><button class="btn">GET IN TOUCH</button></a>
         </div>
       </div>
     </div>
@@ -210,6 +282,37 @@
       </div>
       <!-- CV Button -->
       <button class="cv-btn">GET MY CV</button>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about">
+    <h2>About Me</h2>
+    <p>
+      I'm Jonathan Doe, a passionate product designer who loves turning ideas into reality through creative design.
+      My goal is to create meaningful user experiences by blending creativity with functionality.
+    </p>
+  </section>
+
+  <!-- Works Section -->
+  <section id="works">
+    <h2>My Works</h2>
+    <div class="works-grid">
+      <div class="work-card">Project 1</div>
+      <div class="work-card">Project 2</div>
+      <div class="work-card">Project 3</div>
+      <div class="work-card">Project 4</div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>If you’d like to work together, feel free to reach out!</p>
+    <div class="contact-info">
+      <a href="mailto:someone@example.com"><i class="fas fa-envelope"></i> Email</a>
+      <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+      <a href="https://github.com" target="_blank"><i class="fab fa-github"></i> GitHub</a>
     </div>
   </section>
 
