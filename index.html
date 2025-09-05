@@ -37,9 +37,9 @@
     /* reset */
     *,*::before,*::after{box-sizing:border-box}
     html,body{height:100%;margin:0;padding:0}
-    body{font-family:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;background:var(--bg);color:var(--text);line-height:1.45}
+    body{font-family:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;background:var(--bg);color:var(--text);line-height:1.45;-webkit-font-smoothing:antialiased}
 
-    /* remove CSS snap: we use JS-controlled fullpage snap for smoother, non-shivery behavior */
+    /* remove CSS snap: JS-controlled fullpage snapping used */
     section{min-height:100vh}
 
     /* header */
@@ -62,36 +62,30 @@
     .hero-left{padding:72px 7vw;display:flex;align-items:flex-start}
     .content{max-width:720px}
     .kicker{letter-spacing:3px;color:var(--primary);font-weight:800;margin-bottom:14px;font-size:13px}
-    h1.headline{font-family:'Playfair Display',serif;font-size:48px;line-height:1.04;margin:0;color:var(--text)}
+
+    /* headline supports pre-line so <br> works and forced wrapping if needed */
+    h1.headline{font-family:'Playfair Display',serif;font-size:48px;line-height:1.06;margin:0;color:var(--text);white-space:pre-line;word-break:break-word}
 
     .hero-buttons{margin-top:24px;display:flex;gap:14px;flex-wrap:wrap}
     .btn{padding:12px 20px;border-radius:10px;border:2px solid var(--glass);background:transparent;color:var(--text);font-weight:700;cursor:pointer}
     .btn.primary{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 12px 30px rgba(225,74,42,0.12)}
 
     .hero-right{position:relative;overflow:hidden;display:flex;align-items:stretch}
-    .hero-img{width:100%;height:100%;display:block;object-fit:cover;object-position:center;border-radius:0;min-height:100%;transition:transform .9s cubic-bezier(.2,.9,.2,1),opacity .45s}
+    .hero-img{width:100%;height:100%;display:block;object-fit:cover;object-position:center;border-radius:0;min-height:100%;transition:transform .9s cubic-bezier(.2,.9,.2,1),opacity .45s;will-change:transform}
     .hero-placeholder{width:100%;height:100%;min-height:100%;background:linear-gradient(120deg,#222 0%, #333 100%)}
 
-    /* socials: top-center of the image - futuristic pill */
+    /* socials: top-center of the image - icons only (no background) */
     .image-socials{
       position:absolute;left:50%;top:22px;transform:translateX(-50%);
-      z-index:18;display:flex;gap:12px;align-items:center;padding:10px;border-radius:999px;
-      background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      border:1px solid rgba(255,255,255,0.06);
-      backdrop-filter: blur(8px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+      z-index:18;display:flex;gap:14px;align-items:center;padding:4px;border-radius:999px;pointer-events:auto;
+      background:transparent; border: none; box-shadow:none;
     }
-    html[data-theme="dark"] .image-socials{ background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.06); }
 
     .image-socials a{
-      display:inline-grid;place-items:center;width:56px;height:56px;border-radius:14px;text-decoration:none;color:var(--text);font-size:20px;
-      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.04), rgba(0,0,0,0.04));
-      border:1px solid rgba(255,255,255,0.06);
-      transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
-      position:relative;overflow:hidden;
+      display:inline-grid;place-items:center;width:48px;height:48px;border-radius:8px;text-decoration:none;color:var(--text);font-size:20px;background:transparent;border:none;transition:transform .18s ease,filter .18s ease;
     }
     .image-socials a i{color:inherit}
-    .image-socials a:hover{transform:translateY(-6px);box-shadow:0 18px 50px rgba(225,74,42,0.12);filter:drop-shadow(0 8px 20px rgba(225,74,42,0.08))}
+    .image-socials a:hover{transform:translateY(-6px);filter:drop-shadow(0 8px 20px rgba(225,74,42,0.08))}
 
     .cv-wrap{position:absolute;left:18px;bottom:18px;z-index:6}
     .cv-btn{border:1px solid var(--glass-strong);background:transparent;color:var(--text);padding:8px 12px;border-radius:10px}
@@ -103,16 +97,16 @@
     /* small screens: stack with image on top and all text centered below */
     @media(max-width:980px){
       .hero{display:flex;flex-direction:column}
-      .hero-right{height:44vh}
-      .hero-left{padding:28px 6vw;align-items:center;text-align:center}
+      .hero-right{height:44vh;order:-1}
+      .hero-left{padding:28px 6vw;align-items:center;text-align:center;order:1}
       .content{margin:0 auto}
       .hero-buttons{justify-content:center}
       h1.headline{font-size:28px}
       .menu-btn{display:block}
       nav{display:none}
       .cv-wrap{display:none}
-      .image-socials{top:12px;padding:8px}
-      .image-socials a{width:48px;height:48px;font-size:18px}
+      .image-socials{top:12px}
+      .image-socials a{width:44px;height:44px;font-size:18px}
     }
 
     /* ensure contrast for light mode */
@@ -145,10 +139,10 @@
       <div class="hero-left">
         <div class="content">
           <div class="kicker anim">HELLO</div>
-          <h1 class="headline anim">I'm Jonathan Doe<br>a product designer<br>based in Somewhere.</h1>
+          <!-- keep explicit line breaks; pre-line ensures they render -->
+          <h1 class="headline anim">I'm Jonathan Doe\na product designer\nbased in Somewhere.</h1>
           <p class="anim" style="margin-top:16px;max-width:54ch;opacity:.92">I craft interfaces and build delightful, usable experiences. Replace this copy with your own intro — short and punchy.</p>
           <div class="hero-buttons anim">
-            <!-- ids used already in your file -->
             <button id="moreBtn" type="button" class="btn primary">MORE ABOUT ME</button>
             <button id="contactBtn" type="button" class="btn">GET IN TOUCH</button>
           </div>
@@ -160,7 +154,7 @@
         <img id="heroImgTag" class="hero-img" alt="Hero image" src="" />
         <div id="heroPlaceholder" class="hero-placeholder" aria-hidden="true"></div>
 
-        <!-- socials: TOP CENTER pill -->
+        <!-- socials: TOP CENTER icons-only -->
         <div class="image-socials" aria-hidden="false">
           <a href="mailto:your.email@example.com" title="Email" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
           <a href="https://www.linkedin.com/in/yourprofile" title="LinkedIn" aria-label="LinkedIn" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin-in"></i></a>
@@ -190,7 +184,7 @@
     (function(){ const stored = localStorage.getItem('site-theme'); if(stored==='dark' || stored==='light'){ setTheme(stored); } else { const prefers = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; setTheme(prefers ? 'dark' : 'light'); } })();
     themeBtn.addEventListener('click', ()=>{ const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; setTheme(current==='dark' ? 'light' : 'dark'); });
 
-    // Animations (smooth — light-weight)
+    // Animations (lightweight)
     const animItems = document.querySelectorAll('.anim');
     const io = new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in-view'); }); },{threshold:0.18});
     animItems.forEach(i=>io.observe(i));
@@ -229,13 +223,12 @@
 
     // Smooth snap function used by buttons and JS scroller
     function smoothSnapTo(el){
-      // temporarily disable pointer events during scroll to avoid accidental interactions
       document.body.style.pointerEvents = 'none';
       window.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
       setTimeout(()=>{ document.body.style.pointerEvents = ''; }, 700);
     }
 
-    // Fullpage one-by-one scrolling (wheel + touch) — optimized to reduce shiver
+    // Fullpage one-by-one scrolling (wheel + touch) — optimized
     (function(){
       const sections = Array.from(document.querySelectorAll('section'));
       let anim = false; let touchStartY = null; let wheelTimeout = null;
@@ -243,13 +236,11 @@
       function idx(){ const sTop = window.scrollY + 8; for(let i=0;i<sections.length;i++){ const t=sections[i].offsetTop; const b=t+sections[i].offsetHeight; if(sTop>=t && sTop<b) return i;} return 0; }
       function goto(i){ if(i<0) i=0; if(i>=sections.length) i=sections.length-1; anim=true; window.scrollTo({ top: sections[i].offsetTop, behavior: 'smooth' }); clearTimeout(wheelTimeout); wheelTimeout = setTimeout(()=>{ anim=false; }, 700); }
 
-      // wheel listener non-passive so we can prevent default while animating
       window.addEventListener('wheel', function(e){ if(anim){ e.preventDefault(); return; } if(Math.abs(e.deltaY) < 20) return; const dir = e.deltaY > 0 ? 1 : -1; const i = idx(); if(dir > 0 && i < sections.length - 1) { goto(i + 1); e.preventDefault(); } else if(dir < 0 && i > 0) { goto(i - 1); e.preventDefault(); } }, {passive: false});
 
       window.addEventListener('touchstart', e=>{ touchStartY = e.touches[0].clientY; },{passive:true});
       window.addEventListener('touchend', e=>{ if(anim || touchStartY === null) return; const end = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientY : null; if(end === null) return; const diff = touchStartY - end; if(Math.abs(diff) < 40) return; const i = idx(); if(diff > 0 && i < sections.length - 1) goto(i + 1); else if(diff < 0 && i > 0) goto(i - 1); touchStartY = null; },{passive:true});
 
-      // keyboard support
       window.addEventListener('keydown', e=>{ if(anim) return; const i = idx(); if(e.key === 'ArrowDown' || e.key === 'PageDown') goto(i + 1); if(e.key === 'ArrowUp' || e.key === 'PageUp') goto(i - 1); });
     })();
 
