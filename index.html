@@ -11,7 +11,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
-      font-family: 'Georgia', serif;
+      font-family: 'Poppins', sans-serif;
       background-color: var(--bg);
       color: var(--text);
       transition: background .3s, color .3s;
@@ -22,7 +22,7 @@
       --bg: #ffffff;
       --text: #000000;
       --primary: #e94d1a;
-      --header-h: 60px;
+      --header-h: 65px;
     }
     .dark {
       --bg: #0d1117;
@@ -39,7 +39,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 15px 30px;
+      padding: 0 30px;
       background: var(--bg);
       border-bottom: 1px solid rgba(0,0,0,.1);
       z-index: 1000;
@@ -61,7 +61,7 @@
       color: var(--text);
     }
 
-    /* Hidden by default; shown on mobile (left, replacing logo) */
+    /* Hamburger (mobile only) */
     .menu-toggle {
       display: none;
       background: none;
@@ -71,7 +71,7 @@
       color: var(--text);
     }
 
-    /* ---------- Hero (DESKTOP kept SAME) ---------- */
+    /* ---------- Hero ---------- */
     .hero {
       display: flex;
       height: 100vh;
@@ -118,7 +118,7 @@
       padding: 30px;
     }
 
-    /* Socials on image (desktop) */
+    /* Socials */
     .socials {
       position: absolute;
       right: 20px;
@@ -144,14 +144,60 @@
     }
     .cv-btn:hover { background: #fff; color: #000; }
 
-    /* ---------- Mobile ONLY ---------- */
-    @media (max-width: 768px) {
-      /* header: put hamburger where the logo was */
-      .logo { display: none; }
-      .menu-toggle { display: block; }          /* left side */
-      nav { display: none; }                    /* hide desktop links */
+    /* ---------- Sections ---------- */
+    section {
+      padding: 100px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    section h2 {
+      font-size: 36px;
+      margin-bottom: 20px;
+      color: var(--primary);
+    }
+    section p { font-size: 18px; line-height: 1.6; }
 
-      /* slide-down mobile menu */
+    #works .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: var(--bg);
+      border: 1px solid rgba(0,0,0,.1);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,.05);
+      transition: transform .2s;
+    }
+    .card:hover { transform: translateY(-5px); }
+
+    #contact form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    #contact input, #contact textarea {
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    #contact button {
+      padding: 12px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* ---------- Mobile ---------- */
+    @media (max-width: 768px) {
+      .logo { display: none; }
+      .menu-toggle { display: block; }
+      nav { display: none; }
+
       .mobile-nav {
         position: fixed;
         top: var(--header-h);
@@ -171,11 +217,10 @@
       }
       .mobile-nav a:hover { background: rgba(0,0,0,.05); }
 
-      /* hero becomes full-screen single background with centered overlay text */
       .hero {
         position: relative;
-        margin-top: var(--header-h);                 /* stay below fixed header */
-        height: calc(100vh - var(--header-h));       /* EXACTLY one screen */
+        margin-top: var(--header-h);
+        height: calc(100vh - var(--header-h));
         background: url('assets/bg.jpg') center/cover no-repeat;
         display: flex;
         align-items: center;
@@ -183,8 +228,8 @@
         padding: 0 20px;
         color: #fff;
       }
-      .hero-right { display: none; }                 /* hide split image pane */
-      .socials, .cv-btn { display: none; }           /* hide floating bits */
+      .hero-right { display: none; }
+      .socials, .cv-btn { display: none; }
 
       .hero-left {
         background: rgba(0,0,0,.55);
@@ -192,7 +237,6 @@
         border-radius: 10px;
         width: 100%;
         max-width: 680px;
-        display: block;
         text-align: center;
       }
       .hero-left h1 { font-size: 32px; }
@@ -216,24 +260,20 @@
 <body>
   <!-- Header -->
   <header>
-    <!-- replaces logo on mobile -->
     <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
       <i class="fa-solid fa-bars"></i>
     </button>
-
     <div class="logo">Hudson.</div>
-
     <nav>
       <a href="#intro">Intro</a>
       <a href="#about">About</a>
       <a href="#works">Works</a>
       <a href="#contact">Contact</a>
     </nav>
-
     <i class="fa-solid fa-sun theme-toggle" id="theme-toggle" aria-label="Toggle theme"></i>
   </header>
 
-  <!-- Mobile dropdown menu -->
+  <!-- Mobile Nav -->
   <div class="mobile-nav" id="mobile-nav">
     <a href="#intro">Intro</a>
     <a href="#about">About</a>
@@ -253,30 +293,48 @@
         </div>
       </div>
     </div>
-
     <div class="hero-right">
       <div class="socials">
-        <a href="https://instagram.com" target="_blank" rel="noreferrer"><i class="fab fa-instagram"></i></a>
-        <a href="https://linkedin.com" target="_blank" rel="noreferrer"><i class="fab fa-linkedin"></i></a>
-        <a href="mailto:someone@example.com"><i class="fas fa-envelope"></i></a>
-        <a href="https://github.com" target="_blank" rel="noreferrer"><i class="fab fa-github"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-linkedin"></i></a>
+        <a href="#"><i class="fas fa-envelope"></i></a>
+        <a href="#"><i class="fab fa-github"></i></a>
       </div>
       <button class="cv-btn">GET MY CV</button>
     </div>
   </section>
 
-  <!-- (Optional) additional sections – each will naturally be a full page if you set a 100vh height like the hero -->
-  <!--
-  <section id="about" style="min-height:100vh; padding-top:var(--header-h);">
-    ...
+  <!-- About -->
+  <section id="about">
+    <h2>About Me</h2>
+    <p>I’m a passionate product designer with a love for clean interfaces and meaningful experiences. My work blends creativity with usability to craft designs that delight users.</p>
   </section>
-  -->
+
+  <!-- Works -->
+  <section id="works">
+    <h2>My Works</h2>
+    <div class="grid">
+      <div class="card">Project One</div>
+      <div class="card">Project Two</div>
+      <div class="card">Project Three</div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <h2>Contact Me</h2>
+    <form>
+      <input type="text" placeholder="Your Name" required>
+      <input type="email" placeholder="Your Email" required>
+      <textarea rows="5" placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </section>
 
   <script>
     // Theme toggle
     const toggle = document.getElementById('theme-toggle');
     const html = document.documentElement;
-
     function updateIcon() {
       if (html.classList.contains('dark')) {
         toggle.classList.remove('fa-sun');
@@ -298,7 +356,6 @@
     menuBtn.addEventListener('click', () => {
       mobileNav.classList.toggle('open');
     });
-    // close menu after clicking a link
     mobileNav.querySelectorAll('a').forEach(a => {
       a.addEventListener('click', () => mobileNav.classList.remove('open'));
     });
