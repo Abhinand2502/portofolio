@@ -263,123 +263,240 @@
     </div>
   </section>
 
-  <!-- ABOUT -->
-   <style>/* About Card */
-.about-card {
-  background: linear-gradient(135deg, #f9f9f9, #f0f0f0);
-  border-radius: 20px;
-  padding: 28px;
-  max-width: 500px;
-  margin: auto;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-  border: 2px solid var(--primary);
-  text-align: center;
-  transition: transform 0.3s ease;
-}
 
-.about-card:hover {
-  transform: translateY(-6px);
-}
 
-/* Profile */
-.profile-pic {
-  width: 140px;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 4px solid var(--primary);
-  margin-bottom: 14px;
-}
 
-.player-name {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 6px;
-}
 
-.player-role {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--primary);
-  margin-bottom: 20px;
-}
 
-/* Personal Info */
-.player-info {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-bottom: 24px;
-  text-align: left;
-  font-size: 15px;
-}
 
-/* Education */
-.edu-section {
-  text-align: left;
-}
+  
+  <section id="about">
+  <style>
+    /* ABOUT — single-profile improved layout (scoped) */
+    #about{display:block}
+    .about-inner{height:calc(100vh - var(--header-h));padding-top:var(--header-h);display:flex;align-items:center;justify-content:center}
+    .about-container{width:100%;max-width:1200px;padding:24px;display:grid;grid-template-columns:420px 1fr;gap:28px;align-items:stretch}
 
-.edu-section h3 {
-  margin-bottom: 12px;
-  color: var(--primary);
-}
+    /* Profile card (left) */
+    .profile-wrap{
+      background:linear-gradient(180deg,var(--panel),rgba(0,0,0,0));
+      border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:18px;box-shadow:var(--card-shadow);align-items:center;
+      min-height:420px;
+    }
+    .avatar{
+      width:160px;height:160px;border-radius:50%;overflow:hidden;border:6px solid rgba(255,255,255,0.04);display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--glass),var(--glass-strong));position:relative;
+      box-shadow:0 18px 50px rgba(37,99,235,0.10);
+    }
+    .avatar img{width:100%;height:100%;object-fit:cover;display:block}
 
-.edu-section ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  line-height: 1.6;
-}
+    .avatar-glow{
+      position:absolute;inset:auto -8px -8px -8px;border-radius:50%;width:calc(100% + 16px);height:calc(100% + 16px);
+      background:linear-gradient(90deg, rgba(42,124,225,0.12), rgba(225,74,42,0.08));filter:blur(18px);z-index:-1;
+    }
 
-.edu-section li {
-  margin-bottom: 12px;
-  font-size: 14px;
-}
+    .profile-name{font-family:'Playfair Display',serif;font-weight:900;font-size:26px;margin-top:8px;color:var(--text);text-align:center}
+    .profile-role{font-weight:700;font-size:14px;color:var(--muted);letter-spacing:0.6px;text-transform:uppercase}
+    .meta-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:8px}
+    .badge{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:999px;font-weight:700;font-size:13px;border:1px solid var(--glass-strong);background:transparent;color:var(--text)}
+    .flag{font-size:18px}
 
-/* Mobile Responsive */
-@media (max-width: 600px) {
-  .player-info {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-  .edu-section {
-    text-align: center;
-  }
-}
-</style>
-<!-- ABOUT -->
-<section id="about">
-  <div class="section-inner">
-    <div class="about-card">
+    .profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;margin-top:12px}
+    .info-item{background:transparent;padding:10px;border-radius:10px;border:1px solid var(--glass);display:flex;flex-direction:column;gap:6px}
+    .info-key{font-size:12px;color:var(--muted);font-weight:800;letter-spacing:0.7px}
+    .info-value{font-size:14px;font-weight:900;color:var(--text)}
 
-      <!-- Profile -->
-      <div class="about-header">
-        <img src="images/profile.jpg" alt="Profile Picture" class="profile-pic">
-        <h2 class="player-name">Abhinand Babu</h2>
-        <p class="player-role">Developer</p>
+    /* Right side: education + skills */
+    .right-col{display:flex;flex-direction:column;gap:18px}
+    .card{background:linear-gradient(180deg,var(--panel),rgba(0,0,0,0));border-radius:14px;padding:20px;box-shadow:var(--card-shadow)}
+    .section-title{font-family:'Playfair Display',serif;font-size:20px;margin:0 0 10px 0;color:var(--text);font-weight:800}
+
+    .edu-list{display:flex;flex-direction:column;gap:14px}
+    .edu-item{display:flex;flex-direction:column;gap:8px}
+    .edu-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .edu-school{font-weight:800;font-size:14px}
+    .edu-meta{font-size:13px;color:var(--muted);font-weight:700}
+    .edu-bar-wrap{height:12px;background:var(--muted);border-radius:999px;overflow:hidden;border:1px solid rgba(0,0,0,0.04)}
+    .edu-bar{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--primary),var(--accent));box-shadow:0 10px 30px rgba(37,99,235,0.12);transition:width 900ms cubic-bezier(.2,.9,.2,1)}
+    .edu-percent{font-weight:800;font-size:12px;margin-left:8px;color:var(--text)}
+
+    /* Skills grid - futuristic badges */
+    .skills-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .skill{
+      position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px;border-radius:12px;border:1px solid var(--glass-strong);
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));min-height:96px; text-align:center;overflow:visible;
+      transition:transform .22s ease,box-shadow .22s ease;
+    }
+    .skill:hover{transform:translateY(-8px);box-shadow:0 30px 70px rgba(37,99,235,0.08)}
+    .skill .icon{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;font-size:20px;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;box-shadow:0 10px 30px rgba(37,99,235,0.12)}
+    .skill .label{font-weight:800;font-size:13px;color:var(--text)}
+
+    /* subtle neon rim */
+    .skill::after{
+      content:"";position:absolute;inset:auto 8px 8px 8px;border-radius:12px;pointer-events:none;opacity:.06;background:linear-gradient(90deg,var(--neon),transparent);
+      filter:blur(10px)
+    }
+
+    /* Responsiveness */
+    @media (max-width:980px){
+      .about-container{grid-template-columns:1fr;gap:18px;padding:18px;align-items:start}
+      .profile-wrap{min-height:unset;padding:18px}
+      .avatar{width:120px;height:120px}
+      .skills-grid{grid-template-columns:repeat(3,1fr)}
+      .profile-grid{grid-template-columns:1fr}
+    }
+    @media (max-width:460px){
+      .avatar{width:100px;height:100px}
+      .skills-grid{grid-template-columns:repeat(2,1fr)}
+      .profile-name{font-size:20px}
+    }
+  </style>
+
+  <div class="about-inner">
+    <div class="about-container">
+      <!-- LEFT: Profile -->
+      <div class="profile-wrap anim" aria-labelledby="profileHeading">
+        <div style="position:relative">
+          <div class="avatar" aria-hidden="false">
+            <!-- PUT YOUR SINGLE PROFILE IMAGE PATH HERE -->
+            <img src="assets/profile1.jpg" alt="Abhinand profile picture">
+            <div class="avatar-glow" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <div style="text-align:center">
+          <div id="profileHeading" class="profile-name">Abhinand Babu</div>
+          <div class="profile-role">Developer · B.Tech CSE</div>
+
+          <div class="meta-row" style="margin-top:12px">
+            <div class="badge"><i class="fa-solid fa-briefcase" aria-hidden="true"></i>&nbsp;Fresher</div>
+            <div class="badge"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i>&nbsp;25/02/2003</div>
+            <div class="badge"><span class="flag">🇮🇳</span>&nbsp;Indian</div>
+          </div>
+        </div>
+
+        <div class="profile-grid" role="list" aria-label="Personal info">
+          <div class="info-item" role="listitem">
+            <div class="info-key">Full name</div>
+            <div class="info-value">Abhinand Babu</div>
+          </div>
+          <div class="info-item" role="listitem">
+            <div class="info-key">Degree</div>
+            <div class="info-value">B.Tech (CSE) — UCE Thodupuzha</div>
+          </div>
+          <div class="info-item" role="listitem">
+            <div class="info-key">Experience</div>
+            <div class="info-value">Fresher</div>
+          </div>
+          <div class="info-item" role="listitem">
+            <div class="info-key">Country</div>
+            <div class="info-value">India</div>
+          </div>
+        </div>
       </div>
 
-      <!-- Personal Info -->
-      <div class="player-info">
-        <div><strong>Degree:</strong> B.Tech CSE</div>
-        <div><strong>DOB:</strong> 25/02/2003</div>
-        <div><strong>Experience:</strong> Fresher</div>
-        <div><strong>Country:</strong> 🇮🇳 India</div>
-      </div>
+      <!-- RIGHT: Education and Skills -->
+      <div class="right-col">
+        <div class="card anim" aria-labelledby="eduTitle">
+          <h3 id="eduTitle" class="section-title">Education (Academic Journey)</h3>
 
-      <!-- Education -->
-      <div class="edu-section">
-        <h3>🎓 Education</h3>
-        <ul>
-          <li><strong>B.Tech in CSE</strong><br>UCE, Thodupuzha (2021–2025)<br>GPA: 6.99</li>
-          <li><strong>Higher Secondary</strong><br>St. Sebastian's HSS, Vazhithala (2019–2021)<br>94%</li>
-          <li><strong>Secondary</strong><br>Bappuji Public School, Vazhithala (2018–2019)<br>80%</li>
-        </ul>
-      </div>
+          <div class="edu-list">
+            <div class="edu-item">
+              <div class="edu-head">
+                <div>
+                  <div class="edu-school">B.Tech in CSE — UCE, Thodupuzha</div>
+                  <div class="edu-meta">2021 – 2025 · GPA: 6.99</div>
+                </div>
+                <div class="edu-percent" data-percent="69.9">69.9%</div>
+              </div>
+              <div class="edu-bar-wrap"><div class="edu-bar" data-width="69.9"></div></div>
+            </div>
 
+            <div class="edu-item">
+              <div class="edu-head">
+                <div>
+                  <div class="edu-school">Higher Secondary — St. Sebastian's HSS, Vazhithala</div>
+                  <div class="edu-meta">2019 – 2021</div>
+                </div>
+                <div class="edu-percent" data-percent="94">94%</div>
+              </div>
+              <div class="edu-bar-wrap"><div class="edu-bar" data-width="94"></div></div>
+            </div>
+
+            <div class="edu-item">
+              <div class="edu-head">
+                <div>
+                  <div class="edu-school">Secondary — Bappuji Public School, Vazhithala</div>
+                  <div class="edu-meta">2018 – 2019</div>
+                </div>
+                <div class="edu-percent" data-percent="80">80%</div>
+              </div>
+              <div class="edu-bar-wrap"><div class="edu-bar" data-width="80"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card anim" aria-labelledby="skillsTitle">
+          <h3 id="skillsTitle" class="section-title">Skills — Futuristic set</h3>
+
+          <div class="skills-grid" role="list" aria-label="skills">
+            <div class="skill" role="listitem"><div class="icon"><i class="fa-brands fa-python" aria-hidden="true"></i></div><div class="label">Python</div></div>
+            <div class="skill" role="listitem"><div class="icon">Dj</div><div class="label">Django</div></div>
+            <div class="skill" role="listitem"><div class="icon"><i class="fa-brands fa-html5" aria-hidden="true"></i></div><div class="label">HTML</div></div>
+            <div class="skill" role="listitem"><div class="icon"><i class="fa-brands fa-css3-alt" aria-hidden="true"></i></div><div class="label">CSS</div></div>
+
+            <div class="skill" role="listitem"><div class="icon"><i class="fa-brands fa-js" aria-hidden="true"></i></div><div class="label">JavaScript</div></div>
+            <div class="skill" role="listitem"><div class="icon"><i class="fa-brands fa-react" aria-hidden="true"></i></div><div class="label">React</div></div>
+            <div class="skill" role="listitem"><div class="icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div><div class="label">SQL</div></div>
+            <div class="skill" role="listitem"><div class="icon"><i class="fa-solid fa-robot" aria-hidden="true"></i></div><div class="label">ML</div></div>
+
+            
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+
+  <script>
+    // reuse reveal + animate bars (keeps behavior consistent with your main script)
+    (function(){
+      const animItems = document.querySelectorAll('#about .anim');
+      if('IntersectionObserver' in window){
+        const obs = new IntersectionObserver((entries, o)=>{
+          entries.forEach(entry=>{
+            if(entry.isIntersecting){
+              entry.target.classList.add('in-view');
+              o.unobserve(entry.target);
+            }
+          });
+        }, {threshold: 0.12});
+        animItems.forEach(i => obs.observe(i));
+      } else { animItems.forEach(i => i.classList.add('in-view')); }
+
+      const eduItems = document.querySelectorAll('#about .edu-item');
+      if('IntersectionObserver' in window){
+        const obs2 = new IntersectionObserver((entries, o)=>{
+          entries.forEach(entry=>{
+            if(entry.isIntersecting){
+              const bar = entry.target.querySelector('.edu-bar');
+              if(bar){
+                const w = bar.getAttribute('data-width') || '0';
+                bar.style.width = w + '%';
+              }
+              o.unobserve(entry.target);
+            }
+          });
+        }, {threshold: 0.16});
+        eduItems.forEach(i => obs2.observe(i));
+      } else {
+        document.querySelectorAll('#about .edu-bar').forEach(b=> b.style.width = (b.getAttribute('data-width')||0) + '%');
+      }
+    })();
+  </script>
 </section>
+
+
+
 
 
 
