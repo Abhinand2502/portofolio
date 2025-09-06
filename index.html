@@ -132,28 +132,16 @@
 
     .hero-right{position:relative;overflow:hidden;display:flex;align-items:stretch;height:100%}
     .hero-img{
-  /* image fills the right column but leaves a small gap; all-side curve + content shifted left */
-  width: calc(100% - 24px);   /* 12px gap on each side */
-  height: calc(100% - 24px);  /* 12px gap top & bottom */
-  margin: 12px;               /* creates the visible spacing */
-  display: block;
-  object-fit: cover;
-
-  /* move image content 2.5cm to the left (visual shift, no layout break) */
-  object-position: calc(50% - 2.5cm) center;
-
-  min-height: 0;
-  box-sizing: border-box;
-
-  /* rounded corners on all four sides */
-  border-radius: 28px;
-  -webkit-border-radius: 28px;
-
-  /* keep your existing animation/transition behavior */
-  transition: transform .9s cubic-bezier(.2,.9,.2,1), opacity .45s;
-  will-change: transform, opacity;
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  object-position:center;
+  /* curved corners */
+  border-radius:28px;
+  transition:transform .9s cubic-bezier(.2,.9,.2,1),opacity .45s;
+  will-change:transform;
 }
-
 
     .hero-placeholder{width:100%;height:100%;min-height:100%;background:linear-gradient(120deg,#222 0%, #333 100%)}
 
