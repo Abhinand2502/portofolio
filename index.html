@@ -140,7 +140,7 @@
   box-sizing: border-box;
 
   object-fit: cover;
-  object-position: center;    /* default for mobile / small screens */
+  object-position: center;
 
   /* curved corners */
   border-radius: 28px;
@@ -149,10 +149,10 @@
   will-change: transform, opacity;
 }
 
-/* DESKTOP ONLY: shift image content 2cm left (applies when viewport > 980px) */
+/* DESKTOP ONLY: move whole image 2.5cm left */
 @media (min-width: 981px) {
-  .hero-img{
-    object-position: calc(50% - 2cm) center;
+  .hero-img {
+    margin-left: calc(12px - 2.5cm);
   }
 }
 
