@@ -566,578 +566,392 @@
   </script>
 </section>
 
-
-<!-- ===== WORKS: 3x3 grid (6 visible) + mini autoplay thumbnails + lightbox slideshow ===== -->
+<!-- ===== WORKS: BIGGER DESKTOP THUMBNAILS (2-column large tiles), 6 visible + show more ===== -->
 <section id="works" aria-labelledby="worksTitle">
   <style>
-    /* Scoped styles for the works section */
-    #works { padding: 56px 20px 80px; background: transparent; z-index:1; }
-    #works .box { max-width:1200px; margin:0 auto; }
-
-    /* Grid layout */
-    .folio-grid {
-      display: grid;
-      gap: 20px;
-      grid-template-columns: 1fr;
-      align-items:stretch;
-    }
-    @media (min-width:600px){ .folio-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width:980px){ .folio-grid { grid-template-columns: repeat(3, 1fr); } }
-
-    /* Collapsed state: hide items after 6 */
-    .folio-grid.collapsed .folio-item:nth-child(n+7) { display:none; }
-
-    .folio-item {
-      position:relative;
-      overflow:hidden;
-      border-radius:14px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
-      border:1px solid rgba(255,255,255,0.04);
-      box-shadow: 0 10px 36px rgba(16,24,40,0.12);
-      cursor:pointer;
-      min-height: 220px;
-      transition: transform .22s ease, box-shadow .22s ease, border-color .18s ease;
-      display:flex;
-      flex-direction:column;
-      justify-content:flex-end;
-    }
-    .folio-item:focus { outline: 3px solid rgba(42,124,225,0.12); outline-offset:6px; }
-
-    .folio-item:hover { transform: translateY(-6px); box-shadow: 0 30px 100px rgba(16,24,40,0.18); }
-
-    /* Thumbnail & mini slideshow inside tile */
-    .thumb-wrap {
-      position:absolute; inset:0; display:block; overflow:hidden;
-    }
-    .thumb-wrap img.base-thumb {
-      width:100%; height:100%; object-fit:cover; display:block; filter: saturate(.95) contrast(.98);
-      transform: scale(1.02); transition: transform 800ms cubic-bezier(.2,.9,.2,1);
-    }
-    .folio-item:hover .thumb-wrap img.base-thumb { transform: scale(1); }
-
-    .mini-slide {
-      position:absolute; inset:0; object-fit:cover; width:100%; height:100%;
-      opacity:0; transition:opacity .5s ease; pointer-events:none;
-      filter: saturate(.95) contrast(.98);
-    }
-    .mini-slide.show { opacity:1; pointer-events:auto; }
-
-    /* dark/light friendly neon overlay */
-    .tile-glow {
-      position:absolute; left:12px; top:12px; padding:8px 12px; border-radius:999px; font-weight:800;
-      background: linear-gradient(90deg, rgba(42,124,225,0.12), rgba(225,74,42,0.06));
-      color:var(--text); backdrop-filter: blur(6px);
-      border:1px solid rgba(255,255,255,0.04);
-      z-index:12;
+    :root{
+      --glass-strong: rgba(255,255,255,0.06);
+      --primary:#2a7cf1;
+      --text:#111;
+      --muted:#7a7a7a;
+      --header-h:72px;
     }
 
-    /* Title area on tile */
-    .tile-info {
-      position:relative; z-index:14;
-      padding:14px 16px;
-      background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.12));
-      color:#fff;
-      display:flex; justify-content:space-between; align-items:center;
-      gap:12px;
-    }
-    .project-title { font-weight:900; font-family:'Playfair Display',serif; font-size:16px; margin:0; letter-spacing:.2px; }
-    .project-sub { font-size:12px; opacity:.9; margin:0; color:rgba(255,255,255,0.9); font-weight:700; }
+    /* container */
+    #works { padding-top: calc(var(--header-h) + 24px); padding-bottom: 72px; background: transparent; position: relative; z-index: 1; }
+    #works > .section-inner { height:auto !important; min-height:0 !important; display:block !important; padding-top:0 !important; }
 
-    /* More button */
-    .more-row { display:flex; justify-content:center; margin-top:18px; gap:12px; }
-    .btn-more { padding:10px 16px; border-radius:12px; font-weight:800; border:1px solid var(--glass-strong); background:transparent; cursor:pointer; }
+    /* make the box very wide so tiles can be large */
+    #works .box { width:100%; max-width:1800px; margin:0 auto; padding:36px; box-sizing:border-box; }
 
-    /* Lightbox styles */
-    .lightbox {
-      position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:2000;
-      background: rgba(6,6,6,0.92); padding:0; opacity:0; pointer-events:none; transition: opacity .18s ease;
+    /* Grid: mobile 1, tablet 2 (square), desktop 2 (large tall tiles) */
+    .folio-grid { display:grid; gap:18px; grid-template-columns: 1fr; align-items:stretch; }
+    @media (min-width:760px) { .folio-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    /* On large screens keep 2 columns but make the tiles tall (big) */
+    @media (min-width:1200px){
+      .folio-grid { grid-template-columns: repeat(2, 1fr); gap:22px; }
+      /* Make thumbnails very tall so they take up most of the viewport height */
+      .thumb-wrap { aspect-ratio: auto; height: min(72vh, 920px); } /* tweak 72vh / 920px to increase/decrease size */
     }
+
+    /* Show only first 6 items by default */
+    .folio-grid .folio-item { display:block; }
+    .folio-grid .folio-item:nth-child(n+7) { display:none; }
+    .folio-grid.expanded .folio-item { display:block; }
+
+    .folio-item { display:block; overflow:visible; border-radius:12px; position:relative; border:1px solid var(--glass-strong); transition: transform .18s ease, box-shadow .18s ease; cursor:pointer; background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.01)); }
+    .folio-item:focus, .folio-item:hover { transform: translateY(-6px); box-shadow: 0 30px 80px rgba(16,24,40,0.12); outline:none; }
+
+    /* thumb-wrap: on small screens keep square; on desktop we override height above */
+    .thumb-wrap { width:100%; aspect-ratio:1/1; position:relative; overflow:hidden; border-radius:12px; background:#000; display:block; }
+    .thumb-wrap img {
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;         /* fill the thumb area */
+      object-position:center;
+      opacity:0;
+      transform:scale(1.04);
+      transition: opacity .55s ease, transform .6s cubic-bezier(.2,.9,.2,1);
+      backface-visibility:hidden;
+      will-change: opacity, transform;
+    }
+    .thumb-wrap img.active { opacity:1; transform:scale(1); z-index:1; }
+
+    .folio-caption { position:absolute; left:12px; bottom:12px; padding:8px 10px; border-radius:10px; background: rgba(0,0,0,0.44); color:#fff; font-weight:800; font-size:13px; display:flex; gap:8px; align-items:center; backdrop-filter: blur(6px); z-index: 10; }
+    .folio-caption small { opacity:.95; font-weight:700; font-size:12px; }
+
+    .card-info { position:absolute; left:0; right:0; bottom:0; padding:14px; box-sizing:border-box; transform: translateY(100%); transition: transform .28s cubic-bezier(.2,.9,.2,1); background: linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.78)); color:#fff; font-weight:600; font-size:13px; z-index:8; border-bottom-left-radius:12px; border-bottom-right-radius:12px; }
+    .folio-item:hover .card-info, .folio-item:focus-within .card-info { transform: translateY(0%); }
+
+    /* Lightbox (autoplay slides, no arrows/dots) - full viewport friendly */
+    .lightbox { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:3000; background: rgba(6,6,6,0.86); backdrop-filter: blur(8px); opacity:0; pointer-events:none; transition: opacity .22s ease; }
     .lightbox.open { opacity:1; pointer-events:auto; }
 
-    .lightbox-card {
-      width:100%; height:100%; display:grid; grid-template-columns: 1fr 420px; gap:18px; align-items:stretch;
-      padding:18px; box-sizing:border-box;
+    /* Make the modal use almost the full viewport on large screens —
+       and scale to available space on mobile. */
+    .lb-shell {
+      width: calc(100vw - 48px);
+      height: calc(100vh - 48px);
+      max-width: none;
+      max-height: none;
+      border-radius:12px;
+      overflow:hidden;
+      display:grid;
+      grid-template-columns: 1fr 380px;
+      gap:14px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      box-shadow: 0 60px 160px rgba(2,6,23,0.8);
+      border:1px solid rgba(255,255,255,0.03);
     }
-    @media (max-width:980px) { .lightbox-card { grid-template-columns: 1fr; padding:12px; } }
+    @media (max-width:980px){ .lb-shell { grid-template-columns: 1fr; height: calc(100vh - 28px); width: calc(100vw - 12px); } }
 
-    .lb-view { position:relative; background:#000; border-radius:10px; overflow:hidden; display:flex; align-items:center; justify-content:center; }
-    .lb-slide { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .28s ease; }
-    .lb-slide.active { opacity:1; position:relative; }
+    .lb-view { position:relative; background:#000; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .lb-slide { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; transition: opacity .28s ease; pointer-events:none; }
+    .lb-slide.active { opacity:1; position:relative; pointer-events:auto; }
+    .lb-slide img { max-width:100%; max-height:100%; object-fit:contain; display:block; margin:auto; }
 
-    .lb-slide img { max-width:100%; max-height:100%; object-fit:contain; display:block; }
+    .lb-close { position:absolute; right:12px; top:12px; z-index:40; width:44px; height:44px; border-radius:10px; display:grid; place-items:center; background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.03); color:#fff; font-size:18px; cursor:pointer; }
 
-    .lb-topbar { position:absolute; left:14px; top:14px; z-index:12; display:flex; gap:8px; align-items:center; }
-    .lb-counter { background: rgba(0,0,0,0.45); color:#fff; padding:6px 10px; border-radius:999px; font-weight:800; border:1px solid rgba(255,255,255,0.04); font-size:13px; }
+    .lb-meta { padding:18px; display:flex; flex-direction:column; gap:12px; overflow:auto; color:var(--text); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
+    .lb-title { font-family:'Playfair Display', serif; font-size:22px; font-weight:900; margin:0; color:var(--text); }
+    .lb-desc { color:var(--muted); font-size:13px; line-height:1.45; margin:0; min-height:48px; }
 
-    .lb-controls { position:absolute; inset:auto 18px 18px 18px; display:flex; justify-content:space-between; z-index:14; pointer-events:none; }
-    .lb-arrow { pointer-events:auto; background:transparent; border:0; color:#fff; font-size:44px; padding:8px; cursor:pointer; text-shadow: 0 8px 28px rgba(0,0,0,0.6); }
-    .lb-close { position:absolute; right:18px; top:18px; background:transparent; border:0; color:#fff; font-size:26px; padding:8px; cursor:pointer; z-index:14; }
+    .lb-tech { display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; align-items:center; }
+    .tech-badge { display:flex; align-items:center; gap:8px; padding:6px 10px; border-radius:10px; border:1px solid var(--glass-strong); background:transparent; font-weight:700; font-size:13px; color:var(--text); }
+    .tech-badge img{ width:20px; height:20px; object-fit:contain; border-radius:4px; display:block; }
 
-    .lb-meta { padding:18px; background: linear-gradient(180deg,var(--panel), rgba(255,255,255,0.02)); border-left:1px solid rgba(255,255,255,0.02); overflow:auto; border-radius:10px; display:flex; flex-direction:column; gap:12px; }
-    @media (max-width:980px) { .lb-meta { position: absolute; left:0; right:0; bottom:0; width:100%; border-left:none; background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.2)); color:#fff; border-radius:8px; } }
-
-    .lightbox-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:900; margin:0; color:var(--text); }
-    .lightbox-desc { color:var(--muted); margin:0; line-height:1.45; min-height:46px; }
-
-    .project-tech { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:6px; }
-    .tech-badge { display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:8px; border:1px solid var(--glass-strong); background:transparent; font-weight:800; font-size:13px; color:var(--text); }
-    .tech-badge img, .tech-badge i { width:18px; height:18px; display:block; object-fit:contain; }
-
-    .lb-dots { display:flex; gap:8px; margin-top:6px; justify-content:center; }
-    .lb-dot { width:8px; height:8px; border-radius:999px; background:rgba(255,255,255,0.35); border:0; cursor:pointer; }
-    .lb-dot.active { background:var(--primary); box-shadow:0 8px 20px rgba(42,124,225,0.12); }
-
-    .lb-actions { margin-top:auto; display:flex; gap:10px; align-items:center; }
-    .btn { padding:10px 14px; border-radius:10px; font-weight:800; border:1px solid var(--glass-strong); background:transparent; cursor:pointer; }
+    .btn { padding:8px 12px; border-radius:10px; font-weight:800; border:1px solid var(--glass-strong); background:transparent; cursor:pointer; font-size:13px; text-decoration:none; display:inline-block; }
     .btn.primary { background:var(--primary); color:#fff; border-color:var(--primary); }
 
-    /* futuristic touches */
-    .folio-item::after {
-      content:""; position:absolute; inset:auto -20% -40% -20%; background: radial-gradient(600px 200px at 10% 20%, rgba(37,99,235,0.06), transparent 10%), radial-gradient(500px 150px at 90% 80%, rgba(225,74,42,0.03), transparent 10%); pointer-events:none; filter:blur(10px);
+    /* Show more styling */
+    .show-more-wrap { text-align:center; margin-top:18px; }
+    .show-more { display:inline-block; padding:10px 16px; border-radius:999px; border:1px solid var(--glass-strong); background:transparent; font-weight:800; cursor:pointer; }
+
+    @media (max-width:760px){
+      .folio-caption{ left:8px; bottom:8px; padding:6px 8px; font-size:12px; }
+      .card-info{ padding:12px; font-size:13px }
+      .lb-meta{ padding:12px }
+      .lb-title{ font-size:18px }
+      .lb-shell { gap:8px; }
     }
 
-    /* ensure visible on both themes */
-    html[data-theme="dark"] .folio-item { border-color: rgba(255,255,255,0.06); }
-    html[data-theme="dark"] .tile-glow { border-color: rgba(255,255,255,0.06); }
-    html[data-theme="dark"] .lb-meta { background: linear-gradient(180deg,var(--panel), rgba(255,255,255,0.01)); color:var(--text); }
-
-    /* small screens */
-    @media (max-width:680px) {
-      .folio-item { min-height: 160px; border-radius:12px; }
-      .project-title { font-size:15px; }
-    }
+    .sr-only { position:absolute !important; width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0 }
   </style>
 
   <div class="section-inner">
     <div class="box">
       <h2 id="worksTitle" class="anim">Selected Works</h2>
-      <p class="anim" style="margin-bottom:18px">Click a card to open the project — slideshow, description and tech stack.</p>
+      <p class="anim">Bigger tiles on desktop — two columns with tall thumbnails so projects dominate the page. Showing first 6; click Show more to reveal all.</p>
 
-      <div id="folioGrid" class="folio-grid anim collapsed" aria-live="polite">
-        <!-- 9 demo projects; only first 6 are visible due to .collapsed -->
-        <!-- Each project uses data-images (|' or , separators) for multiple images -->
-        <button class="folio-item" data-images="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='100%' height='100%' fill='%2310232b'/%3E%3Ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='54' fill='%23fff'%3EProject%201 - Slide%201%3C/text%3E%3C/svg%3E|data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='100%' height='100%' fill='%233b82f6'/%3E%3Ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='54' fill='%23fff'%3EProject%201 - Slide%202%3C/text%3E%3C/svg%3E"
-                data-title="Sunset Rider"
-                data-desc="A short documentary sequence: color graded stills and motion frames. Narrative-focused editing."
-                data-tech="fa-brands fa-python,data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18'%3E%3Crect width='100%25' height='100%25' fill='%23ff9900'/%3E%3C/text%3E,fa-brands fa-figma">
-          <div class="thumb-wrap" aria-hidden="true">
-            <img class="base-thumb" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='100%' height='100%' fill='%230f172a'/%3E%3Ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='36' fill='%23fff'%3ESunset Rider%3C/text%3E%3C/svg%3E" alt="">
-          </div>
-          <div class="tile-glow">Featured</div>
-          <div class="tile-info">
-            <h3 class="project-title">Sunset Rider</h3>
-            <span class="project-sub">Documentary</span>
-          </div>
+      <div class="folio-grid anim" id="folioGrid" aria-live="polite">
+        <!-- 6 visible demo items (replace data-images with your own images) -->
+        <button class="folio-item"
+          data-images="/mnt/data/878900a8-a65a-4bfd-871d-3c0403a97085.jpg,/mnt/data/f1eb9623-19cf-4ec8-8c21-33efe692ac83.jpg,/mnt/data/6c2bb8ce-8785-4ca0-9788-3c30283b02bb.png"
+          data-title="White Knit Cap"
+          data-desc="Portrait retouch & color correction.">
+          <span class="thumb-wrap" aria-hidden="true"></span>
+          <div class="folio-caption"><span>White Knit Cap</span><small>Portrait</small></div>
+          <div class="card-info">High-end portrait retouch & lighting study.</div>
         </button>
 
-        <button class="folio-item" data-images="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='100%' height='100%' fill='%23165e83'/%3E%3Ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='54' fill='%23fff'%3EPoster%3C/text%3E%3C/svg%3E"
-                data-title="Minimal Poster"
-                data-desc="A type-first poster concept with modular layout and responsive typography."
-                data-tech="fa-brands fa-html5, fa-brands fa-css3-alt"
-                >
-          <div class="thumb-wrap" aria-hidden="true">
-            <img class="base-thumb" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='100%' height='100%' fill='%23165e83'/%3E%3Ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='36' fill='%23fff'%3EMinimal Poster%3C/text%3E%3C/svg%3E" alt="">
-          </div>
-          <div class="tile-glow">Design</div>
-          <div class="tile-info">
-            <h3 class="project-title">Minimal Poster</h3>
-            <span class="project-sub">Print / UI</span>
-          </div>
+        <button class="folio-item"
+          data-images="/mnt/data/0ea86f24-b09a-4ab0-b235-020ca22f21d4.png,/mnt/data/ccf70fe2-0282-460d-aed0-c621733ceafa.png,/mnt/data/9bf0dd45-dac9-401e-aa95-319661c9c3fc.png"
+          data-title="Minimal Stool"
+          data-desc="Studio product mockups.">
+          <span class="thumb-wrap" aria-hidden="true"></span>
+          <div class="folio-caption"><span>Minimal Stool</span><small>Product</small></div>
+          <div class="card-info">Studio mockups, multiple angles included.</div>
         </button>
 
-        <button class="folio-item" data-images="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='100%' height='100%' fill='%230d9488'/%3E%3Ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='54' fill='%23fff'%3ENature%3C/text%3E%3C/svg%3E|data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='100%' height='100%' fill='%2334d399'/%3E%3Ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='54' fill='%23020507'%3ENature%20Alt%3C/text%3E%3C/svg%3E"
-                data-title="Nature Study"
-                data-desc="Photography series focusing on composition, color, and natural light."
-                data-tech="fa-brands fa-react, fa-brands fa-figma">
-          <div class="thumb-wrap" aria-hidden="true">
-            <img class="base-thumb" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='100%' height='100%' fill='%230d9488'/%3E%3Ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='36' fill='%23fff'%3ENature Study%3C/text%3E%3C/svg%3E" alt="">
-          </div>
-          <div class="tile-glow">Photo</div>
-          <div class="tile-info">
-            <h3 class="project-title">Nature Study</h3>
-            <span class="project-sub">Series</span>
-          </div>
+        <button class="folio-item"
+          data-images="/mnt/data/ccf70fe2-0282-460d-aed0-c621733ceafa.png,/mnt/data/6c2bb8ce-8785-4ca0-9788-3c30283b02bb.png,/mnt/data/878900a8-a65a-4bfd-871d-3c0403a97085.jpg"
+          data-title="Coffee & Tulips"
+          data-desc="Still-life composition & color grading tests.">
+          <span class="thumb-wrap" aria-hidden="true"></span>
+          <div class="folio-caption"><span>Coffee & Tulips</span><small>Still Life</small></div>
+          <div class="card-info">Natural light & reflector experiments.</div>
         </button>
 
-        <button class="folio-item" data-images="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='100%' height='100%' fill='%23ef4444'/%3E%3Ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='54' fill='%23fff'%3EProduct%3C/text%3E%3C/svg%3E"
-                data-title="Product Mock"
-                data-desc="Product mockups and style guide for an e-commerce flow."
-                data-tech="fa-brands fa-js, fa-brands fa-react">
-          <div class="thumb-wrap" aria-hidden="true">
-            <img class="base-thumb" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='100%' height='100%' fill='%23ef4444'/%3E%3Ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='36' fill='%23fff'%3EProduct Mock%3C/text%3E%3C/svg%3E" alt="">
-          </div>
-          <div class="tile-glow">E-com</div>
-          <div class="tile-info">
-            <h3 class="project-title">Product Mock</h3>
-            <span class="project-sub">E-commerce</span>
-          </div>
+        <button class="folio-item"
+          data-images="/mnt/data/6c2bb8ce-8785-4ca0-9788-3c30283b02bb.png,/mnt/data/878900a8-a65a-4bfd-871d-3c0403a97085.jpg,/mnt/data/f1eb9623-19cf-4ec8-8c21-33efe692ac83.jpg"
+          data-title="Monochrome Portrait"
+          data-desc="B&W workflow & grain.">
+          <span class="thumb-wrap" aria-hidden="true"></span>
+          <div class="folio-caption"><span>Monochrome Portrait</span><small>Portrait</small></div>
+          <div class="card-info">Film-look presets and dodge & burn process.</div>
         </button>
 
-        <button class="folio-item" data-images="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='100%' height='100%' fill='%234b5563'/%3E%3Ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='54' fill='%23fff'%3EPortrait%3C/text%3E%3C/svg%3E"
-                data-title="Portrait Study"
-                data-desc="Retouch & lighting experiments for studio portraits."
-                data-tech="fa-brands fa-figma, fa-brands fa-photoshop">
-          <div class="thumb-wrap" aria-hidden="true">
-            <img class="base-thumb" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='100%' height='100%' fill='%234b5563'/%3E%3Ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='36' fill='%23fff'%3EPortrait Study%3C/text%3E%3C/svg%3E" alt="">
-          </div>
-          <div class="tile-glow">Retouch</div>
-          <div class="tile-info">
-            <h3 class="project-title">Portrait Study</h3>
-            <span class="project-sub">Studio</span>
-          </div>
+        <button class="folio-item"
+          data-images="/mnt/data/9bf0dd45-dac9-401e-aa95-319661c9c3fc.png,/mnt/data/0ea86f24-b09a-4ab0-b235-020ca22f21d4.png,/mnt/data/ccf70fe2-0282-460d-aed0-c621733ceafa.png"
+          data-title="Hanging Lamp"
+          data-desc="Studio lamp photography.">
+          <span class="thumb-wrap" aria-hidden="true"></span>
+          <div class="folio-caption"><span>Hanging Lamp</span><small>Product</small></div>
+          <div class="card-info">Texture capture & vignettes for product shots.</div>
         </button>
 
-        <button class="folio-item" data-images="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='100%' height='100%' fill='%235b21b6'/%3E%3Ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='54' fill='%23fff'%3EStreet%3C/text%3E%3C/svg%3E"
-                data-title="Street Frames"
-                data-desc="Documentary street frames focusing on decisive moments."
-                data-tech="fa-brands fa-python">
-          <div class="thumb-wrap" aria-hidden="true">
-            <img class="base-thumb" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='100%' height='100%' fill='%235b21b6'/%3E%3Ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='36' fill='%23fff'%3EStreet Frames%3C/text%3E%3C/svg%3E" alt="">
-          </div>
-          <div class="tile-glow">Street</div>
-          <div class="tile-info">
-            <h3 class="project-title">Street Frames</h3>
-            <span class="project-sub">Documentary</span>
-          </div>
+        <button class="folio-item"
+          data-images="/mnt/data/f1eb9623-19cf-4ec8-8c21-33efe692ac83.jpg,/mnt/data/878900a8-a65a-4bfd-871d-3c0403a97085.jpg,/mnt/data/6c2bb8ce-8785-4ca0-9788-3c30283b02bb.png"
+          data-title="Green Leaves"
+          data-desc="Macro foliage textures.">
+          <span class="thumb-wrap" aria-hidden="true"></span>
+          <div class="folio-caption"><span>Green Leaves</span><small>Nature</small></div>
+          <div class="card-info">High-resolution macro textures for design.</div>
         </button>
 
-        <!-- Hidden by default (show after "View more") -->
-        <button class="folio-item" data-images="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='100%' height='100%' fill='%231f2937'/%3E%3Ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='54' fill='%23fff'%3EType%20Poster%3C/text%3E%3C/svg%3E"
-                data-title="Type Poster" data-desc="Typographic poster experiment." data-tech="fa-brands fa-html5, fa-brands fa-css3-alt">
-          <div class="thumb-wrap"><img class="base-thumb" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='100%' height='100%' fill='%231f2937'/%3E%3Ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='36' fill='%23fff'%3EType Poster%3C/text%3E%3C/svg%3E" alt=""></div>
-          <div class="tile-glow">Type</div>
-          <div class="tile-info"><h3 class="project-title">Type Poster</h3><span class="project-sub">Poster</span></div>
+        <!-- hidden extras (7,8,9) -->
+        <button class="folio-item" data-images="https://images.unsplash.com/photo-1503602642458-232111445657?w=1600&q=80,https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=1600&q=80" data-title="Type Poster" data-desc="Typographic systems.">
+          <span class="thumb-wrap" aria-hidden="true"></span>
+          <div class="folio-caption"><span>Type Poster</span><small>Poster</small></div>
+          <div class="card-info">Type scales & modular layout samples.</div>
         </button>
 
-        <button class="folio-item" data-images="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='100%' height='100%' fill='%232dd4bf'/%3E%3Ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='54' fill='%23000604'%3EProduct%20Grid%3C/text%3E%3C/svg%3E"
-                data-title="Product Grid" data-desc="Designing structured product listing layout." data-tech="fa-brands fa-css3-alt">
-          <div class="thumb-wrap"><img class="base-thumb" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='100%' height='100%' fill='%232dd4bf'/%3E%3Ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='36' fill='%23000604'%3EProduct Grid%3C/text%3E%3C/svg%3E" alt=""></div>
-          <div class="tile-glow">Grid</div>
-          <div class="tile-info"><h3 class="project-title">Product Grid</h3><span class="project-sub">System</span></div>
+        <button class="folio-item" data-images="https://images.unsplash.com/photo-1487017159836-2f9a0f0d9891?w=1600&q=80,https://images.unsplash.com/photo-1505672678657-cc7037095e2f?w=1600&q=80" data-title="Product Grid" data-desc="E-commerce grid.">
+          <span class="thumb-wrap" aria-hidden="true"></span>
+          <div class="folio-caption"><span>Product Grid</span><small>E-commerce</small></div>
+          <div class="card-info">Grid sizing & card states.</div>
         </button>
 
-        <button class="folio-item" data-images="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='100%' height='100%' fill='%23f59e0b'/%3E%3Ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='54' fill='%23060e02'%3EColor%20Studies%3C/text%3E%3C/svg%3E"
-                data-title="Color Studies" data-desc="Color grading & palette experiments." data-tech="fa-brands fa-figma, fa-brands fa-photoshop">
-          <div class="thumb-wrap"><img class="base-thumb" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='100%' height='100%' fill='%23f59e0b'/%3E%3Ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='36' fill='%23060e02'%3EColor Studies%3C/text%3E%3C/svg%3E" alt=""></div>
-          <div class="tile-glow">Color</div>
-          <div class="tile-info"><h3 class="project-title">Color Studies</h3><span class="project-sub">Style</span></div>
+        <button class="folio-item" data-images="https://images.unsplash.com/photo-1498079022511-d15614cb1c02?w=1600&q=80,https://images.unsplash.com/photo-1503602642458-232111445657?w=1600&q=80" data-title="Grid Study" data-desc="Responsive layout experiments.">
+          <span class="thumb-wrap" aria-hidden="true"></span>
+          <div class="folio-caption"><span>Grid Study</span><small>UI</small></div>
+          <div class="card-info">Responsive behavior & breakpoint testing.</div>
         </button>
       </div>
 
-      <div class="more-row">
-        <button id="toggleMore" class="btn btn-more" aria-expanded="false" aria-controls="folioGrid">View more projects</button>
-        <a href="#contact" class="btn" style="text-decoration:none">Contact about work</a>
-      </div>
+      <div class="show-more-wrap"><button id="showMoreBtn" class="show-more">Show more</button></div>
     </div>
   </div>
 
-  <!-- Lightbox -->
-  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
-    <div class="lightbox-card" role="document" aria-labelledby="lbTitle">
-      <div class="lb-view" id="lbView">
-        <div class="lb-topbar">
-          <div id="lbCounter" class="lb-counter" aria-hidden="true">1 / 1</div>
-        </div>
-
+  <!-- lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="lbTitle" tabindex="-1">
+    <div class="lb-shell" role="document">
+      <div class="lb-view" id="lbView" aria-live="polite">
         <div id="lbSlides" style="width:100%;height:100%;position:relative"></div>
-
-        <div class="lb-controls" aria-hidden="false">
-          <button id="lbPrev" class="lb-arrow" aria-label="Previous">‹</button>
-          <button id="lbNext" class="lb-arrow" aria-label="Next">›</button>
-        </div>
-
-        <button id="lbClose" class="lb-close" aria-label="Close (Esc)">✕</button>
+        <button class="lb-close" id="lbClose" aria-label="Close (Esc)">✕</button>
       </div>
 
-      <aside class="lb-meta" id="lbMeta">
-        <h3 id="lbTitle" class="lightbox-title">Project title</h3>
-        <p id="lbDesc" class="lightbox-desc">Project short description</p>
-        <div id="lbTech" class="project-tech" aria-hidden="false"></div>
-        <div id="lbDots" class="lb-dots" role="tablist" aria-label="Slides"></div>
+      <div class="lb-meta" id="lbMeta">
+        <h3 id="lbTitle" class="lb-title">Title</h3>
+        <p id="lbDesc" class="lb-desc">Full description here.</p>
+
+        <div class="lb-tech" id="lbTech" aria-hidden="false"></div>
+
         <div class="lb-actions">
           <a id="lbLink" class="btn primary" href="#" target="_blank" rel="noopener">Open Project</a>
-          <button id="lbDownload" class="btn" title="Download image">Download</button>
+          <button id="lbDownload" class="btn" title="Download current image">Download</button>
         </div>
-      </aside>
+      </div>
     </div>
   </div>
 
   <script>
     (function(){
-      // Elements
       const grid = document.getElementById('folioGrid');
+      if(!grid) return;
       const items = Array.from(grid.querySelectorAll('.folio-item'));
-      const toggleMore = document.getElementById('toggleMore');
-
-      // LIGHTBOX elements
       const lightbox = document.getElementById('lightbox');
       const lbSlides = document.getElementById('lbSlides');
       const lbTitle = document.getElementById('lbTitle');
       const lbDesc = document.getElementById('lbDesc');
       const lbTech = document.getElementById('lbTech');
       const lbLink = document.getElementById('lbLink');
-      const lbPrev = document.getElementById('lbPrev');
-      const lbNext = document.getElementById('lbNext');
       const lbClose = document.getElementById('lbClose');
-      const lbDots = document.getElementById('lbDots');
-      const lbCounter = document.getElementById('lbCounter');
       const lbDownload = document.getElementById('lbDownload');
 
-      // mini-slideshow timer per tile
-      const miniTimers = new Map();
-      const MINI_DELAY = 1600;
-      // lightbox slideshow
-      let lbSlidesArr = [];
-      let lbCurrent = 0;
-      let lbAuto = null;
-      const LB_AUTOPLAY = 2800;
-      let lastFocused = null;
+      const THUMB_INTERVAL = 2200;
+      const LB_INTERVAL = 3200;
+      let lbTimer = null;
+      let lbSlidesArr = [], lbCurrent = 0, lastFocused=null;
 
-      // utility parse images string (supports "|" or ",")
-      function parseImgs(str){
-        if(!str) return [];
-        return str.split(/[,|]+/).map(s => s.trim()).filter(Boolean);
+      const TECH_LOGOS = [
+        {alt:'Python', src:'https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg'},
+        {alt:'Django', src:'https://raw.githubusercontent.com/devicons/devicon/master/icons/django/django-original.svg'},
+        {alt:'HTML5', src:'https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg'},
+        {alt:'CSS3', src:'https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg'}
+      ];
+
+      // Build thumbnail stacks and autoplay them
+      items.forEach((it, idx) => {
+        const wrap = it.querySelector('.thumb-wrap');
+        const images = (it.dataset.images || '').split(',').map(s => s.trim()).filter(Boolean);
+        const imgs = images.length ? images : ['https://via.placeholder.com/1600x1000?text=No+Image'];
+        imgs.forEach((src, i) => {
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = it.dataset.title || '';
+          img.loading = 'lazy';
+          if(i === 0) img.classList.add('active');
+          wrap.appendChild(img);
+        });
+
+        if(imgs.length > 1){
+          let t = 1;
+          const iv = setInterval(() => {
+            const slides = wrap.querySelectorAll('img');
+            if(!slides.length){ clearInterval(iv); return; }
+            slides.forEach((s,i)=> s.classList.toggle('active', i === t));
+            t = (t + 1) % slides.length;
+          }, THUMB_INTERVAL + (idx % 3) * 120);
+
+          // pause on hover / touch
+          it.addEventListener('mouseenter', () => clearInterval(iv));
+          it.addEventListener('touchstart', () => clearInterval(iv), {passive:true});
+        }
+      });
+
+      function createSlide(url, i){
+        const wrap = document.createElement('div');
+        wrap.className = 'lb-slide'; wrap.dataset.index = i;
+        const img = document.createElement('img'); img.src = url; img.alt = ''; img.loading='eager';
+        wrap.appendChild(img);
+        return wrap;
       }
 
-      // Setup mini-slideshow for each tile (auto rotates images on tile)
-      items.forEach((it, idx) => {
-        const imgStr = it.getAttribute('data-images') || '';
-        const imgs = parseImgs(imgStr);
-        const thumbWrap = it.querySelector('.thumb-wrap');
-        if(!thumbWrap) return;
-
-        // create stacked img elements for crossfade
-        const slides = imgs.length ? imgs : [ it.querySelector('img.base-thumb') ? it.querySelector('img.base-thumb').src : '' ];
-        slides.forEach((src, i) => {
-          const img = document.createElement('img');
-          img.className = 'mini-slide' + (i===0? ' show':'');
-          img.alt = '';
-          img.src = src;
-          img.decoding = 'async';
-          // place behind overlay
-          thumbWrap.appendChild(img);
-        });
-
-        // cycle slides
-        let sidx = 0;
-        if(slides.length > 1){
-          const t = setInterval(()=>{
-            const nodes = thumbWrap.querySelectorAll('.mini-slide');
-            if(!nodes || nodes.length === 0) return;
-            nodes.forEach((n,i) => n.classList.toggle('show', i === ((sidx+1) % nodes.length)));
-            sidx = (sidx+1) % nodes.length;
-          }, MINI_DELAY);
-          miniTimers.set(it, t);
-
-          // pause tile sliding while user hovers/focuses a tile
-          it.addEventListener('mouseenter', ()=> clearInterval(miniTimers.get(it)));
-          it.addEventListener('mouseleave', ()=> {
-            if(miniTimers.get(it)) return;
-            const tt = setInterval(()=> {
-              const nodes = thumbWrap.querySelectorAll('.mini-slide');
-              if(!nodes || nodes.length === 0) return;
-              nodes.forEach((n,i)=> n.classList.toggle('show', i === ((sidx+1) % nodes.length)));
-              sidx = (sidx+1) % nodes.length;
-            }, MINI_DELAY);
-            miniTimers.set(it, tt);
-          });
-          // start paused until created (already started above)
-        }
-      });
-
-      // Toggle more projects
-      toggleMore.addEventListener('click', (e) => {
-        const expanded = grid.classList.toggle('collapsed', false);
-        // if collapsed class removed -> show all
-        if(!grid.classList.contains('collapsed')){
-          // show all
-          grid.classList.remove('collapsed');
-          toggleMore.textContent = 'Show fewer projects';
-          toggleMore.setAttribute('aria-expanded', 'true');
-        } else {
-          grid.classList.add('collapsed');
-          toggleMore.textContent = 'View more projects';
-          toggleMore.setAttribute('aria-expanded', 'false');
-        }
-        // simpler: toggle by checking if currently collapsed class exists
-        if(grid.classList.contains('collapsed')){
-          // collapsed => show only 6
-          toggleMore.textContent = 'View more projects';
-          toggleMore.setAttribute('aria-expanded','false');
-        } else {
-          toggleMore.textContent = 'Show fewer projects';
-          toggleMore.setAttribute('aria-expanded','true');
-        }
-      });
-
-      // Open lightbox for a tile index
-      function openLightbox(idx){
-        const it = items[idx];
-        if(!it) return;
-        lastFocused = document.activeElement;
-
-        // parse images for LB
-        const images = parseImgs(it.getAttribute('data-images') || '');
-        const fallback = it.querySelector('img.base-thumb');
-        if(images.length === 0 && fallback && fallback.src) images.push(fallback.src);
-
-        lbSlidesArr = images;
-        lbSlides.innerHTML = '';
-        lbSlidesArr.forEach((u,i) => {
-          const s = document.createElement('div');
-          s.className = 'lb-slide' + (i===0 ? ' active' : '');
-          const img = document.createElement('img');
-          img.src = u;
-          img.alt = '';
-          s.appendChild(img);
-          lbSlides.appendChild(s);
-        });
-
-        // meta
-        lbTitle.textContent = it.getAttribute('data-title') || '';
-        lbDesc.textContent = it.getAttribute('data-desc') || '';
-        lbLink.href = it.getAttribute('data-link') || '#';
-
-        // tech
+      function renderTechBadges(){
         lbTech.innerHTML = '';
-        const techStr = it.getAttribute('data-tech') || '';
-        const parts = techStr.split(/[,|]+/).map(s=>s.trim()).filter(Boolean);
-        parts.forEach(tok => {
-          const badge = document.createElement('div');
-          badge.className = 'tech-badge';
-          if(tok.includes('fa-')){ // font-awesome class
-            const i = document.createElement('i'); i.className = tok; i.setAttribute('aria-hidden','true');
-            badge.appendChild(i);
-            const span = document.createElement('span'); span.textContent = tok.split(' ').pop().replace('fa-','').toUpperCase();
-            badge.appendChild(span);
-          } else { // image url (data uri or path)
-            const img = document.createElement('img'); img.src = tok; img.alt = '';
-            badge.appendChild(img);
-          }
+        TECH_LOGOS.forEach(t => {
+          const badge = document.createElement('div'); badge.className = 'tech-badge';
+          const img = document.createElement('img'); img.src = t.src; img.alt = t.alt;
+          badge.appendChild(img);
+          const span = document.createElement('span'); span.textContent = t.alt; badge.appendChild(span);
           lbTech.appendChild(badge);
         });
-
-        // dots
-        lbDots.innerHTML = '';
-        for(let i=0;i<lbSlidesArr.length;i++){
-          const d = document.createElement('button');
-          d.className = 'lb-dot' + (i===0? ' active' : '');
-          d.dataset.index = i;
-          d.type = 'button';
-          d.addEventListener('click', ()=> { showLbSlide(Number(d.dataset.index)); restartLB(); });
-          lbDots.appendChild(d);
-        }
-
-        lbCurrent = 0;
-        updateLbCounter();
-        lbDownload.dataset.src = lbSlidesArr[0] || '';
-
-        // show
-        lightbox.classList.add('open');
-        lightbox.setAttribute('aria-hidden','false');
-        lbClose.focus();
-        document.body.style.overflow = 'hidden';
-
-        // autoplay LB
-        startLB();
-
-        // pause autoplay on hover inside LB area
-        lbSlides.addEventListener('mouseenter', stopLB);
-        lbSlides.addEventListener('mouseleave', startLB);
       }
 
-      // show slide index
       function showLbSlide(i){
         if(!lbSlidesArr.length) return;
-        if(i < 0) i = lbSlidesArr.length - 1;
+        if(i < 0) i = lbSlidesArr.length-1;
         if(i >= lbSlidesArr.length) i = 0;
         lbCurrent = i;
-        Array.from(lbSlides.children).forEach((el, idx) => el.classList.toggle('active', idx === lbCurrent));
-        Array.from(lbDots.children).forEach((d, idx) => d.classList.toggle('active', idx === lbCurrent));
-        updateLbCounter();
-        const imgEl = lbSlides.children[lbCurrent] && lbSlides.children[lbCurrent].querySelector('img');
-        if(imgEl) lbDownload.dataset.src = imgEl.src;
+        lbSlidesArr.forEach((el, idx) => el.classList.toggle('active', idx === lbCurrent));
+        const currentImg = lbSlidesArr[lbCurrent] && lbSlidesArr[lbCurrent].querySelector('img');
+        if(currentImg) lbDownload.dataset.src = currentImg.src;
       }
+      function lbNext(){ showLbSlide(lbCurrent + 1); }
+      function lbStartAutoplay(){ lbStopAutoplay(); if(lbSlidesArr.length<=1) return; lbTimer = setInterval(lbNext, LB_INTERVAL); }
+      function lbStopAutoplay(){ if(lbTimer){ clearInterval(lbTimer); lbTimer = null; } }
 
-      function nextLb(){ showLbSlide(lbCurrent + 1); }
-      function prevLb(){ showLbSlide(lbCurrent - 1); }
+      function openAt(i){
+        const item = items[i]; if(!item) return;
+        lastFocused = document.activeElement;
+        const slides = (item.dataset.images || '').split(',').map(s=>s.trim()).filter(Boolean);
+        const slidesToUse = slides.length ? slides : ['https://via.placeholder.com/1600x1000?text=No+Image'];
 
-      function updateLbCounter(){
-        lbCounter.textContent = `${lbCurrent + 1} / ${lbSlidesArr.length || 1}`;
-      }
+        lbTitle.textContent = item.dataset.title || '';
+        lbDesc.textContent = item.dataset.desc || '';
+        lbLink.href = item.dataset.link || '#';
 
-      function startLB(){
-        stopLB();
-        if(lbSlidesArr.length <= 1) return;
-        lbAuto = setInterval(()=> { nextLb(); }, LB_AUTOPLAY);
-      }
-      function stopLB(){ if(lbAuto) { clearInterval(lbAuto); lbAuto = null; } }
-      function restartLB(){ stopLB(); startLB(); }
-
-      function closeLightbox(){
-        stopLB();
-        lightbox.classList.remove('open');
-        lightbox.setAttribute('aria-hidden','true');
-        document.body.style.overflow = '';
         lbSlides.innerHTML = '';
-        lbDots.innerHTML = '';
-        lbTech.innerHTML = '';
+        lbSlidesArr = slidesToUse.map((s, idx) => {
+          const el = createSlide(s, idx);
+          lbSlides.appendChild(el);
+          return el;
+        });
+
+        showLbSlide(0);
+        renderTechBadges();
+        lightbox.classList.add('open'); lightbox.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden'; lbClose.focus();
+        lbStartAutoplay();
+
+        lbSlides.addEventListener('mouseenter', lbStopAutoplay);
+        lbSlides.addEventListener('mouseleave', lbStartAutoplay);
+      }
+
+      function closeLB(){
+        lbStopAutoplay();
+        lightbox.classList.remove('open'); lightbox.setAttribute('aria-hidden','true'); document.body.style.overflow = ''; lbSlides.innerHTML = ''; lbSlidesArr = [];
         if(lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
       }
 
-      // Attach click handlers for each tile
-      items.forEach((it, i) => {
-        it.addEventListener('click', (ev) => {
-          ev.preventDefault();
-          openLightbox(i);
-        });
-        it.addEventListener('keydown', (ev) => {
-          if(ev.key === 'Enter' || ev.key === ' '){
-            ev.preventDefault();
-            openLightbox(i);
-          }
-        });
+      items.forEach((it, idx) => {
+        it.addEventListener('click', (ev) => { ev.preventDefault(); openAt(idx); });
+        it.addEventListener('keydown', (ev) => { if(ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); openAt(idx); }});
       });
 
-      // LB controls
-      lbNext.addEventListener('click', (e) => { e.stopPropagation(); nextLb(); restartLB(); });
-      lbPrev.addEventListener('click', (e) => { e.stopPropagation(); prevLb(); restartLB(); });
-      lbClose.addEventListener('click', closeLightbox);
-
-      // keyboard navigation
+      lbClose.addEventListener('click', closeLB);
+      lightbox.addEventListener('click', (e) => { if(e.target === lightbox) closeLB(); });
       document.addEventListener('keydown', (e) => {
-        if(!lightbox.classList.contains('open')) return;
-        if(e.key === 'Escape') { closeLightbox(); }
-        else if(e.key === 'ArrowLeft') { prevLb(); restartLB(); }
-        else if(e.key === 'ArrowRight') { nextLb(); restartLB(); }
+        if(lightbox.classList.contains('open')){
+          if(e.key === 'Escape') closeLB();
+          if(e.key === 'ArrowRight') { lbNext(); }
+          if(e.key === 'ArrowLeft') { showLbSlide(lbCurrent - 1); }
+        }
       });
 
-      // backdrop click closes LB (if clicked outside card)
-      lightbox.addEventListener('click', (e) => {
-        if(e.target === lightbox) closeLightbox();
-      });
-
-      // Download current slide
       lbDownload.addEventListener('click', ()=> {
-        const url = lbDownload.dataset.src;
-        if(!url) return;
-        const a = document.createElement('a'); a.href = url; a.download = url.split('/').pop(); document.body.appendChild(a); a.click(); a.remove();
+        const url = lbDownload.dataset.src; if(!url) return;
+        const a = document.createElement('a'); a.href = url; a.download = url.split('/').pop().split('?')[0]; document.body.appendChild(a); a.click(); a.remove();
       });
 
-      // Ensure grid initial state collapsed
-      grid.classList.add('collapsed');
-      toggleMore.textContent = 'View more projects';
-      toggleMore.setAttribute('aria-expanded','false');
-
-      // Ensure tile mini slides restarted on page load for items that had intervals stopped
-      window.addEventListener('beforeunload', () => {
-        miniTimers.forEach((t) => clearInterval(t));
+      // show more toggle
+      const showMoreBtn = document.getElementById('showMoreBtn');
+      showMoreBtn.addEventListener('click', () => {
+        if(grid.classList.contains('expanded')) {
+          grid.classList.remove('expanded'); showMoreBtn.textContent = 'Show more'; document.querySelector('#works .box').scrollIntoView({behavior:'smooth'});
+        } else {
+          grid.classList.add('expanded'); showMoreBtn.textContent = 'Show less';
+        }
       });
 
+      // preload first image for each card
+      items.forEach(it => {
+        const first = (it.dataset.images || '').split(',').map(s=>s.trim()).filter(Boolean)[0];
+        if(first){ const img = new Image(); img.src = first; }
+      });
+
+      // If you want the lightbox to try and use a larger image based on viewport size,
+      // replace the srcs in data-images with larger variants or the original full-size images.
     })();
   </script>
 </section>
-<!-- ===== end WORKS block ===== -->
+<!-- ===== end WORKS ===== -->
+
+
+
 
 
 
