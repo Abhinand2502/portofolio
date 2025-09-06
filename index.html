@@ -140,13 +140,20 @@
   box-sizing: border-box;
 
   object-fit: cover;
-  object-position: center;
+  object-position: center;    /* default for mobile / small screens */
 
-  /* curved corners (unchanged) */
+  /* curved corners */
   border-radius: 28px;
 
   transition: transform .9s cubic-bezier(.2,.9,.2,1), opacity .45s;
   will-change: transform, opacity;
+}
+
+/* DESKTOP ONLY: shift image content 2cm left (applies when viewport > 980px) */
+@media (min-width: 981px) {
+  .hero-img{
+    object-position: calc(50% - 2cm) center;
+  }
 }
 
 
