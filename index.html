@@ -262,113 +262,74 @@
     </div>
   </section>
 
-  <!-- ABOUT (UPDATED: fixed contrast, equal heights, education level bars, modern skill badges) -->
+<!-- ABOUT (fixed: education level bars + proper Django logo) -->
 <section id="about">
   <style>
-    /* ABOUT — improved, scoped */
+    /* ABOUT — improved, scoped, updated for bars + real logos */
     #about { display:block; }
-    /* local theme-friendly muted color to avoid the global inversion issue */
     .about-inner { --about-muted: rgba(11,11,11,0.56); }
     html[data-theme="dark"] .about-inner { --about-muted: rgba(255,255,255,0.72); }
 
     .about-inner { min-height:calc(100vh - var(--header-h)); padding-top:var(--header-h); display:flex; align-items:center; justify-content:center; }
     .about-container { width:100%; max-width:1200px; padding:24px; display:grid; grid-template-columns:420px 1fr; gap:28px; align-items:stretch; }
 
-    /* Themed card: border/background swap handled here for crisp borders */
-    .themed-card {
-      border-radius:18px;
-      padding:20px;
-      transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease;
-      background: #fff;
-      border: 2px solid #0b0b0b;
-      color: var(--text);
-      box-shadow: 0 8px 28px rgba(16,24,40,0.06);
-    }
-    html[data-theme="dark"] .themed-card {
-      background: #0b0b0b;
-      border: 2px solid #ffffff;
-      color: var(--text);
-      box-shadow: 0 12px 36px rgba(0,0,0,0.6);
-    }
+    .themed-card { border-radius:18px; padding:20px; transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease; background: #fff; border: 2px solid #0b0b0b; color: var(--text); box-shadow: 0 8px 28px rgba(16,24,40,0.06); }
+    html[data-theme="dark"] .themed-card { background: #0b0b0b; border: 2px solid #ffffff; color: var(--text); box-shadow: 0 12px 36px rgba(0,0,0,0.6); }
 
-    /* Left profile card specifics */
     .profile-wrap { display:flex; flex-direction:column; gap:18px; align-items:center; justify-content:flex-start; position:relative; overflow:visible; }
-    /* Desktop: use a fixed min-height so right column cards match */
-    @media (min-width:980px) {
-      .profile-wrap { min-height:520px; padding:28px; }
-    }
-    @media (max-width:979px) {
-      .profile-wrap { padding:18px; min-height:unset; }
-    }
+    @media (min-width:980px) { .profile-wrap { min-height:520px; padding:28px; } }
+    @media (max-width:979px) { .profile-wrap { padding:18px; min-height:unset; } }
 
-    .avatar {
-      width:160px; height:160px; border-radius:50%; overflow:hidden; display:grid; place-items:center;
-      background: linear-gradient(135deg, var(--glass), var(--glass-strong));
-      position:relative; box-shadow:0 18px 50px rgba(37,99,235,0.08);
-    }
+    .avatar { width:160px; height:160px; border-radius:50%; overflow:hidden; display:grid; place-items:center; background: linear-gradient(135deg, var(--glass), var(--glass-strong)); position:relative; box-shadow:0 18px 50px rgba(37,99,235,0.08); }
     .avatar img { width:100%; height:100%; object-fit:cover; display:block; }
-    /* avatar ring — subtle in light, cyan in dark */
-    .avatar::after {
-      content:""; position:absolute; inset:-8px; border-radius:50%;
-      border:6px solid rgba(255,255,255,0.9); box-shadow:0 8px 30px rgba(0,0,0,0.06);
-    }
+    .avatar::after { content:""; position:absolute; inset:-8px; border-radius:50%; border:6px solid rgba(255,255,255,0.9); box-shadow:0 8px 30px rgba(0,0,0,0.06); }
     html[data-theme="dark"] .avatar::after { border-color:#00e6ff; box-shadow:0 10px 36px rgba(0,230,255,0.06); }
 
     .profile-name { font-family:'Playfair Display',serif; font-weight:900; font-size:28px; margin:0; color:var(--text); text-align:center; }
     .profile-role { font-weight:700; font-size:14px; color:var(--about-muted); letter-spacing:0.6px; text-transform:uppercase; }
 
-    /* prominent degree pill */
-    .degree-pill {
-      width:100%; display:flex; justify-content:center; align-items:center; border-radius:12px; padding:12px 16px;
-      font-weight:900; font-size:16px; letter-spacing:0.4px;
-      background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.01));
-      border:1px solid rgba(0,0,0,0.06);
-      color:var(--text);
-    }
+    .degree-pill { width:100%; display:flex; justify-content:center; align-items:center; border-radius:12px; padding:12px 16px; font-weight:900; font-size:16px; letter-spacing:0.4px; background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(0,0,0,0.06); color:var(--text); }
     html[data-theme="dark"] .degree-pill { border:1px solid rgba(255,255,255,0.06); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
 
     .meta-row { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:8px; }
-    .badge { display:inline-flex; gap:8px; align-items:center; padding:8px 12px; border-radius:999px; font-weight:700; font-size:13px;
-      background:transparent; border:1px solid rgba(0,0,0,0.06); color:var(--text); }
+    .badge { display:inline-flex; gap:8px; align-items:center; padding:8px 12px; border-radius:999px; font-weight:700; font-size:13px; background:transparent; border:1px solid rgba(0,0,0,0.06); color:var(--text); }
     html[data-theme="dark"] .badge { border-color: rgba(255,255,255,0.06); }
 
-    /* stat grid */
     .stat-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; width:100%; margin-top:14px; }
     .stat { border-radius:12px; padding:18px 12px; text-align:center; background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(0,0,0,0.06); }
     .stat .k { font-size:12px; font-weight:800; color:var(--about-muted); text-transform:uppercase; letter-spacing:0.8px; }
     .stat .v { font-size:18px; font-weight:900; color:var(--text); margin-top:8px; }
     html[data-theme="dark"] .stat { border-color: rgba(255,255,255,0.06); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
 
-    /* Right column: make stacked cards match left height on desktop */
     .right-col { display:flex; flex-direction:column; gap:18px; }
-    /* each card will expand equally so combined height == left card */
     .right-col > .card { display:flex; flex-direction:column; gap:12px; flex:1; padding:18px; border-radius:14px; box-shadow:var(--card-shadow); }
 
     .section-title { font-family:'Playfair Display',serif; font-size:20px; margin:0 0 6px 0; color:var(--text); font-weight:800; }
 
-    /* Education: keep the bar and also add a visible numeric level on the right */
+    /* EDUCATION: level bar */
     .edu-item { display:flex; flex-direction:column; gap:10px; padding:8px 0; }
     .edu-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
     .edu-school { font-weight:800; font-size:14px; color:var(--text); }
     .edu-meta { font-size:13px; color:var(--about-muted); font-weight:700; }
-    .edu-bar-wrap { height:12px; background: rgba(0,0,0,0.06); border-radius:999px; overflow:hidden; border:1px solid rgba(0,0,0,0.04); }
-    html[data-theme="dark"] .edu-bar-wrap { background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); }
-    .edu-bar { height:100%; width:0%; border-radius:999px; background: linear-gradient(90deg,var(--primary),var(--accent)); box-shadow:0 10px 30px rgba(37,99,235,0.12); transition: width 900ms cubic-bezier(.2,.9,.2,1); }
-
     .edu-row { display:flex; align-items:center; gap:12px; justify-content:space-between; }
-    .edu-percent { font-weight:900; font-size:13px; color:var(--text); min-width:48px; text-align:right; }
+    .edu-bar-wrap { flex:1; height:12px; background: rgba(0,0,0,0.06); border-radius:999px; overflow:hidden; border:1px solid rgba(0,0,0,0.04); }
+    html[data-theme="dark"] .edu-bar-wrap { background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); }
+    .edu-bar { display:block; height:100%; width:0%; border-radius:999px; background: linear-gradient(90deg,var(--primary),var(--accent)); box-shadow:0 10px 30px rgba(37,99,235,0.12); transition: width 900ms cubic-bezier(.2,.9,.2,1); }
 
-    /* Skills: cleaner logo style */
+    .edu-percent { font-weight:900; font-size:13px; color:var(--text); min-width:56px; text-align:right; }
+
+    /* SKILLS: real-logo style */
     .skills-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; }
     .skill { display:flex; gap:12px; align-items:center; padding:10px; border-radius:12px; background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(0,0,0,0.06); }
     html[data-theme="dark"] .skill { border-color: rgba(255,255,255,0.06); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
     .skill .icon { width:46px; height:46px; border-radius:10px; display:grid; place-items:center; background:#fff; box-shadow:0 8px 26px rgba(16,24,40,0.12); }
-    .skill .icon i { font-size:20px; /* color will be set per-skill class */ }
+    .skill .icon img { width:28px; height:28px; object-fit:contain; }
+    .skill .icon i { font-size:20px; }
     .skill .label { font-weight:800; font-size:14px; color:var(--text); }
 
-    /* color accents per skill for a 'brandy' look */
-    .skill.python .icon i { color:#3776AB; }      /* Python blue */
-    .skill.django .icon i { color:#0C4B33; }      /* Django dark green */
+    /* brand accents (for FA icons fallback) */
+    .skill.python .icon i { color:#3776AB; }
+    .skill.django .icon img { /* will use image file */ }
     .skill.html .icon i { color:#E34F26; }
     .skill.css .icon i { color:#1572B6; }
     .skill.js .icon i { color:#F0DB4F; text-shadow: 0 1px 0 rgba(0,0,0,0.2); }
@@ -376,10 +337,8 @@
     .skill.sql .icon i { color:#003B57; }
     .skill.ml .icon i { color:#FF6B6B; }
 
-    /* dots / micro interactions */
     .themed-card:focus-within, .themed-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(16,24,40,0.10); }
 
-    /* responsive breakpoints */
     @media (max-width:980px) {
       .about-container { grid-template-columns: 1fr; gap:18px; padding:18px; align-items:stretch; }
       .right-col { flex-direction:column; }
@@ -395,7 +354,7 @@
 
   <div class="about-inner">
     <div class="about-container">
-      <!-- LEFT: Profile (themed-card) -->
+      <!-- LEFT: Profile -->
       <div class="profile-wrap themed-card anim" aria-labelledby="profileHeading" role="region" aria-roledescription="profile card">
         <div style="position:relative; width:100%; display:flex; justify-content:center;">
           <div class="avatar" aria-hidden="false">
@@ -450,7 +409,7 @@
         </div>
       </div>
 
-      <!-- RIGHT: Education and Skills as two equal-height cards -->
+      <!-- RIGHT: Education and Skills -->
       <div class="right-col">
         <div class="card themed-card anim" aria-labelledby="eduTitle" role="region" aria-roledescription="education">
           <h3 id="eduTitle" class="section-title">Education (Academic Journey)</h3>
@@ -466,7 +425,7 @@
               </div>
               <div class="edu-row">
                 <div class="edu-bar-wrap" aria-hidden="true"><div class="edu-bar" data-width="69.9"></div></div>
-                <div style="min-width:56px;text-align:right;color:var(--about-muted);font-weight:800">Level: 69.9%</div>
+                <div class="edu-percent" aria-hidden="false">Level: <strong>69.9%</strong></div>
               </div>
             </div>
 
@@ -480,7 +439,7 @@
               </div>
               <div class="edu-row">
                 <div class="edu-bar-wrap"><div class="edu-bar" data-width="94"></div></div>
-                <div style="min-width:56px;text-align:right;color:var(--about-muted);font-weight:800">Level: 94%</div>
+                <div class="edu-percent">Level: <strong>94%</strong></div>
               </div>
             </div>
 
@@ -494,7 +453,7 @@
               </div>
               <div class="edu-row">
                 <div class="edu-bar-wrap"><div class="edu-bar" data-width="80"></div></div>
-                <div style="min-width:56px;text-align:right;color:var(--about-muted);font-weight:800">Level: 80%</div>
+                <div class="edu-percent">Level: <strong>80%</strong></div>
               </div>
             </div>
           </div>
@@ -505,42 +464,46 @@
 
           <div class="skills-grid" role="list" aria-label="skills">
             <div class="skill python" role="listitem" tabindex="0">
-              <div class="icon"><i class="fa-brands fa-python" aria-hidden="true"></i></div>
+              <div class="icon"><img src="assets/logos/python.svg" alt="Python logo" onerror="this.style.display='none';this.parentNode.innerHTML='<i class=&quot;fa-brands fa-python&quot;></i>'"></div>
               <div class="label">Python</div>
             </div>
 
             <div class="skill django" role="listitem" tabindex="0">
-              <div class="icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
+              <!-- try to load SVG Django logo; fallback to text 'Dj' if missing -->
+              <div class="icon">
+                <img src="assets/logos/django.svg" alt="Django logo"
+                     onerror="this.style.display='none'; this.parentNode.innerHTML='<span style=&quot;font-weight:900;font-size:14px;color:#0C4B33;&quot;>Dj</span>'">
+              </div>
               <div class="label">Django</div>
             </div>
 
             <div class="skill html" role="listitem" tabindex="0">
-              <div class="icon"><i class="fa-brands fa-html5" aria-hidden="true"></i></div>
+              <div class="icon"><img src="assets/logos/html5.svg" alt="HTML5" onerror="this.style.display='none';this.parentNode.innerHTML='<i class=&quot;fa-brands fa-html5&quot;></i>'"></div>
               <div class="label">HTML</div>
             </div>
 
             <div class="skill css" role="listitem" tabindex="0">
-              <div class="icon"><i class="fa-brands fa-css3-alt" aria-hidden="true"></i></div>
+              <div class="icon"><img src="assets/logos/css3.svg" alt="CSS3" onerror="this.style.display='none';this.parentNode.innerHTML='<i class=&quot;fa-brands fa-css3-alt&quot;></i>'"></div>
               <div class="label">CSS</div>
             </div>
 
             <div class="skill js" role="listitem" tabindex="0">
-              <div class="icon"><i class="fa-brands fa-js" aria-hidden="true"></i></div>
+              <div class="icon"><img src="assets/logos/javascript.svg" alt="JavaScript" onerror="this.style.display='none';this.parentNode.innerHTML='<i class=&quot;fa-brands fa-js&quot;></i>'"></div>
               <div class="label">JavaScript</div>
             </div>
 
             <div class="skill react" role="listitem" tabindex="0">
-              <div class="icon"><i class="fa-brands fa-react" aria-hidden="true"></i></div>
+              <div class="icon"><img src="assets/logos/react.svg" alt="React" onerror="this.style.display='none';this.parentNode.innerHTML='<i class=&quot;fa-brands fa-react&quot;></i>'"></div>
               <div class="label">React</div>
             </div>
 
             <div class="skill sql" role="listitem" tabindex="0">
-              <div class="icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
+              <div class="icon"><img src="assets/logos/sql.svg" alt="SQL" onerror="this.style.display='none';this.parentNode.innerHTML='<i class=&quot;fa-solid fa-database&quot;></i>'"></div>
               <div class="label">SQL</div>
             </div>
 
             <div class="skill ml" role="listitem" tabindex="0">
-              <div class="icon"><i class="fa-solid fa-robot" aria-hidden="true"></i></div>
+              <div class="icon"><img src="assets/logos/ml.svg" alt="Machine Learning" onerror="this.style.display='none';this.parentNode.innerHTML='<i class=&quot;fa-solid fa-robot&quot;></i>'"></div>
               <div class="label">ML</div>
             </div>
           </div>
@@ -550,7 +513,7 @@
   </div>
 
   <script>
-    // reveal + animate bars (keeps behavior consistent with your main script)
+    // reveal + animate bars + immediate set (fix for missing bars)
     (function(){
       const animItems = document.querySelectorAll('#about .anim');
       if('IntersectionObserver' in window){
@@ -565,6 +528,14 @@
         animItems.forEach(i => obs.observe(i));
       } else { animItems.forEach(i => i.classList.add('in-view')); }
 
+      function setEduBarsImmediate(){
+        document.querySelectorAll('#about .edu-bar').forEach(b => {
+          const w = Number(b.getAttribute('data-width') || 0);
+          b.style.width = Math.max(0, Math.min(100, w)) + '%';
+        });
+      }
+
+      // Progressively animate bars when edu items enter view (accessible)
       const eduItems = document.querySelectorAll('#about .edu-item');
       if('IntersectionObserver' in window){
         const obs2 = new IntersectionObserver((entries, o)=>{
@@ -572,20 +543,29 @@
             if(entry.isIntersecting){
               const bar = entry.target.querySelector('.edu-bar');
               if(bar){
-                const w = bar.getAttribute('data-width') || '0';
-                bar.style.width = w + '%';
+                const w = Number(bar.getAttribute('data-width') || 0);
+                // set to 0 first to ensure transition shows
+                bar.style.width = '0%';
+                // small timeout to trigger transition
+                setTimeout(()=> bar.style.width = Math.max(0, Math.min(100, w)) + '%', 80);
               }
               o.unobserve(entry.target);
             }
           });
-        }, {threshold: 0.16});
+        }, {threshold: 0.12});
         eduItems.forEach(i => obs2.observe(i));
       } else {
-        document.querySelectorAll('#about .edu-bar').forEach(b=> b.style.width = (b.getAttribute('data-width')||0) + '%');
+        setEduBarsImmediate();
       }
+
+      // Also call immediate set after DOM ready in case observer doesn't fire
+      window.addEventListener('load', () => setEduBarsImmediate());
+      // ensure immediate set also on DOMContentLoaded
+      document.addEventListener('DOMContentLoaded', () => setEduBarsImmediate());
     })();
   </script>
 </section>
+
 
 
 <!-- ===== WORKS: improved 3x3 grid + full-screen lightbox with slideshow & tech logos ===== -->
