@@ -486,10 +486,10 @@
   </script>
   </section>
 
-  <!-- ===== WORKS: cleaned 3x3 desktop + full-screen lightbox (responsive) ===== -->
+<!-- ===== WORKS: improved 3x3 grid + full-screen lightbox with slideshow & tech logos ===== -->
 <section id="works" aria-labelledby="worksTitle">
   <style>
-    /* Scoped styles for the works section */
+    /* Scoped styles for the works section (replace the old block only) */
     #works { padding: 40px 20px; background: transparent; }
     #works .box { max-width:1200px; margin:0 auto; }
 
@@ -518,16 +518,20 @@
       min-height: 0;
     }
 
-    /* Thumbnail: always cover and keep consistent aspect */
+    /* Better desktop size: keep thumbnails larger in landscape */
     .folio-item .thumb {
       width:100%;
       height:100%;
       display:block;
       object-fit:cover;
       aspect-ratio: 1 / 1; /* mobile-like square */
+      min-height: 170px;
     }
     @media (min-width:720px){
-      .folio-item .thumb { aspect-ratio: 4 / 3; } /* desktop landscape-friendly */
+      .folio-item .thumb { aspect-ratio: 4 / 3; min-height: 220px; } /* landscape-friendly */
+    }
+    @media (min-width:1200px){
+      .folio-item .thumb { min-height: 280px; } /* larger desktop */
     }
 
     .folio-item:hover { transform: translateY(-6px); box-shadow:0 30px 80px rgba(16,24,40,0.12); }
@@ -562,7 +566,7 @@
       align-items:center;
       justify-content:center;
       z-index:1600;
-      background: rgba(6,6,6,0.85);
+      background: rgba(6,6,6,0.88);
       padding:0;
       opacity:0;
       pointer-events:none;
@@ -570,8 +574,7 @@
     }
     .lightbox.open { opacity:1; pointer-events:auto; }
 
-    /* lightbox layout: image fills first column, meta panel on right (desktop).
-       On mobile meta overlays the bottom. */
+    /* take full viewport - image left, meta right on desktop */
     .lightbox-card {
       width:100%;
       height:100%;
@@ -580,14 +583,16 @@
       gap:18px;
       background:transparent;
       border-radius:0;
-      padding:24px;
+      padding:20px;
       box-shadow:none;
       overflow:hidden;
+      align-items:stretch;
     }
     @media (max-width:900px){
       .lightbox-card { grid-template-columns: 1fr; padding:14px; }
     }
 
+    /* image area with slider controls */
     .lightbox-view {
       width:100%;
       height:100%;
@@ -599,6 +604,19 @@
       overflow:hidden;
       position:relative;
     }
+    .lightbox-slide {
+      width:100%;
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:absolute;
+      top:0;left:0;
+      opacity:0;
+      transition:opacity .32s ease;
+      pointer-events:none;
+    }
+    .lightbox-slide.active { opacity:1; pointer-events:auto; position:relative; }
     .lightbox-img {
       max-width:100%;
       max-height:100%;
@@ -607,56 +625,66 @@
       margin:auto;
     }
 
+    /* slide counter */
+    .lb-counter {
+      position:absolute; left:12px; top:12px; background:rgba(0,0,0,0.4); padding:6px 10px; border-radius:999px; color:#fff; font-weight:700; font-size:13px;
+      border:1px solid rgba(255,255,255,0.04);
+    }
+
+    .lb-controls {
+      position:absolute; inset:auto 18px 18px 18px; display:flex; justify-content:space-between; pointer-events:none;
+    }
+    .lb-arrow {
+      pointer-events:auto;
+      background:transparent;border:0;color:#fff;font-size:42px;padding:12px;border-radius:10px;
+      cursor:pointer;
+      text-shadow: 0 8px 28px rgba(0,0,0,0.6);
+      user-select:none;
+    }
+    .lb-prev { left:0; }
+    .lb-next { right:0; }
+
+    .lb-close {
+      position:absolute; right:18px; top:18px; background:transparent;border:0;color:#fff;font-size:26px;padding:8px;border-radius:8px;
+      cursor:pointer; pointer-events:auto;
+    }
+
+    /* meta panel */
     .lightbox-meta {
-      padding:12px;
+      padding:18px;
       display:flex;
       flex-direction:column;
-      gap:12px;
+      gap:14px;
       background: linear-gradient(180deg,var(--panel), rgba(255,255,255,0.02));
       border-left:1px solid rgba(255,255,255,0.02);
       overflow:auto;
     }
     @media (max-width:900px){
       .lightbox-meta {
-        position:absolute;
-        left:0;
-        right:0;
-        bottom:0;
-        width:100%;
-        background: linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.2));
-        color:#fff;
-        border-left:none;
-        padding:14px;
+        position: absolute;
+        left:0; right:0; bottom:0; width:100%;
+        background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.2));
+        color:#fff; border-left:none; padding:14px;
       }
     }
-
     .lightbox-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:900; color:var(--text); margin:0; }
-    .lightbox-desc { color:var(--muted); line-height:1.4; font-size:14px; margin:0; }
-    .lightbox-actions { margin-top:auto; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .lightbox-desc { color:var(--muted); line-height:1.4; font-size:14px; margin:0; min-height:40px; }
+    .project-tech { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:6px; }
 
-    .btn-lightbox {
-      padding:10px 14px; border-radius:10px; font-weight:800; border:1px solid var(--glass-strong);
-      background:transparent; cursor:pointer;
+    .tech-badge {
+      display:inline-flex; align-items:center; gap:8px; padding:6px 8px; border-radius:8px; border:1px solid var(--glass-strong);
+      background:transparent; font-weight:700; font-size:13px; color:var(--text);
     }
+    .tech-badge img { width:20px; height:20px; object-fit:contain; display:block; border-radius:4px; }
+
+    .lightbox-actions { margin-top:auto; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .btn-lightbox { padding:10px 14px; border-radius:10px; font-weight:800; border:1px solid var(--glass-strong); background:transparent; cursor:pointer; }
     .btn-primary-lightbox { background:var(--primary); color:#fff; border-color:var(--primary); }
 
-    /* big overlay arrows & close */
-    .lb-arrow {
-      position: absolute;
-      top:50%;
-      transform:translateY(-50%);
-      background:transparent;border:0;color:#fff;font-size:38px;padding:12px;border-radius:10px;
-      cursor:pointer;pointer-events:auto;
-      text-shadow: 0 6px 22px rgba(0,0,0,0.6);
-      user-select:none;
-    }
-    .lb-prev { left:12px; }
-    .lb-next { right:12px; }
-
-    .lb-close {
-      position:absolute; right:14px; top:14px; background:transparent;border:0;color:#fff;font-size:26px;padding:8px;border-radius:8px;
-      cursor:pointer;
-    }
+    /* small dots */
+    .lb-dots { display:flex; gap:8px; align-items:center; justify-content:center; padding:8px 0; }
+    .lb-dot { width:8px; height:8px; border-radius:999px; background:rgba(255,255,255,0.35); cursor:pointer; }
+    .lb-dot.active { background:var(--primary); box-shadow:0 8px 20px rgba(42,124,225,0.12); }
 
     /* dark-mode tweaks */
     html[data-theme="dark"] .lightbox-meta { background: linear-gradient(180deg,var(--panel), rgba(255,255,255,0.01)); color:var(--text); }
@@ -668,51 +696,76 @@
   <div class="section-inner">
     <div class="box">
       <h2 id="worksTitle" class="anim">Selected Works</h2>
-      <p class="anim">Click any image to open full-screen preview.</p>
+      <p class="anim">Click any image to open full-screen project preview (slideshow + tech).</p>
 
       <div class="folio-grid anim" id="folioGrid">
-        <!-- Example items: replace src & data-large with your images; update data-title/data-desc/data-link -->
-        <button class="folio-item" data-large="assets/project1-large.jpg" data-title="Sunset Rider" data-desc="A short description about this project." data-link="https://example.com/project1">
+        <!--
+          Example items:
+          - data-images: comma-separated list for slideshow (prefer absolute or relative paths)
+          - data-title: project title
+          - data-desc: short description
+          - data-tech: comma-separated tokens; token can be:
+              * a FontAwesome class (e.g. "fa-brands fa-python") -> rendered as <i class="...">
+              * OR an image URL -> rendered as small logo image
+          - data-link: optional project link
+        -->
+        <button class="folio-item"
+                data-images="assets/project1-1.jpg,assets/project1-2.jpg,assets/project1-3.jpg"
+                data-title="Sunset Rider"
+                data-desc="A rider documentary — color graded and sequenced."
+                data-tech="fa-brands fa-python,assets/logos/ps.png,fa-brands fa-figma"
+                data-link="https://example.com/project1">
           <img class="thumb" src="assets/project1-thumb.jpg" alt="Sunset Rider - thumbnail" loading="lazy">
           <div class="folio-caption"><span>Sunset Rider</span><small>View</small></div>
         </button>
 
-        <button class="folio-item" data-large="assets/project2-large.jpg" data-title="Minimal Poster" data-desc="Poster design using type-first aesthetics." data-link="https://example.com/project2">
+        <button class="folio-item"
+                data-images="assets/project2-1.jpg"
+                data-title="Minimal Poster"
+                data-desc="Type-first poster design system."
+                data-tech="assets/logos/ai.png,fa-brands fa-html5"
+                data-link="https://example.com/project2">
           <img class="thumb" src="assets/project2-thumb.jpg" alt="Minimal Poster - thumbnail" loading="lazy">
           <div class="folio-caption"><span>Minimal Poster</span><small>View</small></div>
         </button>
 
-        <button class="folio-item" data-large="assets/project3-large.jpg" data-title="Nature Study" data-desc="Photography + color grading." data-link="https://example.com/project3">
+        <button class="folio-item"
+                data-images="assets/project3-1.jpg,assets/project3-2.jpg"
+                data-title="Nature Study"
+                data-desc="Photography series — light & shadow experiments."
+                data-tech="fa-brands fa-react,assets/logos/ps.png"
+                data-link="https://example.com/project3">
           <img class="thumb" src="assets/project3-thumb.jpg" alt="Nature Study - thumbnail" loading="lazy">
           <div class="folio-caption"><span>Nature Study</span><small>View</small></div>
         </button>
 
-        <button class="folio-item" data-large="assets/project4-large.jpg" data-title="Product Mock" data-desc="E-commerce product mockups and UI." data-link="https://example.com/project4">
+        <!-- copy pattern for your other projects -->
+        <button class="folio-item" data-images="assets/project4-1.jpg" data-title="Product Mock" data-desc="E-commerce product mockups." data-tech="fa-brands fa-js" data-link="#">
           <img class="thumb" src="assets/project4-thumb.jpg" alt="Product Mock - thumbnail" loading="lazy">
           <div class="folio-caption"><span>Product Mock</span><small>View</small></div>
         </button>
 
-        <button class="folio-item" data-large="assets/project5-large.jpg" data-title="Portrait Study" data-desc="Portrait retouch & lighting experiments." data-link="https://example.com/project5">
+        <button class="folio-item" data-images="assets/project5-1.jpg" data-title="Portrait Study" data-desc="Portrait retouching & lighting." data-tech="assets/logos/lightroom.png,fa-brands fa-figma" data-link="#">
           <img class="thumb" src="assets/project5-thumb.jpg" alt="Portrait Study - thumbnail" loading="lazy">
           <div class="folio-caption"><span>Portrait Study</span><small>View</small></div>
         </button>
 
-        <button class="folio-item" data-large="assets/project6-large.jpg" data-title="Street Frames" data-desc="Documentary street photography series." data-link="https://example.com/project6">
+        <button class="folio-item" data-images="assets/project6-1.jpg" data-title="Street Frames" data-desc="Documentary street photography." data-tech="fa-brands fa-python" data-link="#">
           <img class="thumb" src="assets/project6-thumb.jpg" alt="Street Frames - thumbnail" loading="lazy">
           <div class="folio-caption"><span>Street Frames</span><small>View</small></div>
         </button>
 
-        <button class="folio-item" data-large="assets/project7-large.jpg" data-title="Type Poster" data-desc="Type-first poster experiment." data-link="https://example.com/project7">
+        <button class="folio-item" data-images="assets/project7-1.jpg" data-title="Type Poster" data-desc="Type-driven poster experiment." data-tech="fa-brands fa-html5,assets/logos/ai.png" data-link="#">
           <img class="thumb" src="assets/project7-thumb.jpg" alt="Type Poster - thumbnail" loading="lazy">
           <div class="folio-caption"><span>Type Poster</span><small>View</small></div>
         </button>
 
-        <button class="folio-item" data-large="assets/project8-large.jpg" data-title="Product Grid" data-desc="Grid system for product listing." data-link="https://example.com/project8">
+        <button class="folio-item" data-images="assets/project8-1.jpg" data-title="Product Grid" data-desc="Grid system for product listing." data-tech="fa-brands fa-css3-alt" data-link="#">
           <img class="thumb" src="assets/project8-thumb.jpg" alt="Product Grid - thumbnail" loading="lazy">
           <div class="folio-caption"><span>Product Grid</span><small>View</small></div>
         </button>
 
-        <button class="folio-item" data-large="assets/project9-large.jpg" data-title="Color Studies" data-desc="Color grading tests and palettes." data-link="https://example.com/project9">
+        <button class="folio-item" data-images="assets/project9-1.jpg" data-title="Color Studies" data-desc="Color grading tests and palettes." data-tech="assets/logos/palette.png,fa-brands fa-figma" data-link="#">
           <img class="thumb" src="assets/project9-thumb.jpg" alt="Color Studies - thumbnail" loading="lazy">
           <div class="folio-caption"><span>Color Studies</span><small>View</small></div>
         </button>
@@ -720,22 +773,34 @@
     </div>
   </div>
 
-  <!-- Fullscreen Lightbox -->
+  <!-- Fullscreen Lightbox with slideshow -->
   <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="lbTitle" tabindex="-1">
     <div class="lightbox-card" role="document">
-      <div class="lightbox-view" id="lbView">
-        <button class="lb-arrow lb-prev" id="lbPrev" aria-label="Previous">‹</button>
-        <img id="lbImage" class="lightbox-img" src="" alt="">
-        <button class="lb-arrow lb-next" id="lbNext" aria-label="Next">›</button>
-        <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
+      <div class="lightbox-view" id="lbView" aria-live="polite">
+        <div class="lb-counter sr-only" id="lbCounter">Slide 1 of 1</div>
+
+        <!-- slides container (JS will populate slides) -->
+        <div id="lbSlides" style="width:100%;height:100%;position:relative"></div>
+
+        <div class="lb-controls" aria-hidden="false">
+          <button class="lb-arrow lb-prev" id="lbPrev" aria-label="Previous (←)">‹</button>
+          <button class="lb-arrow lb-next" id="lbNext" aria-label="Next (→)">›</button>
+        </div>
+
+        <button class="lb-close" id="lbClose" aria-label="Close (Esc)">✕</button>
       </div>
 
       <div class="lightbox-meta" id="lbMeta" aria-hidden="false">
         <h3 id="lbTitle" class="lightbox-title">Title</h3>
         <p id="lbDesc" class="lightbox-desc">Description</p>
+
+        <div class="project-tech" id="lbTech" aria-hidden="false"></div>
+
+        <div class="lb-dots" id="lbDots" aria-hidden="false"></div>
+
         <div class="lightbox-actions">
           <a id="lbLink" class="btn-lightbox btn-primary-lightbox" href="#" target="_blank" rel="noopener">Open Project</a>
-          <button id="lbDownload" class="btn-lightbox" title="Download image">Download</button>
+          <button id="lbDownload" class="btn-lightbox" title="Download current image">Download</button>
         </div>
       </div>
     </div>
@@ -746,63 +811,204 @@
       const grid = document.getElementById('folioGrid');
       const items = Array.from(grid.querySelectorAll('.folio-item'));
       const lightbox = document.getElementById('lightbox');
-      const lbImage = document.getElementById('lbImage');
+      const lbSlides = document.getElementById('lbSlides');
       const lbTitle = document.getElementById('lbTitle');
       const lbDesc = document.getElementById('lbDesc');
+      const lbTech = document.getElementById('lbTech');
       const lbLink = document.getElementById('lbLink');
       const lbClose = document.getElementById('lbClose');
       const lbPrev = document.getElementById('lbPrev');
       const lbNext = document.getElementById('lbNext');
       const lbDownload = document.getElementById('lbDownload');
+      const lbDots = document.getElementById('lbDots');
+      const lbCounter = document.getElementById('lbCounter');
 
       let idx = -1;
+      let slides = []; // array of URLs
+      let current = 0;
+      let autoplayTimer = null;
       let lastFocused = null;
+      const AUTOPLAY_DELAY = 3000;
+
+      // helper: create slide element
+      function createSlide(url, i){
+        const wrap = document.createElement('div');
+        wrap.className = 'lightbox-slide';
+        wrap.dataset.index = i;
+        const img = document.createElement('img');
+        img.className = 'lightbox-img';
+        img.src = url;
+        img.alt = '';
+        img.loading = 'eager';
+        wrap.appendChild(img);
+        return wrap;
+      }
+
+      function renderTech(techString){
+        lbTech.innerHTML = '';
+        if(!techString) return;
+        const parts = techString.split(',').map(s => s.trim()).filter(Boolean);
+        parts.forEach(tok => {
+          const badge = document.createElement('div');
+          badge.className = 'tech-badge';
+          // if token looks like an FA class (contains "fa-"), render <i>
+          if(tok.includes('fa-')){
+            const i = document.createElement('i');
+            i.className = tok; // example: "fa-brands fa-python"
+            i.setAttribute('aria-hidden','true');
+            badge.appendChild(i);
+            const span = document.createElement('span');
+            span.textContent = tok.split(' ').pop().replace('fa-',''); // fallback label
+            span.style.marginLeft = '6px';
+            span.style.fontWeight = '700';
+            badge.appendChild(span);
+          } else {
+            // otherwise treat as image url
+            const img = document.createElement('img');
+            img.src = tok;
+            img.alt = '';
+            badge.appendChild(img);
+            const span = document.createElement('span');
+            span.textContent = ''; // no label by default
+            badge.appendChild(span);
+          }
+          lbTech.appendChild(badge);
+        });
+      }
+
+      function buildDots(count){
+        lbDots.innerHTML = '';
+        for(let i=0;i<count;i++){
+          const d = document.createElement('button');
+          d.className = 'lb-dot';
+          d.type = 'button';
+          d.dataset.index = i;
+          d.addEventListener('click', ()=> {
+            showSlide(Number(d.dataset.index));
+            restartAutoplay();
+          });
+          lbDots.appendChild(d);
+        }
+      }
+
+      function updateDots(){
+        Array.from(lbDots.children).forEach((d, i) => {
+          d.classList.toggle('active', i === current);
+        });
+      }
+
+      function updateCounter(){
+        lbCounter.textContent = `Slide ${current+1} of ${slides.length}`;
+        lbCounter.classList.add('sr-only');
+      }
+
+      function showSlide(i){
+        if(!slides || slides.length === 0) return;
+        if(i < 0) i = slides.length - 1;
+        if(i >= slides.length) i = 0;
+        current = i;
+        // mark slides
+        Array.from(lbSlides.children).forEach((el, idxEl) => {
+          el.classList.toggle('active', idxEl === current);
+        });
+        updateDots();
+        updateCounter();
+        // update download link to current image
+        const imgEl = lbSlides.children[current] && lbSlides.children[current].querySelector('img');
+        if(imgEl){
+          lbDownload.dataset.src = imgEl.src;
+        }
+      }
+
+      function nextSlide(){
+        showSlide(current + 1);
+      }
+      function prevSlide(){
+        showSlide(current - 1);
+      }
+
+      function startAutoplay(){
+        stopAutoplay();
+        if(slides.length <= 1) return;
+        autoplayTimer = setInterval(()=> {
+          nextSlide();
+        }, AUTOPLAY_DELAY);
+      }
+      function stopAutoplay(){
+        if(autoplayTimer){ clearInterval(autoplayTimer); autoplayTimer = null; }
+      }
+      function restartAutoplay(){ stopAutoplay(); startAutoplay(); }
 
       function openAt(i){
         const item = items[i];
         if(!item) return;
         idx = i;
-        const large = item.getAttribute('data-large') || item.querySelector('img').src;
+        lastFocused = document.activeElement;
+
+        // parse images
+        const imagesAttr = item.getAttribute('data-images') || '';
+        let imagesArr = imagesAttr.split(',').map(s=>s.trim()).filter(Boolean);
+        // fallback - if no data-images, use data-large or thumbnail
+        if(imagesArr.length === 0){
+          const large = item.getAttribute('data-large');
+          if(large) imagesArr.push(large);
+          else {
+            const thumb = item.querySelector('img');
+            if(thumb && thumb.src) imagesArr.push(thumb.src);
+          }
+        }
+        slides = imagesArr;
+
+        // title/desc/tech/link
         const title = item.getAttribute('data-title') || '';
         const desc = item.getAttribute('data-desc') || '';
+        const tech = item.getAttribute('data-tech') || '';
         const link = item.getAttribute('data-link') || '#';
 
-        // set content
-        lbImage.src = large;
-        lbImage.alt = title;
+        // populate meta
         lbTitle.textContent = title;
         lbDesc.textContent = desc;
+        renderTech(tech);
         lbLink.href = link;
-        lbDownload.dataset.src = large;
 
-        // show
+        // populate slides container
+        lbSlides.innerHTML = '';
+        slides.forEach((s, idxS) => {
+          const slide = createSlide(s, idxS);
+          lbSlides.appendChild(slide);
+        });
+
+        buildDots(slides.length);
+        current = 0;
+        showSlide(0);
+
+        // show lightbox
         lightbox.classList.add('open');
         lightbox.setAttribute('aria-hidden','false');
-
-        // focus management
-        lastFocused = document.activeElement;
         lbClose.focus();
-        document.body.style.overflow = 'hidden'; // prevent background scroll
+        document.body.style.overflow = 'hidden';
+
+        // autoplay
+        startAutoplay();
+
+        // pause autoplay on hover and resume on leave
+        lbSlides.addEventListener('mouseenter', stopAutoplay);
+        lbSlides.addEventListener('mouseleave', startAutoplay);
       }
 
       function closeLB(){
+        stopAutoplay();
         lightbox.classList.remove('open');
         lightbox.setAttribute('aria-hidden','true');
         document.body.style.overflow = '';
-        // restore focus
+        lbSlides.innerHTML = '';
+        lbDots.innerHTML = '';
+        lbTech.innerHTML = '';
+        slides = [];
         if(lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
       }
 
-      function prev(){
-        if(idx <= 0) idx = items.length - 1; else idx--;
-        openAt(idx);
-      }
-      function next(){
-        if(idx >= items.length - 1) idx = 0; else idx++;
-        openAt(idx);
-      }
-
-      // Attach click handlers to items
+      // event attachments
       items.forEach((it, i) => {
         it.addEventListener('click', (ev) => {
           ev.preventDefault();
@@ -813,13 +1019,15 @@
         });
       });
 
-      // Lightbox controls
+      lbNext.addEventListener('click', (e)=> { e.stopPropagation(); nextSlide(); restartAutoplay(); });
+      lbPrev.addEventListener('click', (e)=> { e.stopPropagation(); prevSlide(); restartAutoplay(); });
       lbClose.addEventListener('click', closeLB);
-      lbPrev.addEventListener('click', prev);
-      lbNext.addEventListener('click', next);
 
-      // backdrop click closes (if click outside image area)
+      // dots click handled in buildDots()
+
+      // backdrop click closes (if clicking outside the card area)
       lightbox.addEventListener('click', (e) => {
+        // if click on background but not inside .lightbox-card
         if(e.target === lightbox) closeLB();
       });
 
@@ -827,12 +1035,12 @@
       document.addEventListener('keydown', (e) => {
         if(lightbox.classList.contains('open')){
           if(e.key === 'Escape') closeLB();
-          else if(e.key === 'ArrowLeft') prev();
-          else if(e.key === 'ArrowRight') next();
+          else if(e.key === 'ArrowLeft') { prevSlide(); restartAutoplay(); }
+          else if(e.key === 'ArrowRight') { nextSlide(); restartAutoplay(); }
         }
       });
 
-      // Download button
+      // download current image
       lbDownload.addEventListener('click', ()=> {
         const url = lbDownload.dataset.src;
         if(!url) return;
@@ -844,12 +1052,13 @@
         a.remove();
       });
 
-      // Preload large images
+      // Preload thumbnails / first slide for snappy open
       items.forEach(it => {
-        const p = it.getAttribute('data-large');
-        if(p){
+        const imgs = (it.getAttribute('data-images') || '').split(',').map(s=>s.trim()).filter(Boolean);
+        const first = imgs[0] || it.getAttribute('data-large') || (it.querySelector('img') && it.querySelector('img').src);
+        if(first){
           const img = new Image();
-          img.src = p;
+          img.src = first;
         }
       });
 
@@ -857,6 +1066,7 @@
   </script>
 </section>
 <!-- ===== end WORKS block ===== -->
+
 
   <!-- CONTACT -->
   <section id="contact">
