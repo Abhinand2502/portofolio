@@ -565,7 +565,16 @@
     })();
   </script>
 </section>
-<!-- ===== WORKS: 3x3 grid — all images use assets/bg.jpg, synced autoplay, landscape lightbox (solid backgrounds) ===== -->
+
+
+
+
+
+
+
+
+
+<!-- ===== WORKS: 3x3 grid — show 6 by default, Show more reveals remaining; includes search ===== -->
 <section id="works" aria-labelledby="worksTitle">
   <style>
     :root{
@@ -573,7 +582,7 @@
       --primary:#2a7cf1;
       --text:#111;
       --muted:#7a7a7a;
-      --header-h:72px; /* set to your real header height */
+      --header-h:72px; /* adjust to your header height */
     }
 
     /* container */
@@ -581,13 +590,18 @@
     #works > .section-inner { height:auto !important; min-height:0 !important; display:block !important; padding-top:0 !important; }
     #works .box { width:100%; max-width:1400px; margin:0 auto; padding:24px; box-sizing:border-box; }
 
+    /* search */
+    .search-wrap { margin: 6px 0 18px; display:flex; gap:8px; align-items:center; }
+    .search-input { width:100%; max-width:460px; padding:10px 12px; border-radius:10px; border:1px solid var(--glass-strong); font-size:14px; box-sizing:border-box; outline:none; }
+    .search-clear { padding:8px 10px; border-radius:8px; border:1px solid var(--glass-strong); background:transparent; cursor:pointer; font-weight:700; }
+
     /* Grid: mobile 1, tablet/desktop 3 columns */
     .folio-grid { display:grid; gap:14px; grid-template-columns: 1fr; align-items:stretch; }
     @media (min-width:760px) { .folio-grid { grid-template-columns: repeat(3, 1fr); } }
 
-    /* show first 9 items */
+    /* show first 6 items by default */
     .folio-grid .folio-item { display:block; }
-    .folio-grid .folio-item:nth-child(n+10) { display:none; }
+    .folio-grid .folio-item:nth-child(n+7) { display:none; }  /* <-- show only first 6 */
     .folio-grid.expanded .folio-item { display:block; }
 
     .folio-item { display:block; overflow:visible; border-radius:10px; position:relative; border:1px solid var(--glass-strong); transition: transform .18s ease, box-shadow .18s ease; cursor:pointer; background:#fff; }
@@ -600,7 +614,7 @@
       inset:0;
       width:100%;
       height:100%;
-      object-fit:cover;         /* cover so thumbnails display nicely */
+      object-fit:cover;
       object-position:center;
       opacity:0;
       transform:scale(1.03);
@@ -615,16 +629,19 @@
     .folio-caption .title { font-weight:900; letter-spacing:0.2px; }
     .folio-caption .view { font-size:12px; opacity:0.95; background:rgba(255,255,255,0.06); padding:6px 8px; border-radius:6px; font-weight:700; }
 
+    /* no results */
+    .no-results { margin:12px 0 0; color:var(--muted); display:none; font-weight:700; }
+
     /* Lightbox appears below header (doesn't overlap header) */
     .lightbox {
       position:fixed;
       inset:0;
       display:flex;
-      align-items:flex-start;            /* appear at top area */
+      align-items:flex-start;
       justify-content:center;
-      padding-top: var(--header-h);     /* push content below header */
+      padding-top: var(--header-h);
       z-index:3000;
-      background: rgba(6,6,6,0.6);      /* dark overlay */
+      background: rgba(6,6,6,0.6);
       backdrop-filter: blur(6px);
       opacity:0;
       pointer-events:none;
@@ -643,7 +660,7 @@
       display:grid;
       grid-template-columns: 1fr 360px;
       gap:12px;
-      background: #ffffff;                /* solid white */
+      background: #ffffff;
       border:1px solid rgba(0,0,0,0.06);
       box-shadow: 0 40px 120px rgba(2,6,23,0.25);
       margin-top:8px;
@@ -654,7 +671,6 @@
     .lb-view { position:relative; background:#111; display:flex; align-items:center; justify-content:center; overflow:hidden; min-height:320px; }
     .lb-slide { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; transition: opacity .28s ease; pointer-events:none; }
     .lb-slide.active { opacity:1; position:relative; pointer-events:auto; }
-    /* make lightbox images landscape and fill the view (no transparency) */
     .lb-slide img { width:100%; height:100%; object-fit:cover; display:block; margin:auto; cursor:zoom-in; }
 
     .lb-close, .lb-prev, .lb-next {
@@ -690,8 +706,16 @@
 
   <div class="section-inner">
     <div class="box">
-      <h2 id="worksTitle" class="anim">Selected Works</h2>
-      <p class="anim">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+      <h2 id="worksTitle" class="anim">Selected Works      <!-- SEARCH -->
+      <div class="search-wrap">
+        <input id="folioSearch" class="search-input" type="search" placeholder="Search projects (title, description, tech)..." aria-label="Search projects">
+        <button id="folioSearchClear" class="search-clear" aria-label="Clear search">Clear</button>
+      </div></h2>
+       <p class="anim">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+
+      
+
+      <p id="noResults" class="no-results">No projects found</p>
 
       <div class="folio-grid anim" id="folioGrid" aria-live="polite">
         <!-- 9 visible items, default images point to assets/bg.jpg (replace with your own filenames later) -->
@@ -749,6 +773,7 @@
           <div class="folio-caption"><span class="title">Green Leaves</span><span class="view">View details</span></div>
         </button>
 
+        <!-- three more items (hidden until Show more or search) -->
         <button class="folio-item"
           data-images="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
           data-title="Type Poster"
@@ -781,7 +806,7 @@
     </div>
   </div>
 
-  <!-- lightbox -->
+  <!-- lightbox (unchanged) -->
   <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="lbTitle" tabindex="-1">
     <div class="lb-shell" role="document" aria-live="polite">
       <div class="lb-view" id="lbView" aria-hidden="false">
@@ -822,6 +847,11 @@
       const lbNext = document.getElementById('lbNext');
       const lbDownload = document.getElementById('lbDownload');
 
+      const searchInput = document.getElementById('folioSearch');
+      const searchClear = document.getElementById('folioSearchClear');
+      const noResults = document.getElementById('noResults');
+      const showMoreBtn = document.getElementById('showMoreBtn');
+
       // synchronized intervals for thumbnails & lightbox
       const THUMB_INTERVAL = 1800; // same for all thumbnails
       const LB_INTERVAL = 3000;    // lightbox autoplay
@@ -829,7 +859,7 @@
       let lbTimer = null;
       let lbSlidesArr = [], lbCurrent = 0, lastFocused=null;
 
-      // Build thumbnail stacks and autoplay them (SAME timing for all)
+      /* ---------- thumbnails autoplay (same timing) ---------- */
       items.forEach((it) => {
         const wrap = it.querySelector('.thumb-wrap');
         const images = (it.dataset.images || '').split(',').map(s => s.trim()).filter(Boolean);
@@ -902,6 +932,7 @@
       function lbStartAutoplay(){ lbStopAutoplay(); if(lbSlidesArr.length<=1) return; lbTimer = setInterval(lbNextFn, LB_INTERVAL); }
       function lbStopAutoplay(){ if(lbTimer){ clearInterval(lbTimer); lbTimer = null; } }
 
+      /* ---------- OPEN / CLOSE LIGHTBOX ---------- */
       function openAt(i){
         const item = items[i]; if(!item) return;
         lastFocused = document.activeElement;
@@ -948,7 +979,7 @@
       lbPrev.addEventListener('click', lbPrevFn);
       lbNext.addEventListener('click', lbNextFn);
 
-      // click on view image area advances to next (click the image)
+      // click on image area advances to next
       lbSlides.addEventListener('click', (e) => {
         if(e.target && e.target.tagName === 'IMG') { lbNextFn(); }
       });
@@ -969,17 +1000,70 @@
         const a = document.createElement('a'); a.href = url; a.download = url.split('/').pop().split('?')[0]; document.body.appendChild(a); a.click(); a.remove();
       });
 
-      // show more toggle (expands to show all)
-      const showMoreBtn = document.getElementById('showMoreBtn');
-      showMoreBtn.addEventListener('click', () => {
-        if(grid.classList.contains('expanded')) {
-          grid.classList.remove('expanded'); showMoreBtn.textContent = 'Show more'; document.querySelector('#works .box').scrollIntoView({behavior:'smooth'});
+      /* ---------- SEARCH / FILTER ---------- */
+      function resetFilterRespectExpanded(){
+        // If expanded show all; if not, show first 6
+        if(grid.classList.contains('expanded')){
+          items.forEach(it => it.style.display = 'block');
         } else {
-          grid.classList.add('expanded'); showMoreBtn.textContent = 'Show less';
+          items.forEach((it, idx) => it.style.display = (idx < 6 ? 'block' : 'none'));
+        }
+        noResults.style.display = 'none';
+        // show or hide showMore button depending on count and search state
+        showMoreBtn.style.display = items.length > 6 ? 'inline-block' : 'none';
+      }
+
+      function applySearch(q){
+        q = q.trim().toLowerCase();
+        if(!q){
+          resetFilterRespectExpanded();
+          return;
+        }
+        // hide show more while searching
+        showMoreBtn.style.display = 'none';
+        let any=false;
+        items.forEach(it => {
+          const title = (it.dataset.title || '').toLowerCase();
+          const desc = (it.dataset.desc || '').toLowerCase();
+          const tech = (it.dataset.tech || '').toLowerCase();
+          const match = title.includes(q) || desc.includes(q) || tech.includes(q);
+          it.style.display = match ? 'block' : 'none';
+          if(match) any = true;
+        });
+        noResults.style.display = any ? 'none' : 'block';
+      }
+
+      // Search input events (debounce small)
+      let searchTO = null;
+      searchInput.addEventListener('input', (e) => {
+        clearTimeout(searchTO);
+        searchTO = setTimeout(() => {
+          applySearch(searchInput.value || '');
+        }, 120);
+      });
+
+      searchClear.addEventListener('click', () => {
+        searchInput.value = '';
+        applySearch('');
+      });
+
+      // Show more toggle: expands to show all hidden items; collapse back to six
+      showMoreBtn.addEventListener('click', () => {
+        if(grid.classList.contains('expanded')){
+          grid.classList.remove('expanded');
+          resetFilterRespectExpanded();
+          showMoreBtn.textContent = 'Show more';
+        } else {
+          grid.classList.add('expanded');
+          items.forEach(it => it.style.display = 'block'); // show all
+          showMoreBtn.textContent = 'Show less';
         }
       });
 
-      // preload first image for each card (assets/bg.jpg)
+      // initialize
+      resetFilterRespectExpanded();
+
+      // preload first image for each card
       items.forEach(it => {
         const first = (it.dataset.images || '').split(',').map(s=>s.trim()).filter(Boolean)[0];
         if(first){ const img = new Image(); img.src = first; }
@@ -989,6 +1073,7 @@
   </script>
 </section>
 <!-- ===== end WORKS ===== -->
+
 
 
 
