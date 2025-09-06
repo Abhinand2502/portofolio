@@ -565,16 +565,15 @@
     })();
   </script>
 </section>
-
-<!-- ===== WORKS: 3x3 grid — thumbnail shows name + "View details". Lightbox opens below header with image + desc + tech. ===== -->
+<!-- ===== WORKS: 3x3 grid — all images use assets/bg.jpg, synced autoplay, landscape lightbox (solid backgrounds) ===== -->
 <section id="works" aria-labelledby="worksTitle">
   <style>
     :root{
-      --glass-strong: rgba(255,255,255,0.06);
+      --glass-strong: rgba(0,0,0,0.08);
       --primary:#2a7cf1;
       --text:#111;
       --muted:#7a7a7a;
-      --header-h:72px; /* set this to your real header height */
+      --header-h:72px; /* set to your real header height */
     }
 
     /* container */
@@ -591,7 +590,7 @@
     .folio-grid .folio-item:nth-child(n+10) { display:none; }
     .folio-grid.expanded .folio-item { display:block; }
 
-    .folio-item { display:block; overflow:visible; border-radius:10px; position:relative; border:1px solid var(--glass-strong); transition: transform .18s ease, box-shadow .18s ease; cursor:pointer; background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.01)); }
+    .folio-item { display:block; overflow:visible; border-radius:10px; position:relative; border:1px solid var(--glass-strong); transition: transform .18s ease, box-shadow .18s ease; cursor:pointer; background:#fff; }
     .folio-item:focus, .folio-item:hover { transform: translateY(-6px); box-shadow: 0 18px 48px rgba(16,24,40,0.12); outline:none; }
 
     /* thumb-wrap: compact */
@@ -601,23 +600,20 @@
       inset:0;
       width:100%;
       height:100%;
-      object-fit:cover;
+      object-fit:cover;         /* cover so thumbnails display nicely */
       object-position:center;
       opacity:0;
-      transform:scale(1.04);
-      transition: opacity .5s ease, transform .6s cubic-bezier(.2,.9,.2,1);
+      transform:scale(1.03);
+      transition: opacity .45s ease, transform .6s cubic-bezier(.2,.9,.2,1);
       backface-visibility:hidden;
       will-change: opacity, transform;
     }
     .thumb-wrap img.active { opacity:1; transform:scale(1); z-index:1; }
 
     /* Overlay contains only name + view details */
-    .folio-caption { position:absolute; left:10px; bottom:10px; padding:8px 10px; border-radius:8px; background: rgba(0,0,0,0.44); color:#fff; font-weight:800; font-size:13px; display:flex; gap:10px; align-items:center; backdrop-filter: blur(6px); z-index: 10; }
+    .folio-caption { position:absolute; left:10px; bottom:10px; padding:8px 10px; border-radius:8px; background: rgba(0,0,0,0.52); color:#fff; font-weight:800; font-size:13px; display:flex; gap:10px; align-items:center; backdrop-filter: blur(6px); z-index: 10; }
     .folio-caption .title { font-weight:900; letter-spacing:0.2px; }
     .folio-caption .view { font-size:12px; opacity:0.95; background:rgba(255,255,255,0.06); padding:6px 8px; border-radius:6px; font-weight:700; }
-
-    .card-info { position:absolute; left:0; right:0; bottom:0; padding:12px; box-sizing:border-box; transform: translateY(100%); transition: transform .28s cubic-bezier(.2,.9,.2,1); background: linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.7)); color:#fff; font-weight:600; font-size:13px; z-index:8; border-bottom-left-radius:10px; border-bottom-right-radius:10px; }
-    .folio-item:hover .card-info, .folio-item:focus-within .card-info { transform: translateY(0%); }
 
     /* Lightbox appears below header (doesn't overlap header) */
     .lightbox {
@@ -628,7 +624,7 @@
       justify-content:center;
       padding-top: var(--header-h);     /* push content below header */
       z-index:3000;
-      background: rgba(6,6,6,0.6);
+      background: rgba(6,6,6,0.6);      /* dark overlay */
       backdrop-filter: blur(6px);
       opacity:0;
       pointer-events:none;
@@ -636,36 +632,39 @@
     }
     .lightbox.open { opacity:1; pointer-events:auto; }
 
+    /* Solid (not transparent) shell and meta */
     .lb-shell {
       width: calc(100vw - 48px);
       height: calc(100vh - var(--header-h) - 48px);
       max-width:1200px;
-      max-height:900px;
+      max-height:880px;
       border-radius:10px;
       overflow:hidden;
       display:grid;
       grid-template-columns: 1fr 360px;
       gap:12px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border:1px solid rgba(255,255,255,0.03);
-      box-shadow: 0 40px 120px rgba(2,6,23,0.7);
+      background: #ffffff;                /* solid white */
+      border:1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 40px 120px rgba(2,6,23,0.25);
       margin-top:8px;
     }
     @media (max-width:980px){ .lb-shell { grid-template-columns: 1fr; width: calc(100vw - 12px); height: calc(100vh - var(--header-h) - 12px); } }
 
-    .lb-view { position:relative; background:#000; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    /* Left view: force landscape presentation and full coverage */
+    .lb-view { position:relative; background:#111; display:flex; align-items:center; justify-content:center; overflow:hidden; min-height:320px; }
     .lb-slide { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; transition: opacity .28s ease; pointer-events:none; }
     .lb-slide.active { opacity:1; position:relative; pointer-events:auto; }
-    .lb-slide img { max-width:100%; max-height:100%; object-fit:contain; display:block; margin:auto; cursor:zoom-in; }
+    /* make lightbox images landscape and fill the view (no transparency) */
+    .lb-slide img { width:100%; height:100%; object-fit:cover; display:block; margin:auto; cursor:zoom-in; }
 
     .lb-close, .lb-prev, .lb-next {
-      position:absolute; z-index:40; width:44px; height:44px; border-radius:10px; display:grid; place-items:center; background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.03); color:#fff; font-size:18px; cursor:pointer;
+      position:absolute; z-index:40; width:44px; height:44px; border-radius:10px; display:grid; place-items:center; background: rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.06); color:#fff; font-size:18px; cursor:pointer;
     }
     .lb-close { right:12px; top:12px; }
     .lb-prev { left:12px; top:50%; transform:translateY(-50%); }
     .lb-next { right:12px; top:50%; transform:translateY(-50%); }
 
-    .lb-meta { padding:16px; display:flex; flex-direction:column; gap:12px; overflow:auto; color:var(--text); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
+    .lb-meta { padding:18px; display:flex; flex-direction:column; gap:12px; overflow:auto; color:var(--text); background: #ffffff; }
     .lb-title { font-family:'Playfair Display', serif; font-size:20px; font-weight:900; margin:0; color:var(--text); }
     .lb-desc { color:var(--muted); font-size:13px; line-height:1.45; margin:0; min-height:48px; }
     .lb-tech { display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; align-items:center; }
@@ -681,9 +680,9 @@
 
     @media (max-width:760px){
       .folio-caption{ left:8px; bottom:8px; padding:6px 8px; font-size:12px; }
-      .card-info{ padding:10px; font-size:13px }
-      .lb-meta{ padding:10px }
+      .lb-meta{ padding:12px }
       .lb-title{ font-size:17px }
+      .lb-shell { gap:8px; }
     }
 
     .sr-only { position:absolute !important; width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0 }
@@ -695,96 +694,86 @@
       <p class="anim">Click any tile to view details. Lightbox opens below the header and shows the images + description + tech badges. Close with the ✕, click outside, or Esc.</p>
 
       <div class="folio-grid anim" id="folioGrid" aria-live="polite">
-        <!-- 9 visible items (each has multiple images in data-images) -->
+        <!-- 9 visible items, default images point to assets/bg.jpg (replace with your own filenames later) -->
         <button class="folio-item"
-          data-images="/mnt/data/878900a8-a65a-4bfd-871d-3c0403a97085.jpg,/mnt/data/f1eb9623-19cf-4ec8-8c21-33efe692ac83.jpg,/mnt/data/6c2bb8ce-8785-4ca0-9788-3c30283b02bb.png"
+          data-images="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
           data-title="White Knit Cap"
           data-desc="Portrait retouch & color correction."
           data-tech="Python,Django,Photoshop">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">White Knit Cap</span><span class="view">View details</span></div>
-         
         </button>
 
         <button class="folio-item"
-          data-images="/mnt/data/0ea86f24-b09a-4ab0-b235-020ca22f21d4.png,/mnt/data/ccf70fe2-0282-460d-aed0-c621733ceafa.png,/mnt/data/9bf0dd45-dac9-401e-aa95-319661c9c3fc.png"
+          data-images="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
           data-title="Minimal Stool"
           data-desc="Studio product mockups."
           data-tech="3D,Lighting,Retouch">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">Minimal Stool</span><span class="view">View details</span></div>
-        
         </button>
 
         <button class="folio-item"
-          data-images="/mnt/data/ccf70fe2-0282-460d-aed0-c621733ceafa.png,/mnt/data/6c2bb8ce-8785-4ca0-9788-3c30283b02bb.png,/mnt/data/878900a8-a65a-4bfd-871d-3c0403a97085.jpg"
+          data-images="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
           data-title="Coffee & Tulips"
           data-desc="Still-life composition & color grading tests."
           data-tech="Color,Lighting,Compositing">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">Coffee & Tulips</span><span class="view">View details</span></div>
-        
         </button>
 
         <button class="folio-item"
-          data-images="/mnt/data/6c2bb8ce-8785-4ca0-9788-3c30283b02bb.png,/mnt/data/878900a8-a65a-4bfd-871d-3c0403a97085.jpg,/mnt/data/f1eb9623-19cf-4ec8-8c21-33efe692ac83.jpg"
+          data-images="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
           data-title="Monochrome Portrait"
           data-desc="B&W workflow & grain."
           data-tech="Film,Grain,DodgeBurn">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">Monochrome Portrait</span><span class="view">View details</span></div>
-         
         </button>
 
         <button class="folio-item"
-          data-images="/mnt/data/9bf0dd45-dac9-401e-aa95-319661c9c3fc.png,/mnt/data/0ea86f24-b09a-4ab0-b235-020ca22f21d4.png,/mnt/data/ccf70fe2-0282-460d-aed0-c621733ceafa.png"
+          data-images="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
           data-title="Hanging Lamp"
           data-desc="Studio lamp photography."
           data-tech="Studio,Texture,Retouch">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">Hanging Lamp</span><span class="view">View details</span></div>
-        
         </button>
 
         <button class="folio-item"
-          data-images="/mnt/data/f1eb9623-19cf-4ec8-8c21-33efe692ac83.jpg,/mnt/data/878900a8-a65a-4bfd-871d-3c0403a97085.jpg,/mnt/data/6c2bb8ce-8785-4ca0-9788-3c30283b02bb.png"
+          data-images="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
           data-title="Green Leaves"
           data-desc="Macro foliage textures."
           data-tech="Macro,Texture,Light">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">Green Leaves</span><span class="view">View details</span></div>
-         
         </button>
 
-        <!-- three more items (to complete 9) -->
         <button class="folio-item"
-          data-images="https://images.unsplash.com/photo-1503602642458-232111445657?w=1600&q=80,https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=1600&q=80,https://images.unsplash.com/photo-1505678261036-a3fcc5e884ee?w=1600&q=80"
+          data-images="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
           data-title="Type Poster"
           data-desc="Typographic systems."
           data-tech="Type,Layout,Systems">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">Type Poster</span><span class="view">View details</span></div>
-        
         </button>
 
         <button class="folio-item"
-          data-images="https://images.unsplash.com/photo-1487017159836-2f9a0f0d9891?w=1600&q=80,https://images.unsplash.com/photo-1505672678657-cc7037095e2f?w=1600&q=80,https://images.unsplash.com/photo-1517817748499-3f8b8e27d3a6?w=1600&q=80"
+          data-images="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
           data-title="Product Grid"
           data-desc="E-commerce grid."
           data-tech="Grid,UI,States">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">Product Grid</span><span class="view">View details</span></div>
-     
         </button>
 
         <button class="folio-item"
-          data-images="https://images.unsplash.com/photo-1498079022511-d15614cb1c02?w=1600&q=80,https://images.unsplash.com/photo-1503602642458-232111445657?w=1600&q=80,https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=1600&q=80"
+          data-images="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
           data-title="Grid Study"
           data-desc="Responsive layout experiments."
           data-tech="Responsive,Breakpoints,Tests">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">Grid Study</span><span class="view">View details</span></div>
-     
         </button>
       </div>
 
@@ -833,16 +822,18 @@
       const lbNext = document.getElementById('lbNext');
       const lbDownload = document.getElementById('lbDownload');
 
-      const THUMB_INTERVAL = 1600;
-      const LB_INTERVAL = 3000;
+      // synchronized intervals for thumbnails & lightbox
+      const THUMB_INTERVAL = 1800; // same for all thumbnails
+      const LB_INTERVAL = 3000;    // lightbox autoplay
+
       let lbTimer = null;
       let lbSlidesArr = [], lbCurrent = 0, lastFocused=null;
 
-      // Build thumbnail stacks and autoplay them (store interval reference)
-      items.forEach((it, idx) => {
+      // Build thumbnail stacks and autoplay them (SAME timing for all)
+      items.forEach((it) => {
         const wrap = it.querySelector('.thumb-wrap');
         const images = (it.dataset.images || '').split(',').map(s => s.trim()).filter(Boolean);
-        const imgs = images.length ? images : ['https://via.placeholder.com/1600x1000?text=No+Image'];
+        const imgs = images.length ? images : ['assets/bg.jpg'];
         imgs.forEach((src, i) => {
           const img = document.createElement('img');
           img.src = src; img.alt = it.dataset.title || '';
@@ -852,16 +843,17 @@
         });
 
         if(imgs.length > 1){
+          // synchronized autoplay (same behavior for every card)
           let t = 1;
-          const iv = setInterval(() => {
+          it._thumbIv = setInterval(() => {
             const slides = wrap.querySelectorAll('img');
-            if(!slides.length){ clearInterval(iv); return; }
+            if(!slides.length){ clearInterval(it._thumbIv); return; }
             slides.forEach((s,i)=> s.classList.toggle('active', i === t));
             t = (t + 1) % slides.length;
-          }, THUMB_INTERVAL + (idx % 3) * 90);
-          it._thumbIv = iv;
+          }, THUMB_INTERVAL);
 
-          it.addEventListener('mouseenter', () => { clearInterval(it._thumbIv); });
+          // pause/resume on hover/touch
+          it.addEventListener('mouseenter', () => { if(it._thumbIv) { clearInterval(it._thumbIv); it._thumbIv = null; } });
           it.addEventListener('mouseleave', () => {
             if(it._thumbIv) clearInterval(it._thumbIv);
             let t2 = Array.from(wrap.querySelectorAll('img')).findIndex(img => img.classList.contains('active'));
@@ -870,10 +862,10 @@
               const slides = wrap.querySelectorAll('img');
               slides.forEach((s,i)=> s.classList.toggle('active', i === t2));
               t2 = (t2 + 1) % slides.length;
-            }, THUMB_INTERVAL + (idx % 3) * 90);
+            }, THUMB_INTERVAL);
           }, {passive:true});
 
-          it.addEventListener('touchstart', () => clearInterval(it._thumbIv), {passive:true});
+          it.addEventListener('touchstart', () => { if(it._thumbIv){ clearInterval(it._thumbIv); it._thumbIv = null; } }, {passive:true});
         }
       });
 
@@ -914,7 +906,7 @@
         const item = items[i]; if(!item) return;
         lastFocused = document.activeElement;
         const slides = (item.dataset.images || '').split(',').map(s=>s.trim()).filter(Boolean);
-        const slidesToUse = slides.length ? slides : ['https://via.placeholder.com/1600x1000?text=No+Image'];
+        const slidesToUse = slides.length ? slides : ['assets/bg.jpg'];
 
         lbTitle.textContent = item.dataset.title || '';
         lbDesc.textContent = item.dataset.desc || '';
@@ -987,7 +979,7 @@
         }
       });
 
-      // preload first image for each card
+      // preload first image for each card (assets/bg.jpg)
       items.forEach(it => {
         const first = (it.dataset.images || '').split(',').map(s=>s.trim()).filter(Boolean)[0];
         if(first){ const img = new Image(); img.src = first; }
@@ -997,6 +989,7 @@
   </script>
 </section>
 <!-- ===== end WORKS ===== -->
+
 
 
 
