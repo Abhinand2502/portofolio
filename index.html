@@ -500,15 +500,383 @@
 
 
 
-  <!-- WORKS -->
-  <section id="works">
-    <div class="section-inner">
-      <div class="box">
-        <h2 class="anim">Works</h2>
-        <p class="anim">Project gallery / cards go here.</p>
+  <!-- ===== WORKS: 3x3 grid + full-screen lightbox (paste this whole section) ===== -->
+<section id="works" aria-labelledby="worksTitle">
+  <style>
+    /* Scoped styles for the works section */
+    #works { padding: 40px 20px; background: transparent; }
+    #works .box { max-width:1200px; margin:0 auto; }
+
+    /* Grid: mobile -> 1 col, tablet -> 2, desktop -> 3 */
+    .folio-grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 600px){ .folio-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 980px){ .folio-grid { grid-template-columns: repeat(3, 1fr); } } /* desktop 3 columns */
+
+    .folio-item {
+      display:block;
+      overflow:hidden;
+      border-radius:12px;
+      position:relative;
+      box-shadow: var(--card-shadow);
+      border:1px solid var(--glass-strong);
+      background: linear-gradient(180deg,var(--panel),transparent);
+      transition: transform .22s ease, box-shadow .22s ease;
+      cursor:pointer;
+      padding:0;
+      height: auto;
+    }
+
+    /* Thumb: exactly like mobile (cover) but landscape-friendly on larger screens */
+    .folio-item .thumb {
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit:cover;
+      aspect-ratio: 1 / 1; /* mobile-like square */
+    }
+    @media (min-width:720px){
+      .folio-item .thumb { aspect-ratio: 4 / 3; } /* desktop landscape-friendly */
+    }
+
+    .folio-item:hover { transform: translateY(-6px); box-shadow:0 30px 80px rgba(16,24,40,0.12); }
+
+    .folio-caption {
+      position:absolute;
+      left:12px;
+      right:12px;
+      bottom:12px;
+      padding:10px 14px;
+      border-radius:10px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.15));
+      color:#fff;
+      font-weight:800;
+      font-size:14px;
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+      align-items:center;
+      opacity:0;
+      transform:translateY(6px);
+      transition:opacity .18s ease, transform .18s ease;
+      pointer-events:none;
+    }
+    .folio-item:hover .folio-caption { opacity:1; transform:translateY(0); pointer-events:auto; }
+
+    /* Fullscreen Lightbox (covers whole viewport on desktop & mobile) */
+    .lightbox {
+      position:fixed;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:1600;
+      background: rgba(6,6,6,0.85);
+      padding:0;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .18s ease;
+    }
+    .lightbox.open { opacity:1; pointer-events:auto; }
+
+    /* make the lightbox content take the whole viewport */
+    .lightbox-card {
+      width:100%;
+      height:100%;
+      display:grid;
+      grid-template-columns: 1fr 380px;
+      gap:18px;
+      background:transparent;
+      border-radius:0;
+      padding:24px;
+      box-shadow:none;
+      overflow:hidden;
+      align-items:stretch;
+    }
+    @media (max-width:900px){
+      .lightbox-card { grid-template-columns: 1fr; padding:14px; }
+    }
+
+    /* image area fills the first column entirely */
+    .lightbox-view {
+      width:100%;
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#000;
+      border-radius:0;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .lightbox-img {
+      max-width:100%;
+      max-height:100%;
+      object-fit:contain; /* show entire image */
+      display:block;
+      margin:auto;
+    }
+
+    /* side meta panel — scrolls if needed */
+    .lightbox-meta {
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      background: linear-gradient(180deg,var(--panel), rgba(255,255,255,0.02));
+      border-left:1px solid rgba(255,255,255,0.02);
+      overflow:auto;
+    }
+    @media (max-width:900px){
+      .lightbox-meta {
+        position:absolute;
+        left:0;
+        right:0;
+        bottom:0;
+        width:100%;
+        background: linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.2));
+        color:#fff;
+        border-left:none;
+        padding:14px;
+        transform:translateY(0);
+      }
+    }
+
+    .lightbox-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:900; color:var(--text); margin:0; }
+    .lightbox-desc { color:var(--muted); line-height:1.4; font-size:14px; margin:0; }
+    .lightbox-actions { margin-top:auto; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+
+    .btn-lightbox {
+      padding:10px 14px; border-radius:10px; font-weight:800; border:1px solid var(--glass-strong);
+      background:transparent; cursor:pointer;
+    }
+    .btn-primary-lightbox { background:var(--primary); color:#fff; border-color:var(--primary); }
+
+    /* big overlay arrows & close */
+    .lb-arrow {
+      position: absolute;
+      top:50%;
+      transform:translateY(-50%);
+      background:transparent;border:0;color:#fff;font-size:38px;padding:12px;border-radius:10px;
+      cursor:pointer;pointer-events:auto;
+      text-shadow: 0 6px 22px rgba(0,0,0,0.6);
+      user-select:none;
+    }
+    .lb-prev { left:12px; }
+    .lb-next { right:12px; }
+
+    .lb-close {
+      position:absolute; right:14px; top:14px; background:transparent;border:0;color:#fff;font-size:26px;padding:8px;border-radius:8px;
+      cursor:pointer;
+    }
+
+    /* subtle dark-mode tweaks */
+    html[data-theme="dark"] .lightbox-meta { background: linear-gradient(180deg,var(--panel), rgba(255,255,255,0.01)); color:var(--text); }
+    html[data-theme="dark"] .folio-item .thumb { filter: brightness(0.88); }
+
+    /* accessibility helper */
+    .sr-only { position:absolute !important; width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0 }
+  </style>
+
+  <div class="section-inner">
+    <div class="box">
+      <h2 id="worksTitle" class="anim">Selected Works</h2>
+      <p class="anim">Click any image to open full-screen preview.</p>
+
+      <div class="folio-grid anim" id="folioGrid">
+        <!-- Example items: replace src & data-large with your images; update data-title/data-desc/data-link -->
+        <button class="folio-item" data-large="assets/project1-large.jpg" data-title="Sunset Rider" data-desc="A short description about this project." data-link="https://example.com/project1">
+          <img class="thumb" src="assets/project1-thumb.jpg" alt="Sunset Rider - thumbnail" loading="lazy">
+          <div class="folio-caption"><span>Sunset Rider</span><small>View</small></div>
+        </button>
+
+        <button class="folio-item" data-large="assets/project2-large.jpg" data-title="Minimal Poster" data-desc="Poster design using type-first aesthetics." data-link="https://example.com/project2">
+          <img class="thumb" src="assets/project2-thumb.jpg" alt="Minimal Poster - thumbnail" loading="lazy">
+          <div class="folio-caption"><span>Minimal Poster</span><small>View</small></div>
+        </button>
+
+        <button class="folio-item" data-large="assets/project3-large.jpg" data-title="Nature Study" data-desc="Photography + color grading." data-link="https://example.com/project3">
+          <img class="thumb" src="assets/project3-thumb.jpg" alt="Nature Study - thumbnail" loading="lazy">
+          <div class="folio-caption"><span>Nature Study</span><small>View</small></div>
+        </button>
+
+        <button class="folio-item" data-large="assets/project4-large.jpg" data-title="Product Mock" data-desc="E-commerce product mockups and UI." data-link="https://example.com/project4">
+          <img class="thumb" src="assets/project4-thumb.jpg" alt="Product Mock - thumbnail" loading="lazy">
+          <div class="folio-caption"><span>Product Mock</span><small>View</small></div>
+        </button>
+
+        <button class="folio-item" data-large="assets/project5-large.jpg" data-title="Portrait Study" data-desc="Portrait retouch & lighting experiments." data-link="https://example.com/project5">
+          <img class="thumb" src="assets/project5-thumb.jpg" alt="Portrait Study - thumbnail" loading="lazy">
+          <div class="folio-caption"><span>Portrait Study</span><small>View</small></div>
+        </button>
+
+        <button class="folio-item" data-large="assets/project6-large.jpg" data-title="Street Frames" data-desc="Documentary street photography series." data-link="https://example.com/project6">
+          <img class="thumb" src="assets/project6-thumb.jpg" alt="Street Frames - thumbnail" loading="lazy">
+          <div class="folio-caption"><span>Street Frames</span><small>View</small></div>
+        </button>
+
+        <button class="folio-item" data-large="assets/project7-large.jpg" data-title="Type Poster" data-desc="Type-first poster experiment." data-link="https://example.com/project7">
+          <img class="thumb" src="assets/project7-thumb.jpg" alt="Type Poster - thumbnail" loading="lazy">
+          <div class="folio-caption"><span>Type Poster</span><small>View</small></div>
+        </button>
+
+        <button class="folio-item" data-large="assets/project8-large.jpg" data-title="Product Grid" data-desc="Grid system for product listing." data-link="https://example.com/project8">
+          <img class="thumb" src="assets/project8-thumb.jpg" alt="Product Grid - thumbnail" loading="lazy">
+          <div class="folio-caption"><span>Product Grid</span><small>View</small></div>
+        </button>
+
+        <button class="folio-item" data-large="assets/project9-large.jpg" data-title="Color Studies" data-desc="Color grading tests and palettes." data-link="https://example.com/project9">
+          <img class="thumb" src="assets/project9-thumb.jpg" alt="Color Studies - thumbnail" loading="lazy">
+          <div class="folio-caption"><span>Color Studies</span><small>View</small></div>
+        </button>
       </div>
     </div>
-  </section>
+  </div>
+
+  <!-- Fullscreen Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="lbTitle" tabindex="-1">
+    <div class="lightbox-card" role="document">
+      <div class="lightbox-view" id="lbView">
+        <button class="lb-arrow lb-prev" id="lbPrev" aria-label="Previous">‹</button>
+        <img id="lbImage" class="lightbox-img" src="" alt="">
+        <button class="lb-arrow lb-next" id="lbNext" aria-label="Next">›</button>
+        <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
+      </div>
+
+      <div class="lightbox-meta" id="lbMeta" aria-hidden="false">
+        <h3 id="lbTitle" class="lightbox-title">Title</h3>
+        <p id="lbDesc" class="lightbox-desc">Description</p>
+        <div class="lightbox-actions">
+          <a id="lbLink" class="btn-lightbox btn-primary-lightbox" href="#" target="_blank" rel="noopener">Open Project</a>
+          <button id="lbDownload" class="btn-lightbox" title="Download image">Download</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const grid = document.getElementById('folioGrid');
+      const items = Array.from(grid.querySelectorAll('.folio-item'));
+      const lightbox = document.getElementById('lightbox');
+      const lbImage = document.getElementById('lbImage');
+      const lbTitle = document.getElementById('lbTitle');
+      const lbDesc = document.getElementById('lbDesc');
+      const lbLink = document.getElementById('lbLink');
+      const lbClose = document.getElementById('lbClose');
+      const lbPrev = document.getElementById('lbPrev');
+      const lbNext = document.getElementById('lbNext');
+      const lbDownload = document.getElementById('lbDownload');
+
+      let idx = -1;
+      let lastFocused = null;
+
+      function openAt(i){
+        const item = items[i];
+        if(!item) return;
+        idx = i;
+        const large = item.getAttribute('data-large') || item.querySelector('img').src;
+        const title = item.getAttribute('data-title') || '';
+        const desc = item.getAttribute('data-desc') || '';
+        const link = item.getAttribute('data-link') || '#';
+
+        // set content
+        lbImage.src = large;
+        lbImage.alt = title;
+        lbTitle.textContent = title;
+        lbDesc.textContent = desc;
+        lbLink.href = link;
+        lbDownload.dataset.src = large;
+
+        // show
+        lightbox.classList.add('open');
+        lightbox.setAttribute('aria-hidden','false');
+
+        // focus management
+        lastFocused = document.activeElement;
+        lbClose.focus();
+        document.body.style.overflow = 'hidden'; // prevent background scroll
+      }
+
+      function closeLB(){
+        lightbox.classList.remove('open');
+        lightbox.setAttribute('aria-hidden','true');
+        document.body.style.overflow = '';
+        // restore focus
+        if(lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+      }
+
+      function prev(){
+        if(idx <= 0) idx = items.length - 1; else idx--;
+        openAt(idx);
+      }
+      function next(){
+        if(idx >= items.length - 1) idx = 0; else idx++;
+        openAt(idx);
+      }
+
+      // Attach click handlers to items
+      items.forEach((it, i) => {
+        it.addEventListener('click', (ev) => {
+          ev.preventDefault();
+          openAt(i);
+        });
+        it.addEventListener('keydown', (ev) => {
+          if(ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); openAt(i); }
+        });
+      });
+
+      // Lightbox controls
+      lbClose.addEventListener('click', closeLB);
+      lbPrev.addEventListener('click', prev);
+      lbNext.addEventListener('click', next);
+
+      // backdrop click closes (if click outside image area)
+      lightbox.addEventListener('click', (e) => {
+        if(e.target === lightbox) closeLB();
+      });
+
+      // keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if(lightbox.classList.contains('open')){
+          if(e.key === 'Escape') closeLB();
+          else if(e.key === 'ArrowLeft') prev();
+          else if(e.key === 'ArrowRight') next();
+        }
+      });
+
+      // Download button
+      lbDownload.addEventListener('click', ()=> {
+        const url = lbDownload.dataset.src;
+        if(!url) return;
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = url.split('/').pop().split('?')[0];
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
+
+      // Preload large images
+      items.forEach(it => {
+        const p = it.getAttribute('data-large');
+        if(p){
+          const img = new Image();
+          img.src = p;
+        }
+      });
+
+      // ensure focus trap minimal: loop focus between close, prev, next, link
+      // (lightweight — for full trap you can add a proper focus-trap lib)
+    })();
+  </script>
+</section>
+<!-- ===== end WORKS block ===== -->
+
 
   <!-- CONTACT -->
   <section id="contact">
