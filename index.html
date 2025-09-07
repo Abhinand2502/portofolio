@@ -1105,224 +1105,484 @@
 
 
 
-
-  <!-- =========================
+<!-- =========================
      #contact
 ========================= -->
-<section id="contact" class="contact-section">
+<section id="contact" class="contact-section" aria-labelledby="contact-heading">
   <div class="contact-container">
-    
+
     <!-- Heading -->
-    <h1>Contact Me</h1>
-    <div class="divider"></div>
+    <h1 id="contact-heading">Contact Me</h1>
+    <div class="divider" aria-hidden="true"></div>
+
     <p class="contact-text">
-      Let's connect! You can reach me through the following platforms or download my CV.
+      Let's connect! Reach out via my social profiles below or view my resume.
     </p>
 
-    <!-- Info Cards -->
-    <div class="contact-info">
-      <div class="info-card">
-        <i class="fa-solid fa-envelope"></i>
-        <h3>Email</h3>
-        <p><a href="mailto:abhinandbabu2502@gmail.com">abhinandbabu2502@gmail.com</a></p>
-      </div>
-      <div class="info-card">
-        <i class="fa-solid fa-location-dot"></i>
-        <h3>Location</h3>
-        <p>Kerala, India 🇮🇳</p>
-      </div>
+    <!-- Social Icons (below paragraph) -->
+    <div class="socials" role="list">
+      <!-- Email anchor (replace your existing anchor) -->
+<a href="#"
+   id="email-link"
+   title="Email"
+   onclick="openGmailCompose(event)"
+   role="listitem"
+   class="social-link">
+  <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+  <span class="sr-only">Email</span>
+</a>
+
+<script>
+  // Replace these defaults as you like
+  const CONTACT_EMAIL = 'abhinandbabu2502@gmail.com';
+  const DEFAULT_SUBJECT = 'Hello — Inquiry from your portfolio';
+  const DEFAULT_BODY = 'Hi Abhinand,\n\nI would like to connect regarding...';
+
+  function encode(s){
+    return encodeURIComponent(s || '');
+  }
+
+  function openGmailCompose(e){
+    if(e) e.preventDefault();
+
+    const to = encode(CONTACT_EMAIL);
+    const subject = encode(DEFAULT_SUBJECT);
+    const body = encode(DEFAULT_BODY);
+
+    // Web Gmail compose URL (works in desktop & mobile browser)
+    const webGmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`;
+
+    // Gmail app URL scheme (iOS & Android Gmail)
+    const gmailScheme = `googlegmail://co?to=${to}&subject=${subject}&body=${body}`;
+
+    // Android intent fallback (more robust on Android devices / Chrome)
+    // Note: Intent will try to open Gmail app package com.google.android.gm
+    const androidIntent = `intent://compose?to=${to}&subject=${subject}&body=${body}#Intent;package=com.google.android.gm;scheme=mailto;end`;
+
+    // mailto fallback for users who prefer desktop mail client
+    const mailto = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+
+    // Try to open the Gmail app via scheme first
+    // If not available, after a short timeout we'll fallback to intent/web
+    // Timeout length balances giving the app time to open vs quick fallback
+    const start = Date.now();
+    let handled = false;
+
+    // Helper to attempt final fallback
+    function finalFallback() {
+      if (handled) return;
+      handled = true;
+      // If on Android try the intent URL which often triggers the Gmail app
+      const ua = navigator.userAgent || '';
+      if (/android/i.test(ua)) {
+        // try intent first on Android
+        window.location.href = androidIntent;
+        // after another short delay, open web gmail
+        setTimeout(() => { window.location.href = webGmail; }, 900);
+      } else {
+        // non-Android: open Gmail web in browser
+        window.location.href = webGmail;
+      }
+      // if webGmail blocked or unavailable, browser will fall back to mailto if needed
+    }
+
+    // Attempt to open Gmail app scheme
+    try {
+      window.location.href = gmailScheme;
+    } catch (err) {
+      // ignore; move to fallback
+    }
+
+    // If app didn't open within 700ms, run fallback
+    const fallbackTimer = setTimeout(() => {
+      // If the browser stayed on page, try fallback
+      finalFallback();
+    }, 700);
+
+    // As an additional safety: if page visibility changes (user switched to Mail app),
+    // cancel fallback to avoid redirecting the browser away.
+    function onVisibilityChange() {
+      if (document.hidden) {
+        // user likely switched to an app — cancel the fallback
+        clearTimeout(fallbackTimer);
+        handled = true;
+      }
+    }
+    document.addEventListener('visibilitychange', onVisibilityChange, { once: true });
+
+    // Extra safety: after 3s ensure we don't leave timers running
+    setTimeout(() => { clearTimeout(fallbackTimer); document.removeEventListener('visibilitychange', onVisibilityChange); }, 3000);
+  }
+</script>
+
+
+      <a href="https://github.com/Abhinand2502" target="_blank" rel="noopener noreferrer" title="GitHub" class="social-link" role="listitem">
+        <i class="fa-brands fa-github" aria-hidden="true"></i>
+        <span class="sr-only">GitHub</span>
+      </a>
+
+      <a href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="social-link" role="listitem">
+        <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
+        <span class="sr-only">LinkedIn</span>
+      </a>
+
+      <a href="https://instagram.com/_abhinand_babu" target="_blank" rel="noopener noreferrer" title="Instagram" class="social-link" role="listitem">
+        <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+        <span class="sr-only">Instagram</span>
+      </a>
     </div>
 
-    <!-- Social Icons -->
-    <div class="socials">
-      <a href="mailto:abhinandbabu2502@gmail.com" title="Email"><i class="fa-solid fa-envelope"></i></a>
-      <a href="https://github.com/Abhinand2502" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>
-      <a href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-      <a href="https://instagram.com/_abhinand_babu" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-    </div>
+    <!-- Landscape Layout -->
+    <div class="contact-grid">
 
-    <!-- Resume Buttons -->
-    <div class="resume-btns">
-      <a href="assets/Abhinand_Babu_Resume.pdf" download class="btn-primary">
-        <i class="fa-solid fa-file-arrow-down"></i> Download CV
-      </a>
-      <a href="assets/Abhinand_Babu_Resume.pdf" target="_blank" class="btn-outline">
-        <i class="fa-solid fa-eye"></i> View Resume
-      </a>
+      <!-- CV Block only (Download removed here) -->
+      <div class="cv-box" aria-describedby="resume-note">
+        <h3>My Resume</h3>
+        <p id="resume-note" class="resume-note"></p>
+
+        <div class="resume-btns">
+          <!-- only view button on the card -->
+          <button type="button" class="btn-primary" id="view-resume-btn" aria-haspopup="dialog" aria-controls="resume-modal">
+            <i class="fa-solid fa-eye" aria-hidden="true"></i> View Resume
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
+
+<!-- Modal / Lightbox (hidden by default) -->
+<div id="resume-modal" class="resume-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="resume-modal-title">
+  <div class="resume-modal-inner" role="document">
+    <header class="modal-header">
+      <h2 id="resume-modal-title">Resume — Abhinand Babu</h2>
+
+      <div class="modal-actions">
+        <!-- Download and open-in-new-tab live in the modal toolbar -->
+        <a id="modal-download" class="modal-btn modal-download" href="assets/Resume.pdf" download title="Download Resume">
+          <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
+          <span class="modal-btn-text">Download</span>
+        </a>
+
+        <a id="modal-open" class="modal-btn modal-open" href="assets/Resume.pdf" target="_blank" rel="noopener noreferrer" title="Open in new tab">
+          <i class="fa-solid fa-up-right-from-square" aria-hidden="true"></i>
+          <span class="modal-btn-text">Open</span>
+        </a>
+
+        <button id="close-resume-btn" class="modal-close" aria-label="Close resume viewer">&times;</button>
+      </div>
+    </header>
+
+    <!-- PDF viewer: loaded lazily into the iframe for performance -->
+    <div class="modal-body">
+      <div class="iframe-wrap" id="iframe-wrap">
+        <div id="pdf-loading" class="pdf-loading" role="status" aria-live="polite">
+          <div class="spinner" aria-hidden="true"></div>
+          Loading resume...
+        </div>
+
+        <iframe id="resume-iframe"
+                data-src="assets/Resume.pdf"
+                title="Resume PDF"
+                frameborder="0"
+                aria-describedby="pdf-fallback"
+                ></iframe>
+      </div>
+
+      <!-- Helpful fallback for devices/browsers that can't embed PDFs -->
+      <div id="pdf-fallback" class="pdf-fallback" aria-hidden="false">
+        If the resume doesn't display, <a id="fallback-link" href="assets/Resume.pdf" target="_blank" rel="noopener noreferrer">open it in a new tab</a> or use the Download button above.
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Footer -->
 <footer>
   © <span id="yr"></span> Abhinand Babu
 </footer>
 
-<!-- ========== CSS ========== -->
+<!-- ========== UPDATED CSS ========== -->
 <style>
+  :root{
+    --neon: #2a33e1;
+    --neon-glow: rgba(42,51,225,0.85);
+    --container-max: 1350px;
+    --card-bg: rgba(255,255,255,0.035);
+    --card-shadow: 0 10px 30px rgba(2,6,23,0.45);
+    --card-radius: 14px;
+  }
+
+  /* Section basics */
   .contact-section {
-    padding: 80px 20px;
+    padding: 36px 20px;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: linear-gradient(135deg, #0f172a, #111827);
   }
 
+  /* CARD: increased height, cleaner look */
   .contact-container {
-    max-width: 900px;
-    width: 100%;
-    background: rgba(0,0,0,0.05);
-    border-radius: 20px;
-    padding: 50px 40px;
+    max-width: var(--container-max);
+    width: 87%;
+    min-height: 340px;             /* increased card height */
+    border-radius: var(--card-radius);
+    padding: 36px 48px;            /* slightly more padding */
     text-align: center;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    border: 1px solid rgba(42, 51, 225, 0.3);
-    backdrop-filter: blur(10px);
-  }
-
-  .contact-container h1 {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-    font-weight: 700;
-  }
-
-  .divider {
-    width: 80px;
-    height: 3px;
-    background: #2a33e1;
-    margin: 0 auto 20px;
-    border-radius: 3px;
-    box-shadow: 0 0 10px #2a33e1;
-  }
-
-  .contact-text {
-    font-size: 1.15rem;
-    margin-bottom: 40px;
-    color: var(--text-color);
-  }
-
-  /* Info Cards */
-  .contact-info {
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: all 0.22s ease;
+    box-sizing: border-box;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+    box-shadow: var(--card-shadow);
     display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin-bottom: 40px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;       /* vertically center content in the taller card */
+    gap: 8px;
   }
 
-  .info-card {
-    flex: 1;
-    min-width: 200px;
-    background: rgba(0,0,0,0.07);
-    border-radius: 14px;
-    padding: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .info-card i {
-    font-size: 1.8rem;
-    color: #2a33e1;
-    margin-bottom: 10px;
-  }
-
-  .info-card h3 {
-    margin-bottom: 5px;
-    font-size: 1.2rem;
-  }
-
-  .info-card p a {
-    color: inherit;
+  /* Remove underline from all links inside the contact card and make them look clean */
+  .contact-container a, .contact-container button {
     text-decoration: none;
+    outline: none;
   }
 
-  .info-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(42, 51, 225, 0.3);
+  /* border color for modes */
+  body.dark .contact-container{
+    border-color: rgba(255,255,255,0.14);
+    color:#fff;
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
   }
-
-  /* Social Icons */
-  .socials {
-    display: flex;
-    justify-content: center;
-    gap: 25px;
-    margin-bottom: 40px;
-    flex-wrap: wrap;
-  }
-
-  .socials a {
-    font-size: 2rem;
-    color: #2a33e1;
-    transition: transform 0.3s ease, color 0.3s ease, text-shadow 0.3s;
-  }
-
-  .socials a:hover {
-    transform: scale(1.2);
-    color: #00bfff;
-    text-shadow: 0 0 15px rgba(0, 191, 255, 0.9);
-  }
-
-  /* Resume Buttons */
-  .resume-btns {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-
-  .resume-btns a {
-    padding: 12px 28px;
-    border-radius: 50px;
-    font-size: 1rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
-  }
-
-  .btn-primary {
-    background: #2a33e1;
-    color: #fff;
-    box-shadow: 0 0 15px rgba(42, 51, 225, 0.6);
-  }
-
-  .btn-primary:hover {
-    background: #00bfff;
-    box-shadow: 0 0 20px rgba(0, 191, 255, 0.9);
-  }
-
-  .btn-outline {
-    border: 2px solid #2a33e1;
-    color: #2a33e1;
-    background: transparent;
-  }
-
-  .btn-outline:hover {
-    background: #2a33e1;
-    color: #fff;
-    box-shadow: 0 0 20px rgba(42, 51, 225, 0.7);
-  }
-
-  /* Light / Dark Mode */
-  body.light .contact-container {
+  body.light .contact-container{
+    border-color: rgba(0,0,0,0.08);
+    color:#111;
     background: #fff;
-    color: #111;
+    box-shadow: 0 10px 30px rgba(12,12,24,0.06);
   }
 
-  body.dark .contact-container {
-    background: rgba(255,255,255,0.05);
-    color: #fff;
+  .contact-container h1{ font-size:2.1rem; margin:0 0 6px; font-weight:700; }
+  .divider{ width:84px; height:3px; background:var(--neon); margin:10px auto 18px; border-radius:3px; box-shadow:0 0 12px var(--neon-glow); }
+  .contact-text{ font-size:1.02rem; margin-bottom:18px; max-width:840px; margin-left:auto; margin-right:auto; color:inherit; }
+
+  /* Social icons (LARGER) */
+  .socials{
+    display:flex;
+    justify-content:center;
+    gap:28px;
+    margin-bottom:22px;
+    flex-wrap:wrap;
+  }
+  .social-link{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:84px;             /* increased tile */
+    height:84px;            /* increased tile */
+    border-radius:14px;
+    font-size:2.2rem;       /* increased icon size */
+    color:var(--neon);
+    background: linear-gradient(180deg, rgba(42,51,225,0.06), rgba(42,51,225,0.02));
+    box-shadow: 0 10px 28px rgba(2,6,23,0.36);
+    transition: transform 0.22s ease, box-shadow 0.22s ease, color 0.22s;
+    text-decoration:none;
+  }
+  .social-link:hover{
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 18px 38px rgba(42,51,225,0.22);
+    color:#00bfff;
   }
 
-  footer {
-    text-align: center;
-    margin-top: 40px;
-    font-size: 0.95rem;
-    color: var(--text-color);
+  .sr-only { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+
+  /* Grid and CV box centered vertically */
+  .contact-grid{ display:flex; justify-content:center; gap:24px; align-items:stretch; margin-top:4px; }
+
+  /* CV box: larger and vertically centered content */
+  .cv-box{
+    max-width:520px;
+    width:100%;
+    min-height:220px;           /* make the box taller */
+    padding:26px 28px;
+    border-radius:12px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(0,0,0,0.01));
+    box-shadow: 0 8px 26px rgba(2,6,23,0.28);
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;     /* center inner content vertically */
+    gap:12px;
+  }
+
+  .cv-box h3{ margin:0 0 4px; font-size:1.2rem; }
+  .resume-note{ margin:0; font-size:0.98rem; color:rgba(0,0,0,0.58); }
+
+  /* Buttons */
+  .resume-btns{ display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:6px; }
+  .btn-primary, .btn-outline, .modal-btn{
+    padding:10px 18px; border-radius:36px; font-weight:700; border:0; cursor:pointer; display:inline-flex; align-items:center; gap:8px; text-decoration:none;
+  }
+  .btn-primary{ background:var(--neon); color:#fff; box-shadow:0 8px 26px rgba(42,51,225,0.22); }
+  .btn-primary:hover{ background:#00bfff; box-shadow:0 12px 34px rgba(0,191,255,0.18); }
+
+  /* Modal styles (kept as before but cleaning some shadows) */
+  .resume-modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.66); z-index:1300; padding:18px; }
+  .resume-modal[aria-hidden="false"]{ display:flex; }
+
+  .resume-modal-inner{
+    width:100%;
+    max-width:1100px;
+    height:84vh;
+    background:#fff;
+    border-radius:12px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    box-shadow:0 28px 80px rgba(2,6,23,0.5);
+  }
+  body.dark .resume-modal-inner{ background:#0b0b10; color:#fff; }
+
+  .modal-header{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px; border-bottom:1px solid rgba(0,0,0,0.06); background:linear-gradient(90deg, rgba(42,51,225,0.02), rgba(42,51,225,0.01)); }
+  body.dark .modal-header{ border-bottom:1px solid rgba(255,255,255,0.04); }
+
+  .modal-header h2{ margin:0; font-size:1rem; font-weight:700; }
+  .modal-actions{ display:flex; gap:8px; align-items:center; }
+
+  .modal-download{ background:var(--neon); color:#fff; border-radius:8px; padding:8px 12px; display:inline-flex; align-items:center; gap:8px; text-decoration:none; font-weight:700; }
+  .modal-open{ background:transparent; color:var(--neon); border-radius:8px; padding:8px 10px; display:inline-flex; align-items:center; gap:8px; font-weight:700; text-decoration:none; border:2px solid rgba(42,51,225,0.12); }
+  .modal-close{ background:transparent; border:0; font-size:1.6rem; cursor:pointer; color:inherit; padding:6px 8px; line-height:1; }
+
+  .modal-body{ flex:1 1 auto; position:relative; display:flex; flex-direction:column; background: #fff; }
+  body.dark .modal-body{ background:#0b0b10; }
+
+  .iframe-wrap{ flex:1 1 auto; position:relative; display:flex; min-height:120px; }
+  #resume-iframe{ width:100%; height:100%; border:0; display:block; }
+
+  .pdf-loading{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; gap:10px; align-items:center; color:rgba(0,0,0,0.6); font-weight:700; z-index:5; }
+  body.dark .pdf-loading{ color:rgba(255,255,255,0.85); }
+
+  .spinner{ width:18px; height:18px; border-radius:50%; border:3px solid rgba(0,0,0,0.12); border-top-color:var(--neon); animation:spin 1s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .pdf-fallback{ padding:12px 16px; text-align:center; background:rgba(0,0,0,0.03); font-weight:600; }
+  body.dark .pdf-fallback{ background:transparent; color:#ddd; }
+
+  /* Responsive & small tweaks */
+  @media (max-width: 980px){
+    .contact-container{ padding:24px 26px; min-height:300px; }
+    .social-link{ width:76px; height:76px; font-size:2rem; }
+    .cv-box{ min-height:200px; padding:22px; }
+  }
+
+  @media (max-width:720px){
+    .resume-modal-inner{ max-width:100%; height:100vh; border-radius:0; }
+    .modal-header{ padding:12px; }
+    .modal-actions .modal-btn-text{ display:none; } /* compact icons on mobile */
+    .social-link{ width:64px; height:64px; font-size:1.6rem; }
+    .contact-container{ padding:18px; width:96%; min-height:260px; }
+    .contact-grid{ margin-top:6px; }
   }
 </style>
 
-<!-- JS for Year -->
+<!-- ========== JS (unchanged) ========== -->
 <script>
+  // update year
   document.getElementById("yr").textContent = new Date().getFullYear();
+
+  // mail opener for desktop and mobile
+  function openMail(e){
+    if(e) e.preventDefault();
+    const email = "abhinandbabu2502@gmail.com";
+    const subject = encodeURIComponent("Hello — Inquiry from your portfolio");
+    const body = encodeURIComponent("Hi Abhinand,\n\nI would like to connect regarding...");
+    const mailto = `mailto:${email}?subject=${subject}&body=${body}`;
+    // navigate to mailto (works across browsers & opens mail apps on mobile)
+    window.location.href = mailto;
+    // fallback attempt
+    setTimeout(()=> { try { window.open(mailto, "_blank"); } catch(e){} }, 300);
+  }
+
+  // modal logic (lazy load iframe src for performance)
+  const modal = document.getElementById("resume-modal");
+  const viewBtn = document.getElementById("view-resume-btn");
+  const closeBtn = document.getElementById("close-resume-btn");
+  const iframe = document.getElementById("resume-iframe");
+  const loading = document.getElementById("pdf-loading");
+  const fallbackLink = document.getElementById("fallback-link");
+
+  // set data-src path
+  const pdfPath = iframe.getAttribute('data-src') || 'assets/Resume.pdf';
+  // ensure the modal download and open links point to correct path
+  document.getElementById('modal-download').setAttribute('href', pdfPath);
+  document.getElementById('modal-open').setAttribute('href', pdfPath);
+  fallbackLink.setAttribute('href', pdfPath);
+
+  function openModal(){
+    modal.setAttribute('aria-hidden','false');
+    // lock scroll
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    // set iframe src if not set (lazy load)
+    if(!iframe.src || iframe.src.indexOf(pdfPath) === -1){
+      // small delay to allow modal transition
+      setTimeout(()=>{
+        // show loading indicator then set src
+        loading.style.display = 'flex';
+        iframe.src = pdfPath;
+      }, 80);
+    } else {
+      // ensure loading hidden when already loaded
+      loading.style.display = 'none';
+    }
+    // focus close for accessibility
+    setTimeout(()=> closeBtn.focus(), 120);
+  }
+
+  function closeModal(){
+    modal.setAttribute('aria-hidden','true');
+    // unlock scroll
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    // optional: keep iframe src to allow faster reopen; do not remove src to avoid re-downloads on reopen
+    viewBtn.focus();
+  }
+
+  // when iframe loads, hide spinner
+  iframe.addEventListener('load', function(){
+    loading.style.display = 'none';
+  });
+
+  // fallback: if iframe doesn't load within X ms on mobile, show fallback text prominently
+  let loadTimeout = null;
+  viewBtn.addEventListener('click', function(){
+    openModal();
+    // start a timeout: if iframe hasn't loaded in 4000ms, show fallback message
+    if(loadTimeout) clearTimeout(loadTimeout);
+    loadTimeout = setTimeout(()=>{
+      if(loading.style.display !== 'none'){
+        loading.style.display = 'none';
+        // make fallback more visible
+        document.getElementById('pdf-fallback').style.display = 'block';
+      }
+    }, 4000);
+  });
+
+  closeBtn.addEventListener('click', closeModal);
+
+  // close on overlay click (but not when clicking inside modal content)
+  modal.addEventListener('click', function(e){
+    if(e.target === modal) closeModal();
+  });
+
+  // close on Escape key
+  document.addEventListener('keydown', function(e){
+    if(e.key === "Escape" && modal.getAttribute('aria-hidden') === 'false') {
+      closeModal();
+    }
+  });
+
+  // ensure fallback block is hidden initially (will be shown only if needed)
+  document.getElementById('pdf-fallback').style.display = 'none';
 </script>
 
 
