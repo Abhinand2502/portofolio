@@ -1106,15 +1106,148 @@
 
 
 
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="section-inner">
-      <div class="box">
-        <h2 class="anim">Contact</h2>
-        <p class="anim">Contact details or form.</p>
-      </div>
+  <!-- =========================
+     #contact
+========================= -->
+<section id="contact" class="contact-section">
+  <div class="contact-container">
+    <h1>Contact Me</h1>
+    <p class="contact-text">
+      Let's connect! Feel free to reach out through any platform below.
+    </p>
+
+    <!-- Social Icons -->
+    <div class="socials">
+      <a href="mailto:abhinandbabu2502@gmail.com" title="Email">
+        <i class="fa-solid fa-envelope"></i>
+      </a>
+      <a href="https://github.com/Abhinand2502" target="_blank" title="GitHub">
+        <i class="fa-brands fa-github"></i>
+      </a>
+      <a href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" title="LinkedIn">
+        <i class="fa-brands fa-linkedin"></i>
+      </a>
+      <a href="https://instagram.com/_abhinand_babu" target="_blank" title="Instagram">
+        <i class="fa-brands fa-instagram"></i>
+      </a>
     </div>
-  </section>
+
+    <!-- Resume Buttons -->
+    <div class="resume-btns">
+      <a href="assets/Abhinand_Babu_Resume.pdf" download>
+        <i class="fa-solid fa-file-arrow-down"></i> Download CV
+      </a>
+      <a href="assets/Abhinand_Babu_Resume.pdf" target="_blank">
+        <i class="fa-solid fa-eye"></i> View Resume
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  © <span id="yr"></span> Abhinand Babu
+</footer>
+
+<!-- ========== CSS ========== -->
+<style>
+  .contact-section {
+    padding: 70px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .contact-container {
+    max-width: 700px;
+    width: 100%;
+    background: rgba(0,0,0,0.05);
+    border-radius: 16px;
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  }
+
+  .contact-container h1 {
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+  }
+
+  .contact-text {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+  }
+
+  /* Social Icons */
+  .socials {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-bottom: 35px;
+    flex-wrap: wrap;
+  }
+
+  .socials a {
+    font-size: 2rem;
+    color: #2a33e1; /* Neon blue */
+    transition: transform 0.3s ease, color 0.3s ease, text-shadow 0.3s;
+  }
+
+  .socials a:hover {
+    transform: scale(1.2);
+    color: #00bfff;
+    text-shadow: 0 0 12px rgba(0, 191, 255, 0.8);
+  }
+
+  /* Resume Buttons */
+  .resume-btns {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .resume-btns a {
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    background: #2a33e1;
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 0 15px rgba(42, 51, 225, 0.6);
+    transition: all 0.3s ease;
+  }
+
+  .resume-btns a:hover {
+    background: #00bfff;
+    box-shadow: 0 0 20px rgba(0, 191, 255, 0.9);
+  }
+
+  /* Light / Dark Mode */
+  body.light .contact-container {
+    background: #f9f9f9;
+    color: #111;
+  }
+
+  body.dark .contact-container {
+    background: rgba(255,255,255,0.05);
+    color: #fff;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 0.95rem;
+    color: var(--text-color);
+  }
+</style>
+
+<!-- JS for Year -->
+<script>
+  document.getElementById("yr").textContent = new Date().getFullYear();
+</script>
+
 
   <script>
     // THEME init & toggle
