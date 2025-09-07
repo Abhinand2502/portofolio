@@ -1111,33 +1111,42 @@
 ========================= -->
 <section id="contact" class="contact-section">
   <div class="contact-container">
+    
+    <!-- Heading -->
     <h1>Contact Me</h1>
+    <div class="divider"></div>
     <p class="contact-text">
-      Let's connect! Feel free to reach out through any platform below.
+      Let's connect! You can reach me through the following platforms or download my CV.
     </p>
+
+    <!-- Info Cards -->
+    <div class="contact-info">
+      <div class="info-card">
+        <i class="fa-solid fa-envelope"></i>
+        <h3>Email</h3>
+        <p><a href="mailto:abhinandbabu2502@gmail.com">abhinandbabu2502@gmail.com</a></p>
+      </div>
+      <div class="info-card">
+        <i class="fa-solid fa-location-dot"></i>
+        <h3>Location</h3>
+        <p>Kerala, India 🇮🇳</p>
+      </div>
+    </div>
 
     <!-- Social Icons -->
     <div class="socials">
-      <a href="mailto:abhinandbabu2502@gmail.com" title="Email">
-        <i class="fa-solid fa-envelope"></i>
-      </a>
-      <a href="https://github.com/Abhinand2502" target="_blank" title="GitHub">
-        <i class="fa-brands fa-github"></i>
-      </a>
-      <a href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" title="LinkedIn">
-        <i class="fa-brands fa-linkedin"></i>
-      </a>
-      <a href="https://instagram.com/_abhinand_babu" target="_blank" title="Instagram">
-        <i class="fa-brands fa-instagram"></i>
-      </a>
+      <a href="mailto:abhinandbabu2502@gmail.com" title="Email"><i class="fa-solid fa-envelope"></i></a>
+      <a href="https://github.com/Abhinand2502" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>
+      <a href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+      <a href="https://instagram.com/_abhinand_babu" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
     </div>
 
     <!-- Resume Buttons -->
     <div class="resume-btns">
-      <a href="assets/Abhinand_Babu_Resume.pdf" download>
+      <a href="assets/Abhinand_Babu_Resume.pdf" download class="btn-primary">
         <i class="fa-solid fa-file-arrow-down"></i> Download CV
       </a>
-      <a href="assets/Abhinand_Babu_Resume.pdf" target="_blank">
+      <a href="assets/Abhinand_Babu_Resume.pdf" target="_blank" class="btn-outline">
         <i class="fa-solid fa-eye"></i> View Resume
       </a>
     </div>
@@ -1152,30 +1161,83 @@
 <!-- ========== CSS ========== -->
 <style>
   .contact-section {
-    padding: 70px 20px;
+    padding: 80px 20px;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
   .contact-container {
-    max-width: 700px;
+    max-width: 900px;
     width: 100%;
     background: rgba(0,0,0,0.05);
-    border-radius: 16px;
-    padding: 40px 30px;
+    border-radius: 20px;
+    padding: 50px 40px;
     text-align: center;
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    border: 1px solid rgba(42, 51, 225, 0.3);
+    backdrop-filter: blur(10px);
   }
 
   .contact-container h1 {
-    font-size: 2.2rem;
-    margin-bottom: 15px;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+
+  .divider {
+    width: 80px;
+    height: 3px;
+    background: #2a33e1;
+    margin: 0 auto 20px;
+    border-radius: 3px;
+    box-shadow: 0 0 10px #2a33e1;
   }
 
   .contact-text {
-    font-size: 1.1rem;
-    margin-bottom: 30px;
+    font-size: 1.15rem;
+    margin-bottom: 40px;
+    color: var(--text-color);
+  }
+
+  /* Info Cards */
+  .contact-info {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+
+  .info-card {
+    flex: 1;
+    min-width: 200px;
+    background: rgba(0,0,0,0.07);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .info-card i {
+    font-size: 1.8rem;
+    color: #2a33e1;
+    margin-bottom: 10px;
+  }
+
+  .info-card h3 {
+    margin-bottom: 5px;
+    font-size: 1.2rem;
+  }
+
+  .info-card p a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(42, 51, 225, 0.3);
   }
 
   /* Social Icons */
@@ -1183,20 +1245,20 @@
     display: flex;
     justify-content: center;
     gap: 25px;
-    margin-bottom: 35px;
+    margin-bottom: 40px;
     flex-wrap: wrap;
   }
 
   .socials a {
     font-size: 2rem;
-    color: #2a33e1; /* Neon blue */
+    color: #2a33e1;
     transition: transform 0.3s ease, color 0.3s ease, text-shadow 0.3s;
   }
 
   .socials a:hover {
     transform: scale(1.2);
     color: #00bfff;
-    text-shadow: 0 0 12px rgba(0, 191, 255, 0.8);
+    text-shadow: 0 0 15px rgba(0, 191, 255, 0.9);
   }
 
   /* Resume Buttons */
@@ -1208,25 +1270,40 @@
   }
 
   .resume-btns a {
-    padding: 12px 25px;
+    padding: 12px 28px;
     border-radius: 50px;
     font-size: 1rem;
     font-weight: 600;
-    background: #2a33e1;
-    color: #fff;
     text-decoration: none;
-    box-shadow: 0 0 15px rgba(42, 51, 225, 0.6);
     transition: all 0.3s ease;
   }
 
-  .resume-btns a:hover {
+  .btn-primary {
+    background: #2a33e1;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(42, 51, 225, 0.6);
+  }
+
+  .btn-primary:hover {
     background: #00bfff;
     box-shadow: 0 0 20px rgba(0, 191, 255, 0.9);
   }
 
+  .btn-outline {
+    border: 2px solid #2a33e1;
+    color: #2a33e1;
+    background: transparent;
+  }
+
+  .btn-outline:hover {
+    background: #2a33e1;
+    color: #fff;
+    box-shadow: 0 0 20px rgba(42, 51, 225, 0.7);
+  }
+
   /* Light / Dark Mode */
   body.light .contact-container {
-    background: #f9f9f9;
+    background: #fff;
     color: #111;
   }
 
