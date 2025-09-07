@@ -1105,7 +1105,6 @@
 
 
 
-
 <!-- =========================
      #contact
 ========================= -->
@@ -1121,7 +1120,8 @@
     </p>
 
     <!-- Social Icons (below paragraph) -->
-    <div class="socials" role="list" aria-label="Social links">
+    <div class="socials" role="list">
+      <!-- Email anchor -->
       <a href="#"
          id="email-link"
          title="Email"
@@ -1173,7 +1173,7 @@
     <header class="modal-header">
       <h2 id="resume-modal-title">Resume — Abhinand Babu</h2>
 
-      <div class="modal-actions" role="toolbar" aria-label="Resume actions">
+      <div class="modal-actions">
         <a id="modal-download" class="modal-btn modal-download" href="assets/Resume.pdf" download title="Download Resume">
           <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
           <span class="modal-btn-text">Download</span>
@@ -1188,19 +1188,20 @@
       </div>
     </header>
 
-    <!-- IMAGE viewer: loads resume.jpg into an <img> -->
     <div class="modal-body">
       <div class="iframe-wrap" id="iframe-wrap">
-        <div id="image-loading" class="pdf-loading" role="status" aria-live="polite">
+        <div id="pdf-loading" class="pdf-loading" role="status" aria-live="polite">
           <div class="spinner" aria-hidden="true"></div>
           Loading resume...
         </div>
 
-        <!-- Image shown in lightbox (we keep data-src for lazy load) -->
-        <img id="resume-img" data-src="assets/resume.jpg" alt="Resume — Abhinand Babu" />
+        <iframe id="resume-iframe"
+                data-src="assets/Resume.pdf"
+                title="Resume PDF"
+                frameborder="0"
+                aria-describedby="pdf-fallback"></iframe>
       </div>
 
-      <!-- Helpful fallback for devices/browsers that can't display the image -->
       <div id="pdf-fallback" class="pdf-fallback" aria-hidden="false">
         If the resume doesn't display, <a id="fallback-link" href="assets/Resume.pdf" target="_blank" rel="noopener noreferrer">open it in a new tab</a> or use the Download button above.
       </div>
@@ -1213,51 +1214,32 @@
   © <span id="yr"></span> Abhinand Babu
 </footer>
 
-<!-- ========== STYLES (full) ========== -->
+<!-- ========== CORRECTED CSS ========== -->
 <style>
   :root{
     --neon: #2a33e1;
     --neon-glow: rgba(42,51,225,0.85);
-    --header-height: 64px; /* change if your header differs */
     --container-max: 1350px;
+    --card-shadow: 0 10px 30px rgba(2,6,23,0.45);
     --card-radius: 14px;
+    --text-dark: #111;
+    --text-light: #fff;
   }
 
-  /* ===== Header (fixed) ===== */
-  .site-header{
-    position:fixed;
-    top:0;
-    left:0;
-    right:0;
-    height:var(--header-height);
-    display:flex;
-    align-items:center;
-    z-index:1500;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    background: rgba(2,6,23,0.35);
-    border-bottom: 1px solid rgba(255,255,255,0.03);
-  }
-  .site-header .header-inner{ max-width:var(--container-max); width:92%; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
-  .brand{ color:#fff; font-weight:800; text-decoration:none; font-size:1.05rem; letter-spacing:0.2px; }
-  .header-nav a{ color:rgba(255,255,255,0.85); margin-left:18px; text-decoration:none; font-weight:600; }
+  /* Basic page */
+  html,body{ height:100%; margin:0; }
+  body{ font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
-  /* Ensure content sits below fixed header */
-  /* If you already set a global body padding-top for your header, you can remove this block */
-  body{ padding-top: var(--header-height); box-sizing:border-box; }
-
-  /* =========================
-     #contact
-  ========================= */
+  /* contact section wrapper */
   .contact-section {
     padding: 36px 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display:flex;
+    justify-content:center;
+    align-items:center;
     background: linear-gradient(135deg, #0f172a, #111827);
-    min-height: calc(100vh - var(--header-height) - 120px);
   }
 
+  /* Main card */
   .contact-container {
     max-width: var(--container-max);
     width: 87%;
@@ -1265,186 +1247,132 @@
     border-radius: var(--card-radius);
     padding: 36px 48px;
     text-align: center;
-    border: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid transparent; /* overridden below per mode */
     transition: all 0.22s ease;
     box-sizing: border-box;
     background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
-    box-shadow: 0 10px 30px rgba(2,6,23,0.45);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 8px;
-  }
-
-  .contact-container h1{ font-size:2.1rem; margin:0 0 6px; font-weight:700; color:inherit; }
-  .divider{ width:84px; height:3px; background:var(--neon); margin:10px auto 18px; border-radius:3px; box-shadow:0 0 12px var(--neon-glow); }
-  .contact-text{ font-size:1.02rem; margin-bottom:18px; max-width:840px; margin-left:auto; margin-right:auto; color:rgba(255,255,255,0.9); }
-
-  .socials{
-    display:flex;
-    justify-content:center;
-    gap:28px;
-    margin-bottom:22px;
-    flex-wrap:wrap;
-  }
-
-  .social-link{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    width:84px;
-    height:84px;
-    border-radius:14px;
-    font-size:2.2rem;
-    color:var(--neon);
-    background: linear-gradient(180deg, rgba(42,51,225,0.06), rgba(42,51,225,0.02));
-    box-shadow: 0 10px 28px rgba(2,6,23,0.36);
-    transition: transform 0.22s ease, box-shadow 0.22s ease, color 0.22s;
-    text-decoration:none;
-  }
-  .social-link:hover{ transform: translateY(-8px) scale(1.03); box-shadow: 0 18px 38px rgba(42,51,225,0.22); color:#00bfff; }
-  .sr-only{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
-
-  .contact-grid{ display:flex; justify-content:center; gap:24px; align-items:stretch; margin-top:4px; }
-
-  .cv-box{
-    max-width:520px;
-    width:100%;
-    min-height:220px;
-    padding:26px 28px;
-    border-radius:12px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(0,0,0,0.01));
-    box-shadow: 0 8px 26px rgba(2,6,23,0.28);
-    text-align:center;
+    box-shadow: var(--card-shadow);
     display:flex;
     flex-direction:column;
     justify-content:center;
-    gap:12px;
+    gap:8px;
+    color: inherit;
   }
 
-  .btn-primary{ padding:10px 18px; border-radius:36px; font-weight:700; border:0; cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:var(--neon); color:#fff; box-shadow:0 8px 26px rgba(42,51,225,0.22); }
+  /* remove default link/button decorations */
+  .contact-container a, .contact-container button { text-decoration:none; outline:none; }
+
+  /* LIGHT MODE (use body.light class on the <body>) */
+  body.light .contact-section { background: linear-gradient(180deg,#f7f8fb,#ffffff); }
+  body.light .contact-container {
+    border: 1px solid #000;      /* black border in light mode */
+    background: #fff;
+    box-shadow: 0 12px 40px rgba(12,12,24,0.06);
+    color: var(--text-dark);
+  }
+  body.light #site-footer { color: var(--text-dark); background: transparent; text-align:center; padding:14px 8px; font-weight:700; }
+
+  /* DARK MODE (use body.dark class on the <body>) */
+  body.dark .contact-section { background: linear-gradient(135deg,#0f172a,#0b1220); }
+  body.dark .contact-container {
+    border: 1px solid #fff;      /* white border in dark mode */
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0));
+    box-shadow: 0 18px 60px rgba(2,6,23,0.6);
+    color: var(--text-light);
+  }
+  body.dark #site-footer { color: var(--text-light); background: transparent; text-align:center; padding:14px 8px; font-weight:700; }
+
+  /* Heading + divider + intro */
+  .contact-container h1{ font-size:2.1rem; margin:0 0 6px; font-weight:700; }
+  .divider{ width:84px; height:3px; background:var(--neon); margin:10px auto 18px; border-radius:3px; box-shadow:0 0 12px var(--neon-glow); }
+  .contact-text{ font-size:1.02rem; margin-bottom:18px; max-width:840px; margin-left:auto; margin-right:auto; color:inherit; }
+
+  /* socials */
+  .socials{ display:flex; justify-content:center; gap:28px; margin-bottom:22px; flex-wrap:wrap; }
+  .social-link{ display:inline-flex; align-items:center; justify-content:center; width:84px; height:84px; border-radius:14px; font-size:2.2rem; color:var(--neon); background: linear-gradient(180deg, rgba(42,51,225,0.06), rgba(42,51,225,0.02)); box-shadow: 0 10px 28px rgba(2,6,23,0.36); transition: transform .22s, box-shadow .22s, color .22s; }
+  .social-link:hover{ transform:translateY(-8px) scale(1.03); box-shadow:0 18px 38px rgba(42,51,225,0.22); color:#00bfff; }
+
+  .sr-only { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+
+  /* grid & cv box */
+  .contact-grid{ display:flex; justify-content:center; gap:24px; align-items:stretch; margin-top:4px; }
+  .cv-box{ max-width:520px; width:100%; min-height:220px; padding:26px 28px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(0,0,0,0.01)); box-shadow: 0 8px 26px rgba(2,6,23,0.28); text-align:center; display:flex; flex-direction:column; justify-content:center; gap:12px; color:inherit; }
+  .cv-box h3{ margin:0 0 4px; font-size:1.2rem; }
+
+  /* resume-note color per mode */
+  .resume-note { margin:0; font-size:0.98rem; }
+  body.light .resume-note { color: rgba(0,0,0,0.65); }
+  body.dark  .resume-note { color: rgba(255,255,255,0.78); }
+
+  /* buttons */
+  .resume-btns{ display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:6px; }
+  .btn-primary, .btn-outline, .modal-btn{ padding:10px 18px; border-radius:36px; font-weight:700; border:0; cursor:pointer; display:inline-flex; align-items:center; gap:8px; text-decoration:none; }
+  .btn-primary{ background:var(--neon); color:#fff; box-shadow:0 8px 26px rgba(42,51,225,0.22); }
   .btn-primary:hover{ background:#00bfff; box-shadow:0 12px 34px rgba(0,191,255,0.18); }
 
-  /* Modal */
-  .resume-modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.66); z-index:1600; padding:18px; }
+  /* modal */
+  .resume-modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.66); z-index:1300; padding:18px; }
   .resume-modal[aria-hidden="false"]{ display:flex; }
-
-  .resume-modal-inner{ width:100%; max-width:1100px; height:84vh; background:#fff; border-radius:12px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 28px 80px rgba(2,6,23,0.5); }
-  body.dark .resume-modal-inner{ background:#0b0b10; color:#fff; }
-
+  .resume-modal-inner{ width:100%; max-width:1100px; height:84vh; background:#fff; border-radius:12px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 28px 80px rgba(2,6,23,0.5); color:inherit; }
+  body.dark .resume-modal-inner{ background:#0b0b10; color:var(--text-light); }
   .modal-header{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px; border-bottom:1px solid rgba(0,0,0,0.06); background:linear-gradient(90deg, rgba(42,51,225,0.02), rgba(42,51,225,0.01)); }
   body.dark .modal-header{ border-bottom:1px solid rgba(255,255,255,0.04); }
   .modal-header h2{ margin:0; font-size:1rem; font-weight:700; }
   .modal-actions{ display:flex; gap:8px; align-items:center; }
-  .modal-btn{ display:inline-flex; align-items:center; gap:8px; text-decoration:none; padding:8px 10px; border-radius:8px; font-weight:700; }
-  .modal-download{ background:var(--neon); color:#fff; }
-  .modal-open{ background:transparent; color:var(--neon); border:2px solid rgba(42,51,225,0.12); }
+  .modal-download{ background:var(--neon); color:#fff; border-radius:8px; padding:8px 12px; display:inline-flex; align-items:center; gap:8px; text-decoration:none; font-weight:700; }
+  .modal-open{ background:transparent; color:var(--neon); border-radius:8px; padding:8px 10px; display:inline-flex; align-items:center; gap:8px; font-weight:700; text-decoration:none; border:2px solid rgba(42,51,225,0.12); }
   .modal-close{ background:transparent; border:0; font-size:1.6rem; cursor:pointer; color:inherit; padding:6px 8px; line-height:1; }
 
-  .modal-body{ flex:1 1 auto; position:relative; display:flex; flex-direction:column; background: #fff; }
-  body.dark .modal-body{ background:#0b0b10; }
-  .iframe-wrap{ flex:1 1 auto; position:relative; display:flex; min-height:120px; align-items:center; justify-content:center; padding:12px; }
-  #resume-img{ width:100%; height:auto; max-height:80vh; display:block; object-fit:contain; border-radius:6px; }
+  .modal-body{ flex:1 1 auto; position:relative; display:flex; flex-direction:column; background: #fff; color:inherit; }
+  body.dark .modal-body{ background:#0b0b10; color:var(--text-light); }
+
+  .iframe-wrap{ flex:1 1 auto; position:relative; display:flex; min-height:120px; }
+  #resume-iframe{ width:100%; height:100%; border:0; display:block; }
+
   .pdf-loading{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; gap:10px; align-items:center; color:rgba(0,0,0,0.6); font-weight:700; z-index:5; }
   body.dark .pdf-loading{ color:rgba(255,255,255,0.85); }
   .spinner{ width:18px; height:18px; border-radius:50%; border:3px solid rgba(0,0,0,0.12); border-top-color:var(--neon); animation:spin 1s linear infinite; }
   @keyframes spin{ to{ transform:rotate(360deg); } }
-  .pdf-fallback{ padding:12px 16px; text-align:center; background:rgba(0,0,0,0.03); font-weight:600; display:none; border-radius:8px; }
 
-  /* Footer (translucent, theme-aware) */
-  #site-footer{
-    width:100%;
-    box-sizing:border-box;
-    padding:10px 18px;
-    text-align:center;
-    font-weight:600;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    transition: background-color 220ms ease, color 220ms ease, transform 220ms ease, opacity 220ms ease;
-    z-index:1400;
-    position:relative;
-    border-top: 1px solid rgba(255,255,255,0.03);
-  }
-  body.light #site-footer{
-    background: rgba(255,255,255,0.55);
-    color: #0b0b0b;
-    border-top-color: rgba(0,0,0,0.06);
-    box-shadow: 0 6px 18px rgba(12,12,24,0.04);
-  }
-  body.dark #site-footer{
-    background: rgba(2,6,23,0.45);
-    color: #f5f7fb;
-    border-top-color: rgba(255,255,255,0.04);
-    box-shadow: 0 6px 18px rgba(2,6,23,0.55);
-  }
+  .pdf-fallback{ padding:12px 16px; text-align:center; background:rgba(0,0,0,0.03); font-weight:600; }
+  body.dark .pdf-fallback{ background:transparent; color:#ddd; }
 
-  /* Responsive */
+  /* footer */
+  #site-footer { margin-top:18px; font-weight:700; font-size:0.98rem; }
+
+  /* responsive */
   @media (max-width: 980px){
     .contact-container{ padding:24px 26px; min-height:300px; }
     .social-link{ width:76px; height:76px; font-size:2rem; }
     .cv-box{ min-height:200px; padding:22px; }
   }
-
-  /* MOBILE: socials single row + footer floating pill */
   @media (max-width:720px){
-    .socials{
-      flex-wrap:nowrap;
-      overflow-x:auto;
-      -webkit-overflow-scrolling:touch;
-      gap:14px;
-      padding:6px 4px;
-      justify-content:flex-start;
-    }
-    .social-link{
-      width:60px;
-      height:60px;
-      font-size:1.45rem;
-      flex:0 0 auto;
-    }
-
-    /* floating footer pill */
-    #site-footer{
-      position:fixed;
-      left:12px;
-      right:12px;
-      bottom:12px;
-      border-radius:12px;
-      padding:10px 14px;
-      max-width:calc(100% - 24px);
-      margin:0 auto;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.28);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-
-    /* ensure modal content has space above the floating footer */
-    .resume-modal-inner { padding-bottom: 92px; }
+    .resume-modal-inner{ max-width:100%; height:100vh; border-radius:0; }
+    .modal-header{ padding:12px; }
+    .modal-actions .modal-btn-text{ display:none; }
+    .social-link{ width:64px; height:64px; font-size:1.6rem; }
+    .contact-container{ padding:18px; width:96%; min-height:260px; }
+    .contact-grid{ margin-top:6px; }
   }
-
-  /* small active feedback */
-  #site-footer:active { transform: translateY(1px); opacity:0.98; }
 </style>
 
-<!-- ========== SCRIPTS (full) ========== -->
+<!-- ========== SCRIPTS (unchanged except safe selectors) ========== -->
 <script>
-  // set year
-  document.getElementById("yr").textContent = new Date().getFullYear();
+  // Update year (run after the footer is in DOM)
+  (function(){ const yrEl = document.getElementById("yr"); if(yrEl) yrEl.textContent = new Date().getFullYear(); })();
 
-  // Gmail opener (robust: tries Gmail app then web then mailto)
+  /* Gmail compose helper (keeps the behavior you had) */
+  const CONTACT_EMAIL = 'abhinandbabu2502@gmail.com';
+  const DEFAULT_SUBJECT = 'Hello — Inquiry from your portfolio';
+  const DEFAULT_BODY = 'Hi Abhinand,\n\nI would like to connect regarding...';
+
+  function encode(s){ return encodeURIComponent(s || ''); }
+
   function openGmailCompose(e){
     if(e) e.preventDefault();
-
-    const CONTACT_EMAIL = 'abhinandbabu2502@gmail.com';
-    const DEFAULT_SUBJECT = 'Hello — Inquiry from your portfolio';
-    const DEFAULT_BODY = 'Hi Abhinand,\n\nI would like to connect regarding...';
-    function enc(s){ return encodeURIComponent(s || ''); }
-
-    const to = enc(CONTACT_EMAIL);
-    const subject = enc(DEFAULT_SUBJECT);
-    const body = enc(DEFAULT_BODY);
+    const to = encode(CONTACT_EMAIL);
+    const subject = encode(DEFAULT_SUBJECT);
+    const body = encode(DEFAULT_BODY);
 
     const webGmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`;
     const gmailScheme = `googlegmail://co?to=${to}&subject=${subject}&body=${body}`;
@@ -1456,76 +1384,90 @@
       if(handled) return;
       handled = true;
       const ua = navigator.userAgent || '';
-      if(/android/i.test(ua)){ window.location.href = androidIntent; setTimeout(()=> window.location.href = webGmail, 900); }
-      else window.location.href = webGmail;
+      if(/android/i.test(ua)){
+        window.location.href = androidIntent;
+        setTimeout(()=> { window.location.href = webGmail; }, 900);
+      } else {
+        window.location.href = webGmail;
+      }
     }
 
-    try { window.location.href = gmailScheme; } catch(e){}
+    try { window.location.href = gmailScheme; } catch(err){ /* ignore */ }
+
     const fallbackTimer = setTimeout(finalFallback, 700);
     function onVisibilityChange(){
       if(document.hidden){ clearTimeout(fallbackTimer); handled = true; }
     }
-    document.addEventListener('visibilitychange', onVisibilityChange, { once: true });
+    document.addEventListener('visibilitychange', onVisibilityChange, { once:true });
     setTimeout(()=> { clearTimeout(fallbackTimer); document.removeEventListener('visibilitychange', onVisibilityChange); }, 3000);
   }
 
-  // Modal & image logic (lazy loads assets/resume.jpg into #resume-img)
-  const modal = document.getElementById("resume-modal");
-  const viewBtn = document.getElementById("view-resume-btn");
-  const closeBtn = document.getElementById("close-resume-btn");
-  const img = document.getElementById("resume-img");
-  const loading = document.getElementById("image-loading");
-  const fallback = document.getElementById("pdf-fallback");
-  const fallbackLink = document.getElementById("fallback-link");
+  /* Modal / PDF viewer logic */
+  (function(){
+    const modal = document.getElementById("resume-modal");
+    const viewBtn = document.getElementById("view-resume-btn");
+    const closeBtn = document.getElementById("close-resume-btn");
+    const iframe = document.getElementById("resume-iframe");
+    const loading = document.getElementById("pdf-loading");
+    const fallbackLink = document.getElementById("fallback-link");
+    if(!iframe) return;
 
-  // PDF path for download/open links
-  const pdfPath = 'assets/Resume.pdf';
-  document.getElementById('modal-download').setAttribute('href', pdfPath);
-  document.getElementById('modal-open').setAttribute('href', pdfPath);
-  if(fallbackLink) fallbackLink.setAttribute('href', pdfPath);
+    const pdfPath = iframe.getAttribute('data-src') || 'assets/Resume.pdf';
+    const modalDownload = document.getElementById('modal-download');
+    const modalOpen = document.getElementById('modal-open');
+    if(modalDownload) modalDownload.setAttribute('href', pdfPath);
+    if(modalOpen) modalOpen.setAttribute('href', pdfPath);
+    if(fallbackLink) fallbackLink.setAttribute('href', pdfPath);
 
-  const imgPath = img.getAttribute('data-src') || 'assets/resume.jpg';
-
-  function openModal(){
-    modal.setAttribute('aria-hidden','false');
-    document.documentElement.style.overflow = 'hidden';
-    document.body.style.overflow = 'hidden';
-    if(!img.src || img.src.indexOf(imgPath) === -1){
-      loading.style.display = 'flex';
-      fallback.style.display = 'none';
-      setTimeout(()=> { img.src = imgPath; }, 60);
-    } else {
-      loading.style.display = 'none';
+    function openModal(){
+      if(!modal) return;
+      modal.setAttribute('aria-hidden','false');
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+      if(!iframe.src || iframe.src.indexOf(pdfPath) === -1){
+        setTimeout(()=>{ if(loading) loading.style.display = 'flex'; iframe.src = pdfPath; }, 80);
+      } else {
+        if(loading) loading.style.display = 'none';
+      }
+      setTimeout(()=> { if(closeBtn) closeBtn.focus(); }, 120);
     }
-    setTimeout(()=> closeBtn.focus(), 120);
-  }
 
-  function closeModal(){
-    modal.setAttribute('aria-hidden','true');
-    document.documentElement.style.overflow = '';
-    document.body.style.overflow = '';
-    viewBtn.focus();
-  }
+    function closeModal(){
+      if(!modal) return;
+      modal.setAttribute('aria-hidden','true');
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      if(viewBtn) viewBtn.focus();
+    }
 
-  img.addEventListener('load', function(){ loading.style.display = 'none'; });
-  img.addEventListener('error', function(){ loading.style.display = 'none'; fallback.style.display = 'block'; });
+    if(iframe){
+      iframe.addEventListener('load', function(){ if(loading) loading.style.display = 'none'; });
+    }
 
-  let loadTimeout = null;
-  viewBtn.addEventListener('click', function(){
-    openModal();
-    if(loadTimeout) clearTimeout(loadTimeout);
-    loadTimeout = setTimeout(()=> {
-      if(loading.style.display !== 'none'){ loading.style.display = 'none'; fallback.style.display = 'block'; }
-    }, 4000);
-  });
+    let loadTimeout = null;
+    if(viewBtn){
+      viewBtn.addEventListener('click', function(){
+        openModal();
+        if(loadTimeout) clearTimeout(loadTimeout);
+        loadTimeout = setTimeout(()=> {
+          if(loading && loading.style.display !== 'none'){
+            loading.style.display = 'none';
+            const pf = document.getElementById('pdf-fallback');
+            if(pf) pf.style.display = 'block';
+          }
+        }, 4000);
+      });
+    }
 
-  closeBtn.addEventListener('click', closeModal);
-  modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); });
-  document.addEventListener('keydown', function(e){ if(e.key === "Escape" && modal.getAttribute('aria-hidden') === 'false') closeModal(); });
+    if(closeBtn) closeBtn.addEventListener('click', closeModal);
+    if(modal) modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && modal && modal.getAttribute('aria-hidden') === 'false') closeModal(); });
 
-  // Accessibility: allow focus trap-ish behaviour by returning focus to viewBtn on close (simple)
-  // If you want a full focus trap, I can add that next.
+    const pf = document.getElementById('pdf-fallback');
+    if(pf) pf.style.display = 'none';
+  })();
 </script>
+
 
 
   <script>
