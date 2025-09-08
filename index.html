@@ -277,22 +277,24 @@
 
         <!-- socials: TOP CENTER icons-only -->
         <div class="image-socials" aria-hidden="false">
-       <!-- Email anchor -->
-      <a href="#"
-         id="email-link"
-         title="Email"
-         onclick="openGmailCompose(event)"
-         role="listitem"
-         class="social-link">
-        <i class="fa-solid fa-envelope" aria-hidden="true"></i>
-        <span class="sr-only">Email</span>
-      </a>
-
+           <!-- Email anchor -->
+     <!-- move this OUT of .image-socials and place it as a direct child of .hero-right -->
+<a href="#"
+   id="email-link"
+   title="Email"
+   onclick="openGmailCompose(event)"
+   role="listitem"
+   class="social-link">
+  <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+  <span class="sr-only">Email</span>
+</a>
+<style></style>
+<p>&nbsp;</p>
       <a href="https://github.com/Abhinand2502" target="_blank" rel="noopener noreferrer" title="GitHub" class="social-link" role="listitem">
         <i class="fa-brands fa-github" aria-hidden="true"></i>
         <span class="sr-only">GitHub</span>
       </a>
-
+<p>&nbsp;</p>
       <a href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="social-link" role="listitem">
         <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
         <span class="sr-only">LinkedIn</span>
@@ -304,12 +306,7 @@
       </a>
         </div>
 
-
-
-
-
-
-       
+        
       </div>
     </div>
   </section>
@@ -428,11 +425,6 @@
             </div>
           </div>
 
-          <div class="meta-row" style="margin-top:12px">
-            <div class="badge" tabindex="0"><i class="fa-solid fa-briefcase" aria-hidden="true"></i>&nbsp;Fresher</div>
-            <div class="badge" tabindex="0"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i>&nbsp;25/02/2003</div>
-            <div class="badge" tabindex="0"><span class="flag">🇮🇳</span>&nbsp;Indian</div>
-          </div>
 
           <div class="stat-grid" role="list" aria-label="Personal stats">
             <div class="stat" role="listitem" tabindex="0">
@@ -442,10 +434,6 @@
             <div class="stat" role="listitem" tabindex="0">
               <div class="k">DOB</div>
               <div class="v">25/02/03</div>
-            </div>
-            <div class="stat" role="listitem" tabindex="0">
-              <div class="k">LOC</div>
-              <div class="v">Kerala</div>
             </div>
 
             <div class="stat" role="listitem" tabindex="0">
@@ -459,6 +447,10 @@
             <div class="stat" role="listitem" tabindex="0">
               <div class="k">COUNTRY</div>
               <div class="v">🇮🇳</div>
+            </div>
+             <div class="stat" role="listitem" tabindex="0">
+              <div class="k">LOC</div>
+              <div class="v">Kerala</div>
             </div>
           </div>
         </div>
@@ -476,11 +468,11 @@
                   <div class="edu-school">B.Tech in CSE — UCE, Thodupuzha</div>
                   <div class="edu-meta">2021 – 2025</div>
                 </div>
-                <div class="edu-percent" data-percent="69.9">69.9%</div>
+              
               </div>
               <div class="edu-row">
                 <div class="edu-bar-wrap" aria-hidden="true"><div class="edu-bar" data-width="69.9"></div></div>
-                <div class="edu-percent" aria-hidden="false">Level: <strong>69.9%</strong></div>
+                <div class="edu-percent" aria-hidden="false">Level: <strong>69.9 GPA</strong></div>
               </div>
             </div>
 
@@ -490,7 +482,7 @@
                   <div class="edu-school">Higher Secondary — St. Sebastian's HSS, Vazhithala</div>
                   <div class="edu-meta">2019 – 2021</div>
                 </div>
-                <div class="edu-percent" data-percent="94">94%</div>
+    
               </div>
               <div class="edu-row">
                 <div class="edu-bar-wrap"><div class="edu-bar" data-width="94"></div></div>
@@ -504,7 +496,7 @@
                   <div class="edu-school">Secondary — Bappuji Public School, Vazhithala</div>
                   <div class="edu-meta">2018 – 2019</div>
                 </div>
-                <div class="edu-percent" data-percent="80">80%</div>
+     
               </div>
               <div class="edu-row">
                 <div class="edu-bar-wrap"><div class="edu-bar" data-width="80"></div></div>
@@ -523,14 +515,15 @@
               <div class="label">Python</div>
             </div>
 
-            <div class="skill django" role="listitem" tabindex="0">
-              <!-- try to load SVG Django logo; fallback to text 'Dj' if missing -->
-              <div class="icon">
-                <img src="assets/logos/django.svg" alt="Django logo"
-                     onerror="this.style.display='none'; this.parentNode.innerHTML='<span style=&quot;font-weight:900;font-size:14px;color:#0C4B33;&quot;>Dj</span>'">
-              </div>
-              <div class="label">Django</div>
-            </div>
+           <div class="skill django" role="listitem" tabindex="0">
+  <div class="icon">
+    <img src="assets/logos/django.svg" alt="Django logo"
+         style="filter: brightness(0) saturate(100%) invert(24%) sepia(93%) saturate(6000%) hue-rotate(200deg) brightness(95%) contrast(105%);"
+         onerror="this.style.display='none'; this.parentNode.innerHTML='<span style=&quot;font-weight:900;font-size:14px;color:#2563eb;&quot;>Dj</span>'">
+  </div>
+  <div class="label">Django</div>
+</div>
+
 
             <div class="skill html" role="listitem" tabindex="0">
               <div class="icon"><img src="assets/logos/html5.svg" alt="HTML5" onerror="this.style.display='none';this.parentNode.innerHTML='<i class=&quot;fa-brands fa-html5&quot;></i>'"></div>
@@ -887,8 +880,7 @@ html.dark .show-more,
           <input id="folioSearch" class="search-input" type="search" placeholder="Search projects (title, description, tech)..." aria-label="Search projects" />
         </div>
         <div class="search-actions">
-         
-          <button id="folioSearchClear" class="search-clear" aria-label="Clear search">Clear</button>
+        
         </div>
       </div>
 
