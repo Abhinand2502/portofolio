@@ -597,7 +597,7 @@
 
 
 
-<!-- ===== WORKS: updated — lightbox no-autoplay, contained images, black LB text, improved search/highlight, black search border ===== -->
+<!-- ===== WORKS: updated — removed bottom white meta bar, caption/title inside image, responsive view button ===== -->
 <section id="works" aria-labelledby="worksTitle">
   <style>
     :root{
@@ -656,7 +656,7 @@
     .folio-item { display:block; overflow:visible; border-radius:var(--card-radius); position:relative; border:1px solid var(--glass-strong); transition: transform .18s ease, box-shadow .18s ease; cursor:pointer; background:var(--card-bg); padding:0; }
     .folio-item:focus, .folio-item:hover { transform: translateY(-6px); box-shadow: 0 22px 60px rgba(16,24,40,0.10); outline:none; }
 
-    /* thumb-wrap: rectangle 16:9 */
+    /* thumb-wrap: rectangle 16:9 - image fills card area */
     .thumb-wrap { width:100%; aspect-ratio: 16/9; position:relative; overflow:hidden; border-radius:var(--card-radius) var(--card-radius) 8px 8px; background:#000; display:block; }
     .thumb-wrap img {
       position:absolute;
@@ -673,35 +673,39 @@
     }
     .thumb-wrap img.active { opacity:1; transform: scale(1); z-index:1; }
 
-    /* caption overlay: replace pill with thumbnail image (square) */
-    .folio-caption { position:absolute; left:12px; bottom:12px; padding:8px 12px; border-radius:10px; background: rgba(0,0,0,0.52); color:#fff; font-weight:900; font-size:13px; display:flex; gap:12px; align-items:center; backdrop-filter: blur(6px); z-index: 10; }
-    .folio-caption .title { font-weight:900; letter-spacing:0.2px; color:#fff; }
+    /* caption overlay: title + view inside the image area (dark overlay) */
+    .folio-caption { position:absolute; left:12px; bottom:12px; right:12px; padding:8px 12px; border-radius:10px; background: rgba(0,0,0,0.52); color:#fff; font-weight:900; font-size:14px; display:flex; gap:12px; align-items:center; backdrop-filter: blur(6px); z-index: 10; }
+    .folio-caption .title { font-weight:900; letter-spacing:0.2px; color:#fff; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:14px; }
+    /* view control: pill-style, smaller on mobile, consistent across breakpoints */
     .folio-caption .view {
-      width:44px;
-      height:44px;
-      padding:0;
-      border-radius:8px;
-      overflow:hidden;
-      background-color:transparent;
-      background-size:cover;
-      background-position:center;
-      background-repeat:no-repeat;
-      display:inline-block;
-      border:1px solid rgba(255,255,255,0.06);
-      box-shadow: 0 8px 24px rgba(2,6,23,0.12);
-      text-indent:-9999px; /* hide text */
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:10px;
+      background: rgba(255,255,255,0.06);
+      color:#fff;
+      font-weight:700;
+      font-size:13px;
+      min-width:54px;
+      height:36px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    @media (max-width:760px){
+      .folio-caption { padding:6px 10px; bottom:8px; left:8px; right:8px; }
+      .folio-caption .title { font-size:13px; }
+      .folio-caption .view { padding:6px 8px; min-width:44px; height:32px; font-size:12px; }
     }
 
-    /* subtle card meta below thumb */
-    .folio-meta { padding:10px 12px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; color:var(--text); }
-    .meta-left { display:flex; flex-direction:column; gap:4px; }
-    .meta-title { font-weight:800; color:var(--text); font-size:14px; }
-    .meta-sub { font-size:12px; color:var(--muted); font-weight:700; }
+    /* removed the white meta tab – keep these gone */
+    /* .folio-meta and children intentionally removed from layout */
 
     /* no results */
     .no-results { margin:12px 0 0; color:var(--muted); display:none; font-weight:700; }
 
-    /* Lightbox overlay */
+    /* Lightbox overlay (unchanged) */
     .lightbox {
       position:fixed;
       inset:0;
@@ -736,22 +740,11 @@
     }
     @media (max-width:980px){ .lb-shell { grid-template-columns: 1fr; width: calc(100vw - 12px); height: calc(100vh - var(--header-h) - 12px); } }
 
-    /* Left view: track (GPU transform) — images displayed contained (no zoom) */
     .lb-view { position:relative; background:#111; display:flex; align-items:center; justify-content:center; overflow:hidden; min-height:320px; }
     .lb-track { display:flex; width:100%; height:100%; will-change: transform; transition: transform .55s cubic-bezier(.2,.9,.2,1); }
     .lb-slide { flex:0 0 100%; display:flex; align-items:center; justify-content:center; position:relative; height:100%; min-height:320px; padding:12px; box-sizing:border-box; }
-    .lb-slide img {
-      max-width:100%;
-      max-height:100%;
-      width:auto;
-      height:auto;
-      object-fit:contain; /* contained rectangle, no zoom/crop */
-      display:block;
-      margin:auto;
-      cursor:zoom-in; user-select:none; -webkit-user-drag:none;
-    }
+    .lb-slide img { max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block; margin:auto; cursor:zoom-in; user-select:none; -webkit-user-drag:none; }
 
-    /* controls */
     .lb-close, .lb-prev, .lb-next {
       position:absolute; z-index:40; width:44px; height:44px; border-radius:10px; display:grid; place-items:center; background: rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.06); color:#fff; font-size:18px; cursor:pointer;
       transition: transform .12s ease, opacity .12s ease;
@@ -760,7 +753,6 @@
     .lb-prev { left:12px; top:50%; transform:translateY(-50%); }
     .lb-next { right:12px; top:50%; transform:translateY(-50%); }
 
-    /* LB meta panel: forced black text (user requested "only that black font") */
     .lb-meta { padding:18px; display:flex; flex-direction:column; gap:12px; overflow:auto; color:#111; background: #ffffff; }
     .lb-title { font-family:'Playfair Display', serif; font-size:20px; font-weight:900; margin:0; color:#111; }
     .lb-desc { color:var(--muted); font-size:13px; line-height:1.45; margin:0; min-height:48px; color:#111; }
@@ -778,8 +770,6 @@
       .lb-meta{ padding:12px }
       .lb-title{ font-size:17px }
       .lb-shell { gap:8px; }
-      .meta-left { gap:2px; }
-      .folio-caption .view { width:36px; height:36px; }
     }
 
     /* force ALL text inside lightbox meta to black (both themes) */
@@ -815,28 +805,19 @@
       </div>
 
       <p class="anim" aria-hidden="true">&nbsp;</p>
-             <p class="anim">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-
-      
+      <p class="anim">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 
       <p id="noResults" class="no-results">No projects found</p>
 
       <div class="folio-grid anim" id="folioGrid" aria-live="polite">
-        <!-- Items (same dataset attributes — keep images and data as before) -->
+        <!-- Items: NOTE - .folio-meta removed. Only image + caption overlay remain -->
         <button class="folio-item"
           data-images="assets/TLOGIN (1).png,assets/THOME.png,assets/TPROF.png,assets/TUPLOAD.png,assets/TRESULT.png,assets/TRESULT1.png,assets/THIST.png,assets/THIST2.png,assets/TCOM.png,assets/ALOG.png,assets/AHOME.png,assets/AUSER.png,assets/AHIST.png,assets/ACOMP.png"
           data-title="White Knit Cap"
           data-desc="Portrait retouch & color correction."
           data-tech="Python,Django,Photoshop">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">White Knit Cap</span><span class="view">View</span></div>
-          <div class="folio-meta">
-            <div class="meta-left">
-              <div class="meta-title">White Knit Cap</div>
-              <div class="meta-sub">Portrait retouch & color correction</div>
-            </div>
-            <div class="meta-right"></div>
-          </div>
+          <div class="folio-caption"><span class="title">White Knit Cap</span><span class="view">View details</span></div>
         </button>
 
         <button class="folio-item"
@@ -845,13 +826,7 @@
           data-desc="Studio product mockups."
           data-tech="3D,Lighting,Retouch">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Minimal Stool</span><span class="view">View</span></div>
-          <div class="folio-meta">
-            <div class="meta-left">
-              <div class="meta-title">Minimal Stool</div>
-              <div class="meta-sub">Studio product mockups</div>
-            </div>
-          </div>
+          <div class="folio-caption"><span class="title">Minimal Stool</span><span class="view">View details</span></div>
         </button>
 
         <button class="folio-item"
@@ -860,13 +835,7 @@
           data-desc="Still-life composition & color grading tests."
           data-tech="Color,Lighting,Compositing">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Coffee & Tulips</span><span class="view">View</span></div>
-          <div class="folio-meta">
-            <div class="meta-left">
-              <div class="meta-title">Coffee & Tulips</div>
-              <div class="meta-sub">Still-life & color grading</div>
-            </div>
-          </div>
+          <div class="folio-caption"><span class="title">Coffee & Tulips</span><span class="view">View details</span></div>
         </button>
 
         <button class="folio-item"
@@ -875,13 +844,7 @@
           data-desc="B&W workflow & grain."
           data-tech="Film,Grain,DodgeBurn">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Monochrome Portrait</span><span class="view">View</span></div>
-          <div class="folio-meta">
-            <div class="meta-left">
-              <div class="meta-title">Monochrome Portrait</div>
-              <div class="meta-sub">B&W workflow & grain</div>
-            </div>
-          </div>
+          <div class="folio-caption"><span class="title">Monochrome Portrait</span><span class="view">View details</span></div>
         </button>
 
         <button class="folio-item"
@@ -890,13 +853,7 @@
           data-desc="Studio lamp photography."
           data-tech="Studio,Texture,Retouch">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Hanging Lamp</span><span class="view">View</span></div>
-          <div class="folio-meta">
-            <div class="meta-left">
-              <div class="meta-title">Hanging Lamp</div>
-              <div class="meta-sub">Studio lamp photography</div>
-            </div>
-          </div>
+          <div class="folio-caption"><span class="title">Hanging Lamp</span><span class="view">View details</span></div>
         </button>
 
         <button class="folio-item"
@@ -905,13 +862,7 @@
           data-desc="Macro foliage textures."
           data-tech="Macro,Texture,Light">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Green Leaves</span><span class="view">View</span></div>
-          <div class="folio-meta">
-            <div class="meta-left">
-              <div class="meta-title">Green Leaves</div>
-              <div class="meta-sub">Macro foliage textures</div>
-            </div>
-          </div>
+          <div class="folio-caption"><span class="title">Green Leaves</span><span class="view">View details</span></div>
         </button>
 
         <!-- hidden ones (shown after Show more) -->
@@ -921,13 +872,7 @@
           data-desc="Typographic systems."
           data-tech="Type,Layout,Systems">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Type Poster</span><span class="view">View</span></div>
-          <div class="folio-meta">
-            <div class="meta-left">
-              <div class="meta-title">Type Poster</div>
-              <div class="meta-sub">Typographic systems</div>
-            </div>
-          </div>
+          <div class="folio-caption"><span class="title">Type Poster</span><span class="view">View details</span></div>
         </button>
 
         <button class="folio-item"
@@ -936,13 +881,7 @@
           data-desc="E-commerce grid."
           data-tech="Grid,UI,States">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Product Grid</span><span class="view">View</span></div>
-          <div class="folio-meta">
-            <div class="meta-left">
-              <div class="meta-title">Product Grid</div>
-              <div class="meta-sub">E-commerce grid</div>
-            </div>
-          </div>
+          <div class="folio-caption"><span class="title">Product Grid</span><span class="view">View details</span></div>
         </button>
 
         <button class="folio-item"
@@ -951,13 +890,7 @@
           data-desc="Responsive layout experiments."
           data-tech="Responsive,Breakpoints,Tests">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Grid Study</span><span class="view">View</span></div>
-          <div class="folio-meta">
-            <div class="meta-left">
-              <div class="meta-title">Grid Study</div>
-              <div class="meta-sub">Responsive layout experiments</div>
-            </div>
-          </div>
+          <div class="folio-caption"><span class="title">Grid Study</span><span class="view">View details</span></div>
         </button>
       </div>
 
@@ -1031,16 +964,15 @@
           wrap.appendChild(img);
         });
 
-        // set small caption-thumbnail (replace white pill) using first image
+        // keep "View details" as a pill, NOT a bottom white tab. (No more meta block.)
         const viewEl = it.querySelector('.folio-caption .view');
         if(viewEl){
           const firstThumb = imgs[0] || '';
           if(firstThumb){
-            viewEl.style.backgroundImage = `url(${firstThumb})`;
-            viewEl.style.backgroundSize = 'cover';
-            viewEl.style.backgroundPosition = 'center';
-            viewEl.textContent = ''; // hide textual label
-            viewEl.classList.add('caption-thumb');
+            // optionally set thumbnail behind view pill - commented out to keep pill text visible.
+            // viewEl.style.backgroundImage = `url(${firstThumb})`;
+            // viewEl.style.backgroundSize = 'cover';
+            // viewEl.style.backgroundPosition = 'center';
           }
         }
 
@@ -1162,14 +1094,12 @@
       // attach open handlers
       items.forEach((it, idx) => {
         it.addEventListener('click', (ev) => { ev.preventDefault(); openAt(idx); });
-        it.addEventListener('keydown', (ev) => { if(ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); openAt(idx); }});
+        it.addEventListener('keydown', (ev) => { if(ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); openAt(idx); }} );
       });
 
       lbClose.addEventListener('click', closeLB);
       lbPrev.addEventListener('click', () => { lbPrevFn(); });
       lbNext.addEventListener('click', () => { lbNextFn(); });
-
-      // remove image-click-to-advance: only arrows move slides (per request)
 
       // click outside content closes (lightbox background)
       lightbox.addEventListener('click', (e) => { if(e.target === lightbox) closeLB(); });
@@ -1193,10 +1123,8 @@
       }
 
       function highlightText(node, tokens){
-        // node is an element that contains plain text. We'll replace whole innerHTML safely.
         let txt = node.textContent || '';
         if(!tokens.length){ node.innerHTML = txt; return; }
-        // build combined regex (match any token)
         const parts = tokens.map(t => escapeRegExp(t));
         const re = new RegExp('(' + parts.join('|') + ')', 'ig');
         node.innerHTML = txt.replace(re, (m) => `<span class="hl">${m}</span>`);
@@ -1211,9 +1139,7 @@
       function resetHighlights(){
         items.forEach(it => {
           const capTitle = it.querySelector('.folio-caption .title');
-          const metaTitle = it.querySelector('.meta-title');
           if(capTitle) capTitle.innerHTML = capTitle.textContent || '';
-          if(metaTitle) metaTitle.innerHTML = metaTitle.textContent || '';
         });
       }
 
@@ -1246,17 +1172,11 @@
           it.style.display = match ? 'block' : 'none';
           if(match) {
             any = true;
-            // highlight matches in visible titles
             const capTitle = it.querySelector('.folio-caption .title');
-            const metaTitle = it.querySelector('.meta-title');
             if(capTitle) highlightText(capTitle, tokens);
-            if(metaTitle) highlightText(metaTitle, tokens);
           } else {
-            // clear highlights on hidden
             const capTitle = it.querySelector('.folio-caption .title');
-            const metaTitle = it.querySelector('.meta-title');
             if(capTitle) capTitle.innerHTML = capTitle.textContent || '';
-            if(metaTitle) metaTitle.innerHTML = metaTitle.textContent || '';
           }
         });
         noResults.style.display = any ? 'none' : 'block';
@@ -1319,6 +1239,7 @@
   </script>
 </section>
 <!-- ===== end WORKS ===== -->
+
 
 
 
