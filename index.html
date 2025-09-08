@@ -296,7 +296,7 @@
     html[data-theme="dark"] .about-inner { --about-muted: rgba(255,255,255,0.72); }
 
     .about-inner { min-height:calc(100vh - var(--header-h)); padding-top:var(--header-h); display:flex; align-items:center; justify-content:center; }
-    .about-container { width:100%; max-width:1200px; padding:24px; display:grid; grid-template-columns:420px 1fr; gap:28px; align-items:stretch; }
+    .about-container { width:1350%; max-width:1350px; padding:24px; display:grid; grid-template-columns:420px 1fr; gap:28px; align-items:stretch; }
 
     .themed-card { border-radius:18px; padding:20px; transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease; background: #fff; border: 2px solid #0b0b0b; color: var(--text); box-shadow: 0 8px 28px rgba(16,24,40,0.06); }
     html[data-theme="dark"] .themed-card { background: #0b0b0b; border: 2px solid #ffffff; color: var(--text); box-shadow: 0 12px 36px rgba(0,0,0,0.6); }
@@ -352,15 +352,18 @@
     .skill .icon i { font-size:20px; }
     .skill .label { font-weight:800; font-size:14px; color:var(--text); }
 
-    /* brand accents (for FA icons fallback) */
-    .skill.python .icon i { color:#3776AB; }
-    .skill.django .icon img { /* will use image file */ }
-    .skill.html .icon i { color:#E34F26; }
-    .skill.css .icon i { color:#1572B6; }
-    .skill.js .icon i { color:#F0DB4F; text-shadow: 0 1px 0 rgba(0,0,0,0.2); }
-    .skill.react .icon i { color:#61DAFB; }
-    .skill.sql .icon i { color:#003B57; }
-    .skill.ml .icon i { color:#FF6B6B; }
+    /* Force all skill logos/icons into blue */
+.skill .icon i,
+.skill .icon img {
+  filter: brightness(0) saturate(100%) invert(27%) sepia(98%) saturate(2042%) hue-rotate(202deg) brightness(95%) contrast(97%);
+  /* 🔹 This filter makes any logo appear blue (#1572B6-like). */
+}
+
+/* OR simpler: if you're only using <i> (FontAwesome) icons */
+.skill .icon i {
+  color: #1572B6 !important;   /* 🔹 Force all icons blue */
+}
+
 
     .themed-card:focus-within, .themed-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(16,24,40,0.10); }
 
