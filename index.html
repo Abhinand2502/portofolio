@@ -1738,6 +1738,66 @@ html.dark .show-more,
     .socials::-webkit-scrollbar { height: 8px; }
     .socials::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 8px; }
   }
+nnnn
+/* ---- Force borders: include the small social buttons (.social-link) ----
+   Place at the END of your stylesheet so it overrides previous border settings.
+*/
+body.light .contact-container,
+body.light .cv-box,
+body.light .resume-modal-inner,
+body.light .iframe-wrap,
+body.light .social-link {
+  border: 2px solid #000 !important;   /* BLACK borders in light mode */
+  background-clip: padding-box;
+}
+
+/* Dark mode: white borders */
+body.dark .contact-container,
+body.dark .cv-box,
+body.dark .resume-modal-inner,
+body.dark .iframe-wrap,
+body.dark .social-link {
+  border: 2px solid #fff !important;   /* WHITE borders in dark mode */
+  background-clip: padding-box;
+}
+
+/* Fallback to OS theme if no body class */
+@media (prefers-color-scheme: light) {
+  .contact-container,
+  .cv-box,
+  .resume-modal-inner,
+  .iframe-wrap,
+  .social-link {
+    border: 2px solid #000 !important;
+    background-clip: padding-box;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  .contact-container,
+  .cv-box,
+  .resume-modal-inner,
+  .iframe-wrap,
+  .social-link {
+    border: 2px solid #fff !important;
+    background-clip: padding-box;
+  }
+}
+
+/* Keep same radius & smooth transitions for the small buttons */
+.social-link {
+  border-radius: 14px;          /* matches your button shape */
+  transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+  box-sizing: border-box;       /* ensure border doesn't alter the size */
+}
+
+/* Optional: slightly adjust hover so border remains visible */
+.social-link:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 44px rgba(42,51,225,0.16);
+}
+
+
+  
 </style>
 
 <!-- ========== SCRIPTS (unchanged) ========== -->
