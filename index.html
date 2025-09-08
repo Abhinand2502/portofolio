@@ -1299,7 +1299,6 @@ html.dark .show-more,
 
 
 
-
 <!-- =========================
      #contact
 ========================= -->
@@ -1392,7 +1391,6 @@ html.dark .show-more,
         </div>
 
         <!-- IMAGE (lazy-loaded) placed inside the lightbox -->
-        <!-- inline sizing removed so CSS below controls sizing precisely -->
         <img id="resume-image"
              data-src="assets/resume.jpg"
              alt="Resume preview — Abhinand Babu"
@@ -1412,7 +1410,7 @@ html.dark .show-more,
   © <span id="yr"></span> Abhinand Babu
 </footer>
 
-<!-- ========== CORRECTED CSS ========== -->
+<!-- ========== UPDATED CSS ========== -->
 <style>
   :root{
     --neon: #2a33e1;
@@ -1463,7 +1461,7 @@ html.dark .show-more,
   /* LIGHT MODE (apply body.light on <body>) */
   body.light .contact-section { background: linear-gradient(180deg,#f7f8fb,#ffffff); }
   body.light .contact-container {
-    border: 2px solid #000;      /* BLACK border in light mode (updated) */
+    border: 2px solid #000;      /* BLACK border in light mode */
     background: #fff;
     box-shadow: 0 12px 40px rgba(12,12,24,0.06);
     color: var(--text-dark);
@@ -1473,7 +1471,7 @@ html.dark .show-more,
   /* DARK MODE (apply body.dark on <body>) */
   body.dark .contact-section { background: linear-gradient(135deg,#0f172a,#0b1220); }
   body.dark .contact-container {
-    border: 2px solid #fff;      /* WHITE border in dark mode (updated) */
+    border: 2px solid #fff;      /* WHITE border in dark mode */
     background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0));
     box-shadow: 0 18px 60px rgba(2,6,23,0.6);
     color: var(--text-light);
@@ -1525,7 +1523,7 @@ html.dark .show-more,
   body.dark .modal-body{ background:#0b0b10; color:var(--text-light); }
 
   /* ensure iframe-wrap centers image and provides padding so image doesn't touch edges */
-  .iframe-wrap{ flex:1 1 auto; position:relative; display:flex; min-height:120px; align-items:center; justify-content:center; padding:20px; box-sizing:border-box; }
+  .iframe-wrap{ flex:1 1 auto; position:relative; display:flex; min-height:120px; align-items:center; justify-content:center; padding:12px 20px; box-sizing:border-box; }
 
   /* loading + spinner */
   .pdf-loading{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; gap:10px; align-items:center; color:rgba(0,0,0,0.6); font-weight:700; z-index:5; }
@@ -1536,25 +1534,52 @@ html.dark .show-more,
   .pdf-fallback{ padding:12px 16px; text-align:center; background:rgba(0,0,0,0.03); font-weight:600; }
   body.dark .pdf-fallback{ background:transparent; color:#ddd; }
 
-  /* ------------ FIX: don't let resume image zoom on desktop ------------- */
+  /* ------------ RESUME IMAGE SIZING ------------- */
+  /* Default - keeps image from upscaling and ensures it fits available modal area */
   #resume-image {
     display:block;
-    width: auto !important;                        /* do not force width */
-    height: auto !important;                       /* do not force height */
-    max-width: calc(100% - 40px) !important;       /* leave a little padding inside modal */
-    max-height: calc(84vh - 140px) !important;     /* header + safe gap subtracted so image never overflows */
-    object-fit: contain !important;                /* preserve aspect ratio */
+    width: auto;
+    height: auto;
+    max-width: calc(100% - 40px);        /* leave small padding inside modal */
+    max-height: calc(84vh - 140px);      /* reserve header + actions area (adjust if header height changes) */
+    object-fit: contain;
     image-rendering: auto;
-    visibility: visible; /* JS will toggle while loading */
+    visibility: visible; /* will be toggled by JS during load */
+  }
+
+  /* Laptop / desktop: allow wider but keep within viewport height */
+  @media (min-width: 1024px) {
+    #resume-image {
+      /* cap width relative to modal max-width and viewport */
+      max-width: min(1000px, calc(100vw - 240px));
+      max-height: calc(80vh - 60px);
+    }
+  }
+
+  /* Mobile small screens (5" phones ~ 360x640): ensure image fits available viewport height */
+  @media (max-width: 480px), (max-height: 700px) {
+    .iframe-wrap { padding: 8px; }
+    #resume-image {
+      max-width: calc(100% - 20px);
+      max-height: calc(100vh - 120px); /* header (~56px) + small safe gap */
+      /* on very short phones this ensures the image height is no more than what's visible */
+    }
+  }
+
+  /* extra small very short devices, be more strict */
+  @media (max-height: 600px) {
+    #resume-image {
+      max-height: calc(100vh - 110px);
+    }
   }
 
   /* footer */
   #site-footer { margin-top:18px; font-weight:700; font-size:0.98rem; text-align:center; }
 
-  /* responsive */
+  /* responsive adjustments */
   @media (max-width: 980px){
-    .contact-container{ padding:24px 26px; min-height:600px; }
-    .social-link{ width:80px; height:80px; font-size:2rem; }
+    .contact-container{ padding:24px 26px; min-height:340px; }
+    .social-link{ width:76px; height:76px; font-size:2rem; }
     .cv-box{ min-height:200px; padding:22px; }
   }
 
@@ -1564,7 +1589,9 @@ html.dark .show-more,
     .modal-header{ padding:12px; }
     .modal-actions .modal-btn-text{ display:none; }
     .social-link{ width:64px; height:64px; font-size:1.6rem; }
-    .contact-container{ padding:18px; width:96%; min-height:260px; }
+    /* Increased mobile contact container height as requested */
+    .contact-container{ padding:18px; width:96%; min-height:420px; } /* increased from earlier values */
+
     .contact-grid{ margin-top:6px; }
 
     .socials {
@@ -1583,7 +1610,7 @@ html.dark .show-more,
   }
 </style>
 
-<!-- ========== SCRIPTS (updated to lazy-load image) ========== -->
+<!-- ========== SCRIPTS (unchanged) ========== -->
 <script>
   // Update year
   (function(){ const yrEl = document.getElementById("yr"); if(yrEl) yrEl.textContent = new Date().getFullYear(); })();
