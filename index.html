@@ -638,6 +638,15 @@
     .search-icon { position:relative; left:34px; margin-right: -34px; pointer-events:none; opacity:.9; font-weight:700; color:var(--muted); font-size:14px; }
     .search-actions { display:flex; gap:8px; align-items:center; }
     .search-clear { padding:8px 12px; border-radius:10px; border:1px solid var(--glass-strong); background:transparent; cursor:pointer; font-weight:800; font-size:13px; color:var(--text); }
+    /* Dark mode border override for search-clear */
+body.dark .search-clear,
+html.dark .search-clear,
+.dark-mode .search-clear,
+.theme-dark .search-clear,
+[data-theme="dark"] .search-clear {
+  border-color: #ffffff !important; /* white border in dark mode */
+}
+
     .result-count { font-weight:700; color:var(--text); font-size:13px; white-space:nowrap; }
 
     /* highlight for matched text */
@@ -703,7 +712,43 @@
     /* .folio-meta and children intentionally removed from layout */
 
     /* no results */
-    .no-results { margin:12px 0 0; color:var(--muted); display:none; font-weight:700; }
+    /* replace previous .no-results rule with this */
+/* ===== minimal overrides — paste at the END of your #works <style> block ===== */
+
+/* NO RESULTS: black in light, white in dark (many dark-mode selectors covered) */
+#works .no-results {
+  color: #111111 !important;    /* default: black */
+}
+
+/* dark-mode variants (common patterns) */
+body.dark #works .no-results,
+html.dark #works .no-results,
+.dark-mode #works .no-results,
+.theme-dark #works .no-results,
+[data-theme="dark"] #works .no-results {
+  color: #ffffff !important;    /* dark mode: white */
+}
+
+/* SEARCH INPUT TEXT & PLACEHOLDER: force visible (dark on both themes) */
+#works .search-input {
+  color: #111111 !important;           /* typed text */
+  background-clip: padding-box;        /* keep BG behavior unchanged */
+}
+
+/* placeholder (all common browsers) */
+#works .search-input::placeholder { color: #666666 !important; opacity: 1 !important; }
+#works .search-input::-webkit-input-placeholder { color: #666666 !important; opacity: 1 !important; }
+#works .search-input:-ms-input-placeholder { color: #666666 !important; opacity: 1 !important; }
+#works .search-input::-ms-input-placeholder { color: #666666 !important; opacity: 1 !important; }
+
+
+
+/* result count (makes "Showing X of Y" readable when you force text colors) */
+#works .result-count { color: #111111 !important; }
+
+/* If your dark-mode uses unusual selectors, add them to the dark-mode block above.
+   This block intentionally uses !important and specific #works scoping so it overrides competing rules. */
+
 
     /* Lightbox overlay (unchanged) */
     .lightbox {
@@ -764,6 +809,19 @@
 
     .show-more-wrap { text-align:center; margin-top:12px; }
     .show-more { display:inline-block; padding:8px 14px; border-radius:999px; border:1px solid var(--glass-strong); background:transparent; font-weight:800; cursor:pointer; color:var(--text); }
+/* Dark mode border override */
+body.dark .btn,
+html.dark .btn,
+.dark-mode .btn,
+.theme-dark .btn,
+[data-theme="dark"] .btn,
+body.dark .show-more,
+html.dark .show-more,
+.dark-mode .show-more,
+.theme-dark .show-more,
+[data-theme="dark"] .show-more {
+  border-color: #ffffff !important; /* white border in dark mode */
+}
 
     @media (max-width:760px){
       .folio-caption{ left:8px; bottom:8px; padding:6px 8px; font-size:12px; }
@@ -791,7 +849,7 @@
 
   <div class="section-inner">
     <div class="box">
-      <h2 id="worksTitle" class="anim">Selected Works</h2>
+      <h1 id="worksTitle" class="anim">My projects</h1>
 
       <div class="search-wrap" role="search" aria-label="Search projects">
         <div class="search-left">
@@ -799,12 +857,12 @@
           <input id="folioSearch" class="search-input" type="search" placeholder="Search projects (title, description, tech)..." aria-label="Search projects" />
         </div>
         <div class="search-actions">
-          <div id="resultCount" class="result-count" aria-live="polite">Showing 6 of 9</div>
+         
           <button id="folioSearchClear" class="search-clear" aria-label="Clear search">Clear</button>
         </div>
       </div>
 
-      <p class="anim" aria-hidden="true">&nbsp;</p>
+     
       <p class="anim">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 
       <p id="noResults" class="no-results">No projects found</p>
@@ -917,7 +975,7 @@
 
         <div class="lb-actions">
           <a id="lbLink" class="btn primary" href="#" target="_blank" rel="noopener">Open Project</a>
-          <button id="lbDownload" class="btn" title="Download current image">Download</button>
+    
         </div>
       </div>
     </div>
@@ -937,8 +995,7 @@
       const lbClose = document.getElementById('lbClose');
       const lbPrev = document.getElementById('lbPrev');
       const lbNext = document.getElementById('lbNext');
-      const lbDownload = document.getElementById('lbDownload');
-
+    
       const searchInput = document.getElementById('folioSearch');
       const searchClear = document.getElementById('folioSearchClear');
       const noResults = document.getElementById('noResults');
@@ -1045,8 +1102,7 @@
             lbTrack.style.transform = `translateX(${offset}%)`;
           }
         }
-        const currentImg = lbSlidesArr[lbCurrent] && lbSlidesArr[lbCurrent].querySelector('img');
-        if(currentImg) lbDownload.dataset.src = currentImg.src;
+        
       }
       function lbNextFn(){ showLbSlide(lbCurrent + 1); }
       function lbPrevFn(){ showLbSlide(lbCurrent - 1); }
@@ -1112,11 +1168,7 @@
         }
       });
 
-      lbDownload.addEventListener('click', ()=> {
-        const url = lbDownload.dataset.src; if(!url) return;
-        const a = document.createElement('a'); a.href = url; a.download = url.split('/').pop().split('?')[0]; document.body.appendChild(a); a.click(); a.remove();
-      });
-
+     
       // ------------ SEARCH / FILTER: efficient + highlight ------------
       function escapeRegExp(string) {
         return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
