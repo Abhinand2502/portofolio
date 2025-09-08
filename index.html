@@ -1410,9 +1410,9 @@ html.dark .show-more,
   © <span id="yr"></span> Abhinand Babu
 </footer>
 
-<!-- ========== UPDATED CSS ========== -->
+<!-- ========== FIXED CSS ========== -->
 <style>
-  :root{
+  :root {
     --neon: #2a33e1;
     --neon-glow: rgba(42,51,225,0.85);
     --container-max: 1350px;
@@ -1420,15 +1420,21 @@ html.dark .show-more,
     --card-radius: 14px;
     --text-dark: #111;
     --text-light: #fff;
-    --social-bg-light: rgba(0,0,0,0.04);
-    --social-bg-dark: rgba(255,255,255,0.03);
-    --social-border-light: rgba(0,0,0,0.06);
-    --social-border-dark: rgba(255,255,255,0.06);
+
+    /* border colors */
+    --border-light: #000; /* black */
+    --border-dark:  #fff; /* white */
   }
 
   /* Basic page */
-  html,body{ height:100%; margin:0; }
-  body{ font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+  html,body {
+    height:100%; margin:0;
+  }
+  body {
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
 
   /* contact section wrapper */
   .contact-section {
@@ -1439,17 +1445,15 @@ html.dark .show-more,
     background: linear-gradient(135deg, #0f172a, #111827);
   }
 
-  /* Main card
-     NOTE: increased min-height by ~1cm: use calc(original + 1cm)
-  */
+  /* Main card */
   .contact-container {
     max-width: var(--container-max);
     width: 89%;
-    min-height: calc(340px + 1cm);      /* increased by ~1cm */
+    min-height: calc(340px + 1cm);
     border-radius: var(--card-radius);
     padding: 36px 48px;
     text-align: center;
-    border: 1px solid transparent; /* overridden below per mode */
+    border: 2px solid transparent; /* overridden below */
     transition: all 0.22s ease;
     box-sizing: border-box;
     background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
@@ -1462,35 +1466,91 @@ html.dark .show-more,
   }
 
   /* remove default link/button decorations */
-  .contact-container a, .contact-container button { text-decoration:none; outline:none; }
+  .contact-container a, .contact-container button {
+    text-decoration:none; outline:none;
+  }
 
-  /* LIGHT MODE (apply body.light on <body>) */
-  body.light .contact-section { background: linear-gradient(180deg,#f7f8fb,#ffffff); }
+  /* LIGHT MODE */
+  body.light .contact-section {
+    background: linear-gradient(180deg,#f7f8fb,#ffffff);
+  }
   body.light .contact-container {
-    border: 2px solid #000;      /* BLACK border in light mode */
+    border: 2px solid var(--border-light);
     background: #fff;
     box-shadow: 0 12px 40px rgba(12,12,24,0.06);
     color: var(--text-dark);
   }
-  body.light #site-footer { color: var(--text-dark); background: transparent; text-align:center; padding:14px 8px; font-weight:700; }
+  body.light .socials {
+    background: rgba(0,0,0,0.04);
+    border: 2px solid var(--border-light);
+  }
+  body.light .cv-box {
+    border: 2px solid var(--border-light);
+  }
+  body.light .social-link {
+    border: 2px solid var(--border-light);
+  }
+  body.light #site-footer {
+    color: var(--text-dark);
+    background: transparent;
+    text-align:center;
+    padding:14px 8px;
+    font-weight:700;
+  }
 
-  /* DARK MODE (apply body.dark on <body>) */
-  body.dark .contact-section { background: linear-gradient(135deg,#0f172a,#0b1220); }
+  /* DARK MODE */
+  body.dark .contact-section {
+    background: linear-gradient(135deg,#0f172a,#0b1220);
+  }
   body.dark .contact-container {
-    border: 2px solid #fff;      /* WHITE border in dark mode */
+    border: 2px solid var(--border-dark);
     background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0));
     box-shadow: 0 18px 60px rgba(2,6,23,0.6);
     color: var(--text-light);
   }
-  body.dark #site-footer { color: var(--text-light); background: transparent; text-align:center; padding:14px 8px; font-weight:700; }
+  body.dark .socials {
+    background: rgba(255,255,255,0.03);
+    border: 2px solid var(--border-dark);
+  }
+  body.dark .cv-box {
+    border: 2px solid var(--border-dark);
+  }
+  body.dark .social-link {
+    border: 2px solid var(--border-dark);
+  }
+  body.dark #site-footer {
+    color: var(--text-light);
+    background: transparent;
+    text-align:center;
+    padding:14px 8px;
+    font-weight:700;
+  }
 
   /* Heading + divider + intro */
-  .contact-container h1{ font-size:2.1rem; margin:0 0 6px; font-weight:700; }
-  .divider{ width:84px; height:3px; background:var(--neon); margin:10px auto 18px; border-radius:3px; box-shadow:0 0 12px var(--neon-glow); }
-  .contact-text{ font-size:1.02rem; margin-bottom:18px; max-width:840px; margin-left:auto; margin-right:auto; color:inherit; }
+  .contact-container h1 {
+    font-size:2.1rem;
+    margin:0 0 6px;
+    font-weight:700;
+  }
+  .divider {
+    width:84px;
+    height:3px;
+    background:var(--neon);
+    margin:10px auto 18px;
+    border-radius:3px;
+    box-shadow:0 0 12px var(--neon-glow);
+  }
+  .contact-text {
+    font-size:1.02rem;
+    margin-bottom:18px;
+    max-width:840px;
+    margin-left:auto;
+    margin-right:auto;
+    color:inherit;
+  }
 
-  /* socials - modern centered style */
-  .socials{
+  /* socials */
+  .socials {
     display:flex;
     justify-content:center;
     align-items:center;
@@ -1500,13 +1560,10 @@ html.dark .show-more,
     padding:10px;
     border-radius:14px;
     background: transparent;
+    border: 2px solid transparent; /* overridden per mode */
   }
 
-  /* per-mode subtle background for the social container to feel modern */
-  body.light .socials { background: var(--social-bg-light); }
-  body.dark  .socials { background: var(--social-bg-dark); }
-
-  .social-link{
+  .social-link {
     display:inline-flex;
     align-items:center;
     justify-content:center;
@@ -1518,27 +1575,49 @@ html.dark .show-more,
     background: linear-gradient(180deg, rgba(42,51,225,0.06), rgba(42,51,225,0.02));
     box-shadow: 0 12px 30px rgba(2,6,23,0.18);
     transition: transform .22s, box-shadow .22s, color .22s, background .22s;
-    border: 1px solid rgba(0,0,0,0.04);
+    border: 2px solid transparent; /* overridden per mode */
   }
-
-  /* adjust border color per mode */
-  body.light .social-link { border-color: var(--social-border-light); }
-  body.dark  .social-link { border-color: var(--social-border-dark); }
 
   .social-link i { pointer-events: none; }
 
-  .social-link:hover{
+  .social-link:hover {
     transform: translateY(-8px) scale(1.06);
     box-shadow: 0 20px 44px rgba(42,51,225,0.16);
     color: #00bfff;
   }
 
-  .sr-only { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+  .sr-only {
+    position:absolute; left:-9999px; top:auto;
+    width:1px; height:1px; overflow:hidden;
+  }
 
   /* grid & cv box */
-  .contact-grid{ display:flex; justify-content:center; gap:24px; align-items:stretch; margin-top:4px; }
-  .cv-box{ max-width:520px; width:100%; min-height:220px; padding:26px 28px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(0,0,0,0.01)); box-shadow: 0 8px 26px rgba(2,6,23,0.28); text-align:center; display:flex; flex-direction:column; justify-content:center; gap:12px; color:inherit; }
-  .cv-box h3{ margin:0 0 4px; font-size:1.2rem; }
+  .contact-grid {
+    display:flex;
+    justify-content:center;
+    gap:24px;
+    align-items:stretch;
+    margin-top:4px;
+  }
+  .cv-box {
+    max-width:520px;
+    width:100%;
+    min-height:220px;
+    padding:26px 28px;
+    border-radius:12px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(0,0,0,0.01));
+    box-shadow: 0 8px 26px rgba(2,6,23,0.28);
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:12px;
+    color:inherit;
+    border: 2px solid transparent; /* overridden per mode */
+  }
+  .cv-box h3 { margin:0 0 4px; font-size:1.2rem; }
+
+
 
   /* resume-note color per mode */
   .resume-note { margin:0; font-size:0.98rem; }
