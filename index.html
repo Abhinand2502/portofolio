@@ -597,8 +597,7 @@
 
 
 
-
-<!-- ===== WORKS: 3x3 grid — show 6 by default, Show more reveals remaining; includes improved search, synchronized thumbs, smoother lightbox ===== -->
+<!-- ===== WORKS: updated — lightbox no-autoplay, contained images, black LB text, improved search/highlight, black search border ===== -->
 <section id="works" aria-labelledby="worksTitle">
   <style>
     :root{
@@ -609,7 +608,7 @@
       --header-h:72px; /* adjust to your header height */
       --card-radius:12px;
       --thumb-interval: 1800ms;
-      --lb-interval: 3200ms;
+      --card-bg: #ffffff; /* card / small UI background */
     }
 
     /* container */
@@ -617,30 +616,32 @@
     #works > .section-inner { height:auto !important; min-height:0 !important; display:block !important; padding-top:0 !important; }
     #works .box { width:100%; max-width:1400px; margin:0 auto; padding:24px; box-sizing:border-box; }
 
-    /* SEARCH - modern/rich */
+    /* SEARCH - stronger black border and modern style */
     .search-wrap { margin: 8px 0 18px; display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
     .search-left { display:flex; gap:10px; align-items:center; flex:1; min-width:220px; }
     .search-input {
       flex:1;
       padding:12px 14px 12px 40px;
       border-radius:12px;
-      border:1px solid var(--glass-strong);
+      border:2px solid #000;            /* stronger black border per request */
       font-size:14px;
       box-sizing:border-box;
       outline:none;
-      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,250,0.96));
+      background: var(--card-bg);
+      color: var(--text);
       box-shadow: 0 6px 18px rgba(38,57,90,0.03);
-      transition: box-shadow .18s ease, transform .12s ease;
+      transition: box-shadow .12s ease, transform .09s ease, border-color .12s ease;
       position:relative;
     }
-    .search-input:focus { box-shadow: 0 12px 30px rgba(42,124,241,0.06); transform: translateY(-1px); }
-    .search-icon {
-      position:relative; left:34px; margin-right: -34px; pointer-events:none; opacity:.9; font-weight:700;
-      color:var(--muted); font-size:14px;
-    }
+    .search-input::placeholder { color: var(--muted); }
+    .search-input:focus { box-shadow: 0 12px 30px rgba(42,124,241,0.06); transform: translateY(-1px); border-color: rgba(0,0,0,0.9); }
+    .search-icon { position:relative; left:34px; margin-right: -34px; pointer-events:none; opacity:.9; font-weight:700; color:var(--muted); font-size:14px; }
     .search-actions { display:flex; gap:8px; align-items:center; }
-    .search-clear { padding:8px 12px; border-radius:10px; border:1px solid var(--glass-strong); background:transparent; cursor:pointer; font-weight:800; font-size:13px; }
-    .result-count { font-weight:700; color:var(--muted); font-size:13px; white-space:nowrap; }
+    .search-clear { padding:8px 12px; border-radius:10px; border:1px solid var(--glass-strong); background:transparent; cursor:pointer; font-weight:800; font-size:13px; color:var(--text); }
+    .result-count { font-weight:700; color:var(--text); font-size:13px; white-space:nowrap; }
+
+    /* highlight for matched text */
+    .hl { background: rgba(42,124,241,0.18); padding:0 3px; border-radius:3px; color:var(--text); font-weight:800; }
 
     /* Grid: mobile 1, tablet/desktop 3 columns */
     .folio-grid { display:grid; gap:16px; grid-template-columns: 1fr; align-items:stretch; }
@@ -652,7 +653,7 @@
     .folio-grid.expanded .folio-item { display:block; }
 
     /* Rectangle card */
-    .folio-item { display:block; overflow:visible; border-radius:var(--card-radius); position:relative; border:1px solid var(--glass-strong); transition: transform .18s ease, box-shadow .18s ease; cursor:pointer; background:#fff; padding:0; }
+    .folio-item { display:block; overflow:visible; border-radius:var(--card-radius); position:relative; border:1px solid var(--glass-strong); transition: transform .18s ease, box-shadow .18s ease; cursor:pointer; background:var(--card-bg); padding:0; }
     .folio-item:focus, .folio-item:hover { transform: translateY(-6px); box-shadow: 0 22px 60px rgba(16,24,40,0.10); outline:none; }
 
     /* thumb-wrap: rectangle 16:9 */
@@ -672,13 +673,27 @@
     }
     .thumb-wrap img.active { opacity:1; transform: scale(1); z-index:1; }
 
-    /* caption overlay (kept similar theme) */
-    .folio-caption { position:absolute; left:12px; bottom:12px; padding:8px 12px; border-radius:10px; background: rgba(0,0,0,0.52); color:#fff; font-weight:900; font-size:13px; display:flex; gap:10px; align-items:center; backdrop-filter: blur(6px); z-index: 10; }
-    .folio-caption .title { font-weight:900; letter-spacing:0.2px; }
-    .folio-caption .view { font-size:12px; opacity:0.95; background:rgba(255,255,255,0.06); padding:6px 8px; border-radius:6px; font-weight:700; }
+    /* caption overlay: replace pill with thumbnail image (square) */
+    .folio-caption { position:absolute; left:12px; bottom:12px; padding:8px 12px; border-radius:10px; background: rgba(0,0,0,0.52); color:#fff; font-weight:900; font-size:13px; display:flex; gap:12px; align-items:center; backdrop-filter: blur(6px); z-index: 10; }
+    .folio-caption .title { font-weight:900; letter-spacing:0.2px; color:#fff; }
+    .folio-caption .view {
+      width:44px;
+      height:44px;
+      padding:0;
+      border-radius:8px;
+      overflow:hidden;
+      background-color:transparent;
+      background-size:cover;
+      background-position:center;
+      background-repeat:no-repeat;
+      display:inline-block;
+      border:1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 8px 24px rgba(2,6,23,0.12);
+      text-indent:-9999px; /* hide text */
+    }
 
     /* subtle card meta below thumb */
-    .folio-meta { padding:10px 12px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+    .folio-meta { padding:10px 12px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; color:var(--text); }
     .meta-left { display:flex; flex-direction:column; gap:4px; }
     .meta-title { font-weight:800; color:var(--text); font-size:14px; }
     .meta-sub { font-size:12px; color:var(--muted); font-weight:700; }
@@ -703,7 +718,7 @@
     }
     .lightbox.open { opacity:1; pointer-events:auto; }
 
-    /* Solid shell and meta (unchanged look but minor rounded corners) */
+    /* Solid shell and meta (minor rounded corners) */
     .lb-shell {
       width: calc(100vw - 48px);
       height: calc(100vh - var(--header-h) - 48px);
@@ -721,11 +736,20 @@
     }
     @media (max-width:980px){ .lb-shell { grid-template-columns: 1fr; width: calc(100vw - 12px); height: calc(100vh - var(--header-h) - 12px); } }
 
-    /* Left view: use sliding track (GPU transform) for smooth animation */
+    /* Left view: track (GPU transform) — images displayed contained (no zoom) */
     .lb-view { position:relative; background:#111; display:flex; align-items:center; justify-content:center; overflow:hidden; min-height:320px; }
     .lb-track { display:flex; width:100%; height:100%; will-change: transform; transition: transform .55s cubic-bezier(.2,.9,.2,1); }
-    .lb-slide { flex:0 0 100%; display:flex; align-items:center; justify-content:center; position:relative; height:100%; min-height:320px; }
-    .lb-slide img { width:100%; height:100%; object-fit:cover; display:block; margin:auto; cursor:zoom-in; user-select:none; -webkit-user-drag:none; }
+    .lb-slide { flex:0 0 100%; display:flex; align-items:center; justify-content:center; position:relative; height:100%; min-height:320px; padding:12px; box-sizing:border-box; }
+    .lb-slide img {
+      max-width:100%;
+      max-height:100%;
+      width:auto;
+      height:auto;
+      object-fit:contain; /* contained rectangle, no zoom/crop */
+      display:block;
+      margin:auto;
+      cursor:zoom-in; user-select:none; -webkit-user-drag:none;
+    }
 
     /* controls */
     .lb-close, .lb-prev, .lb-next {
@@ -736,19 +760,18 @@
     .lb-prev { left:12px; top:50%; transform:translateY(-50%); }
     .lb-next { right:12px; top:50%; transform:translateY(-50%); }
 
-    .lb-meta { padding:18px; display:flex; flex-direction:column; gap:12px; overflow:auto; color:var(--text); background: #ffffff; }
-    .lb-title { font-family:'Playfair Display', serif; font-size:20px; font-weight:900; margin:0; color:var(--text); }
-    .lb-desc { color:var(--muted); font-size:13px; line-height:1.45; margin:0; min-height:48px; }
+    /* LB meta panel: forced black text (user requested "only that black font") */
+    .lb-meta { padding:18px; display:flex; flex-direction:column; gap:12px; overflow:auto; color:#111; background: #ffffff; }
+    .lb-title { font-family:'Playfair Display', serif; font-size:20px; font-weight:900; margin:0; color:#111; }
+    .lb-desc { color:var(--muted); font-size:13px; line-height:1.45; margin:0; min-height:48px; color:#111; }
     .lb-tech { display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; align-items:center; }
-
     .tech-badge { display:flex; align-items:center; gap:8px; padding:6px 10px; border-radius:10px; border:1px solid var(--glass-strong); background:transparent; font-weight:700; font-size:13px; color:var(--text); }
-    .tech-badge img{ width:18px; height:18px; object-fit:contain; border-radius:4px; display:block; }
 
-    .btn { padding:8px 12px; border-radius:10px; font-weight:800; border:1px solid var(--glass-strong); background:transparent; cursor:pointer; font-size:13px; text-decoration:none; display:inline-block; }
+    .btn { padding:8px 12px; border-radius:10px; font-weight:800; border:1px solid var(--glass-strong); background:transparent; cursor:pointer; font-size:13px; text-decoration:none; display:inline-block; color:var(--text); }
     .btn.primary { background:var(--primary); color:#fff; border-color:var(--primary); }
 
     .show-more-wrap { text-align:center; margin-top:12px; }
-    .show-more { display:inline-block; padding:8px 14px; border-radius:999px; border:1px solid var(--glass-strong); background:transparent; font-weight:800; cursor:pointer; }
+    .show-more { display:inline-block; padding:8px 14px; border-radius:999px; border:1px solid var(--glass-strong); background:transparent; font-weight:800; cursor:pointer; color:var(--text); }
 
     @media (max-width:760px){
       .folio-caption{ left:8px; bottom:8px; padding:6px 8px; font-size:12px; }
@@ -756,6 +779,21 @@
       .lb-title{ font-size:17px }
       .lb-shell { gap:8px; }
       .meta-left { gap:2px; }
+      .folio-caption .view { width:36px; height:36px; }
+    }
+
+    /* force ALL text inside lightbox meta to black (both themes) */
+    .lightbox .lb-meta,
+    .lightbox .lb-meta * {
+      color: #111 !important;
+    }
+    .lightbox .tech-badge { color:#111 !important; border-color: rgba(0,0,0,0.06) !important; }
+
+    /* theme toggling base (adjust if you use a body.dark class) */
+    body.dark, .dark-mode {
+      --text: #111;     /* you requested black text in both modes */
+      --muted: #666;
+      --card-bg: #0b0b0b; /* card background can be dark while text remains black */
     }
 
     .sr-only { position:absolute !important; width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0 }
@@ -775,6 +813,8 @@
           <button id="folioSearchClear" class="search-clear" aria-label="Clear search">Clear</button>
         </div>
       </div>
+
+      <p class="anim" aria-hidden="true">&nbsp;</p>
              <p class="anim">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 
       
@@ -789,7 +829,7 @@
           data-desc="Portrait retouch & color correction."
           data-tech="Python,Django,Photoshop">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">White Knit Cap</span><span class="view">View details</span></div>
+          <div class="folio-caption"><span class="title">White Knit Cap</span><span class="view">View</span></div>
           <div class="folio-meta">
             <div class="meta-left">
               <div class="meta-title">White Knit Cap</div>
@@ -805,7 +845,7 @@
           data-desc="Studio product mockups."
           data-tech="3D,Lighting,Retouch">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Minimal Stool</span><span class="view">View details</span></div>
+          <div class="folio-caption"><span class="title">Minimal Stool</span><span class="view">View</span></div>
           <div class="folio-meta">
             <div class="meta-left">
               <div class="meta-title">Minimal Stool</div>
@@ -820,7 +860,7 @@
           data-desc="Still-life composition & color grading tests."
           data-tech="Color,Lighting,Compositing">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Coffee & Tulips</span><span class="view">View details</span></div>
+          <div class="folio-caption"><span class="title">Coffee & Tulips</span><span class="view">View</span></div>
           <div class="folio-meta">
             <div class="meta-left">
               <div class="meta-title">Coffee & Tulips</div>
@@ -835,7 +875,7 @@
           data-desc="B&W workflow & grain."
           data-tech="Film,Grain,DodgeBurn">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Monochrome Portrait</span><span class="view">View details</span></div>
+          <div class="folio-caption"><span class="title">Monochrome Portrait</span><span class="view">View</span></div>
           <div class="folio-meta">
             <div class="meta-left">
               <div class="meta-title">Monochrome Portrait</div>
@@ -850,7 +890,7 @@
           data-desc="Studio lamp photography."
           data-tech="Studio,Texture,Retouch">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Hanging Lamp</span><span class="view">View details</span></div>
+          <div class="folio-caption"><span class="title">Hanging Lamp</span><span class="view">View</span></div>
           <div class="folio-meta">
             <div class="meta-left">
               <div class="meta-title">Hanging Lamp</div>
@@ -865,7 +905,7 @@
           data-desc="Macro foliage textures."
           data-tech="Macro,Texture,Light">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Green Leaves</span><span class="view">View details</span></div>
+          <div class="folio-caption"><span class="title">Green Leaves</span><span class="view">View</span></div>
           <div class="folio-meta">
             <div class="meta-left">
               <div class="meta-title">Green Leaves</div>
@@ -881,7 +921,7 @@
           data-desc="Typographic systems."
           data-tech="Type,Layout,Systems">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Type Poster</span><span class="view">View details</span></div>
+          <div class="folio-caption"><span class="title">Type Poster</span><span class="view">View</span></div>
           <div class="folio-meta">
             <div class="meta-left">
               <div class="meta-title">Type Poster</div>
@@ -896,7 +936,7 @@
           data-desc="E-commerce grid."
           data-tech="Grid,UI,States">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Product Grid</span><span class="view">View details</span></div>
+          <div class="folio-caption"><span class="title">Product Grid</span><span class="view">View</span></div>
           <div class="folio-meta">
             <div class="meta-left">
               <div class="meta-title">Product Grid</div>
@@ -911,7 +951,7 @@
           data-desc="Responsive layout experiments."
           data-tech="Responsive,Breakpoints,Tests">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Grid Study</span><span class="view">View details</span></div>
+          <div class="folio-caption"><span class="title">Grid Study</span><span class="view">View</span></div>
           <div class="folio-meta">
             <div class="meta-left">
               <div class="meta-title">Grid Study</div>
@@ -929,9 +969,7 @@
   <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="lbTitle" tabindex="-1">
     <div class="lb-shell" role="document" aria-live="polite">
       <div class="lb-view" id="lbView" aria-hidden="false">
-        <div id="lbSlides" style="width:100%;height:100%;position:relative;overflow:hidden;">
-          <!-- lb-track will be inserted here by JS -->
-        </div>
+        <div id="lbSlides" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
 
         <button class="lb-prev" id="lbPrev" aria-label="Previous (Left arrow)">◀</button>
         <button class="lb-next" id="lbNext" aria-label="Next (Right arrow)">▶</button>
@@ -976,14 +1014,14 @@
 
       // timings (from CSS variables)
       const THUMB_INTERVAL = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--thumb-interval')) || 1800;
-      const LB_INTERVAL = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--lb-interval')) || 3200;
 
-      // ------------ THUMBNAIL SYNCHRONIZED AUTOPLAY ------------
-      // Build imgs for each card and keep indexes
+      // ------------ THUMBNAIL SYNCHRONIZED AUTOPLAY & caption thumbnail setup ------------
       items.forEach((it) => {
         const wrap = it.querySelector('.thumb-wrap');
         const images = (it.dataset.images || '').split(',').map(s => s.trim()).filter(Boolean);
         const imgs = images.length ? images : ['assets/bg.jpg'];
+
+        // append image elements for thumbnail autoplay
         imgs.forEach((src, i) => {
           const img = document.createElement('img');
           img.src = src;
@@ -992,19 +1030,29 @@
           if(i === 0) img.classList.add('active');
           wrap.appendChild(img);
         });
-        // mark initial state
+
+        // set small caption-thumbnail (replace white pill) using first image
+        const viewEl = it.querySelector('.folio-caption .view');
+        if(viewEl){
+          const firstThumb = imgs[0] || '';
+          if(firstThumb){
+            viewEl.style.backgroundImage = `url(${firstThumb})`;
+            viewEl.style.backgroundSize = 'cover';
+            viewEl.style.backgroundPosition = 'center';
+            viewEl.textContent = ''; // hide textual label
+            viewEl.classList.add('caption-thumb');
+          }
+        }
+
         it._thumbCount = imgs.length;
         it._thumbIndex = 0;
         it._thumbPaused = false;
-
-        // pause/resume on hover/touch for this card only
         it.addEventListener('mouseenter', () => { it._thumbPaused = true; }, {passive:true});
         it.addEventListener('mouseleave', () => { it._thumbPaused = false; }, {passive:true});
         it.addEventListener('touchstart', () => { it._thumbPaused = true; }, {passive:true});
         it.addEventListener('touchend', () => { it._thumbPaused = false; }, {passive:true});
       });
 
-      // global tick ensures same rhythm across cards (but each card cycles modulo its slide count)
       let globalThumbTick = 1;
       function thumbTick(){
         items.forEach(it => {
@@ -1017,14 +1065,12 @@
         });
         globalThumbTick++;
       }
-      // start global thumbnail timer (single interval)
       let thumbTimer = setInterval(thumbTick, THUMB_INTERVAL);
 
-      // ------------ LIGHTBOX: GPU-ACCELERATED TRACK SLIDER ------------
+      // ------------ LIGHTBOX: GPU-ACCELERATED TRACK SLIDER (NO AUTOPLAY) ------------
       let lbTrack = null;
       let lbSlidesArr = [];
       let lbCurrent = 0;
-      let lbTimer = null;
       let lastFocused = null;
 
       function createSlide(url, i){
@@ -1035,7 +1081,6 @@
         img.src = url;
         img.alt = '';
         img.loading = 'eager';
-        // ensure image won't block paint: set decode if available
         if(img.decode) img.decode().catch(()=>{});
         wrapper.appendChild(img);
         return wrapper;
@@ -1058,32 +1103,21 @@
         if(i >= lbSlidesArr.length) i = 0;
         lbCurrent = i;
         const offset = - (100 * lbCurrent);
-        // move track via transform
         if(lbTrack){
           if(instant) {
             lbTrack.style.transition = 'none';
             lbTrack.style.transform = `translateX(${offset}%)`;
-            // force reflow then restore transition
             void lbTrack.offsetWidth;
             lbTrack.style.transition = '';
           } else {
             lbTrack.style.transform = `translateX(${offset}%)`;
           }
         }
-        // set download src for current
         const currentImg = lbSlidesArr[lbCurrent] && lbSlidesArr[lbCurrent].querySelector('img');
         if(currentImg) lbDownload.dataset.src = currentImg.src;
       }
-
       function lbNextFn(){ showLbSlide(lbCurrent + 1); }
       function lbPrevFn(){ showLbSlide(lbCurrent - 1); }
-
-      function lbStartAutoplay(){
-        lbStopAutoplay();
-        if(lbSlidesArr.length <= 1) return;
-        lbTimer = setInterval(lbNextFn, LB_INTERVAL);
-      }
-      function lbStopAutoplay(){ if(lbTimer){ clearInterval(lbTimer); lbTimer = null; } }
 
       function openAt(index){
         const item = items[index]; if(!item) return;
@@ -1097,7 +1131,6 @@
 
         renderTechBadgesFromData(item.dataset.tech || '');
 
-        // clear previous
         lbSlides.innerHTML = '';
         lbSlidesArr = [];
 
@@ -1111,21 +1144,16 @@
         });
         lbSlides.appendChild(lbTrack);
 
-        // quickly move to 0 (no flicker) then show
+        // go to first slide instantly to avoid flicker
         showLbSlide(0, true);
 
         lightbox.classList.add('open'); lightbox.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden';
         lbClose.focus();
-        lbStartAutoplay();
 
-        // pause autoplay on pointer over view
-        lbTrack.addEventListener('mouseenter', lbStopAutoplay);
-        lbTrack.addEventListener('mouseleave', lbStartAutoplay);
-        lbTrack.addEventListener('touchstart', lbStopAutoplay, {passive:true});
+        // NOTE: autoplay & hover-pause removed per request (only arrow control)
       }
 
       function closeLB(){
-        lbStopAutoplay();
         lightbox.classList.remove('open'); lightbox.setAttribute('aria-hidden','true'); document.body.style.overflow = '';
         lbSlides.innerHTML = ''; lbSlidesArr = []; lbTrack = null;
         if(lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
@@ -1141,10 +1169,7 @@
       lbPrev.addEventListener('click', () => { lbPrevFn(); });
       lbNext.addEventListener('click', () => { lbNextFn(); });
 
-      // click on image area advances to next
-      lbSlides.addEventListener('click', (e) => {
-        if(e.target && e.target.tagName === 'IMG') { lbNextFn(); }
-      });
+      // remove image-click-to-advance: only arrows move slides (per request)
 
       // click outside content closes (lightbox background)
       lightbox.addEventListener('click', (e) => { if(e.target === lightbox) closeLB(); });
@@ -1162,15 +1187,37 @@
         const a = document.createElement('a'); a.href = url; a.download = url.split('/').pop().split('?')[0]; document.body.appendChild(a); a.click(); a.remove();
       });
 
-      // ------------ SEARCH / FILTER (better UX) ------------
+      // ------------ SEARCH / FILTER: efficient + highlight ------------
+      function escapeRegExp(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      }
+
+      function highlightText(node, tokens){
+        // node is an element that contains plain text. We'll replace whole innerHTML safely.
+        let txt = node.textContent || '';
+        if(!tokens.length){ node.innerHTML = txt; return; }
+        // build combined regex (match any token)
+        const parts = tokens.map(t => escapeRegExp(t));
+        const re = new RegExp('(' + parts.join('|') + ')', 'ig');
+        node.innerHTML = txt.replace(re, (m) => `<span class="hl">${m}</span>`);
+      }
+
       function updateResultCount(){
         const total = items.length;
         const visible = items.filter(it => it.style.display !== 'none').length;
         resultCount.textContent = `Showing ${visible} of ${total}`;
       }
 
+      function resetHighlights(){
+        items.forEach(it => {
+          const capTitle = it.querySelector('.folio-caption .title');
+          const metaTitle = it.querySelector('.meta-title');
+          if(capTitle) capTitle.innerHTML = capTitle.textContent || '';
+          if(metaTitle) metaTitle.innerHTML = metaTitle.textContent || '';
+        });
+      }
+
       function resetFilterRespectExpanded(){
-        // If expanded show all; if not, show first 6
         if(grid.classList.contains('expanded')){
           items.forEach(it => it.style.display = 'block');
         } else {
@@ -1178,17 +1225,16 @@
         }
         noResults.style.display = 'none';
         showMoreBtn.style.display = items.length > 6 ? 'inline-block' : 'none';
+        resetHighlights();
         updateResultCount();
       }
 
-      // simple tokenized search with title/desc/tech
       function applySearch(q){
         q = q.trim().toLowerCase();
         if(!q){
           resetFilterRespectExpanded();
           return;
         }
-        // hide show more while searching
         showMoreBtn.style.display = 'none';
         let any = false;
         const tokens = q.split(/\s+/).filter(Boolean);
@@ -1196,16 +1242,27 @@
           const title = (it.dataset.title || '').toLowerCase();
           const desc = (it.dataset.desc || '').toLowerCase();
           const tech = (it.dataset.tech || '').toLowerCase();
-          // item matches if every token is found in either title, desc, or tech
           const match = tokens.every(tok => title.includes(tok) || desc.includes(tok) || tech.includes(tok));
           it.style.display = match ? 'block' : 'none';
-          if(match) any = true;
+          if(match) {
+            any = true;
+            // highlight matches in visible titles
+            const capTitle = it.querySelector('.folio-caption .title');
+            const metaTitle = it.querySelector('.meta-title');
+            if(capTitle) highlightText(capTitle, tokens);
+            if(metaTitle) highlightText(metaTitle, tokens);
+          } else {
+            // clear highlights on hidden
+            const capTitle = it.querySelector('.folio-caption .title');
+            const metaTitle = it.querySelector('.meta-title');
+            if(capTitle) capTitle.innerHTML = capTitle.textContent || '';
+            if(metaTitle) metaTitle.innerHTML = metaTitle.textContent || '';
+          }
         });
         noResults.style.display = any ? 'none' : 'block';
         updateResultCount();
       }
 
-      // Search input events (small debounce)
       let searchTO = null;
       searchInput.addEventListener('input', (e) => {
         clearTimeout(searchTO);
@@ -1250,10 +1307,8 @@
       document.addEventListener('visibilitychange', () => {
         if(document.hidden){
           if(thumbTimer){ clearInterval(thumbTimer); thumbTimer = null; }
-          lbStopAutoplay();
         } else {
           if(!thumbTimer) thumbTimer = setInterval(thumbTick, THUMB_INTERVAL);
-          if(lightbox.classList.contains('open')) lbStartAutoplay();
         }
       });
 
@@ -1264,6 +1319,8 @@
   </script>
 </section>
 <!-- ===== end WORKS ===== -->
+
+
 
 
 
