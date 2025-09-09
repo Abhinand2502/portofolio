@@ -619,8 +619,7 @@
 
 
 
-
-<!-- ===== WORKS: updated — removed bottom white meta bar, caption/title inside image, responsive view button ===== -->
+<!-- ===== WORKS: updated — lightbox uses data-lightbox separately from thumbnails ===== -->
 <section id="works" aria-labelledby="worksTitle">
   <style>
     :root{
@@ -769,10 +768,6 @@ html.dark #works .no-results,
 /* result count (makes "Showing X of Y" readable when you force text colors) */
 #works .result-count { color: #111111 !important; }
 
-/* If your dark-mode uses unusual selectors, add them to the dark-mode block above.
-   This block intentionally uses !important and specific #works scoping so it overrides competing rules. */
-
-
     /* Lightbox overlay (unchanged) */
     .lightbox {
       position:fixed;
@@ -880,20 +875,22 @@ html.dark .show-more,
           <input id="folioSearch" class="search-input" type="search" placeholder="Search projects (title, description, tech)..." aria-label="Search projects" />
         </div>
         <div class="search-actions">
-         
+          <div id="resultCount" class="result-count" aria-live="polite"></div>
           <button id="folioSearchClear" class="search-clear" aria-label="Clear search">Clear</button>
         </div>
       </div>
 
      
-      <p class="anim">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+      <p class="anim">&nbsp;</p>
 
       <p id="noResults" class="no-results">No projects found</p>
+      <p class="anim">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 
       <div class="folio-grid anim" id="folioGrid" aria-live="polite">
         <!-- Items: NOTE - .folio-meta removed. Only image + caption overlay remain -->
         <button class="folio-item"
           data-images="assets/TLOGIN (1).png,assets/THOME.png,assets/TPROF.png,assets/TUPLOAD.png,assets/TRESULT.png,assets/TRESULT1.png,assets/THIST.png,assets/THIST2.png,assets/TCOM.png,assets/ALOG.png,assets/AHOME.png,assets/AUSER.png,assets/AHIST.png,assets/ACOMP.png"
+          data-lightbox="assets/TLOGIN (1).png,assets/THOME.png,assets/TPROF.png,assets/TUPLOAD.png,assets/TRESULT.png,assets/TRESULT1.png,assets/THIST.png,assets/THIST2.png,assets/TCOM.png,assets/ALOG.png,assets/AHOME.png,assets/AUSER.png,assets/AHIST.png,assets/ACOMP.png"
           data-title="White Knit Cap"
           data-desc="Portrait retouch & color correction."
           data-tech="Python,Django,Photoshop">
@@ -903,6 +900,7 @@ html.dark .show-more,
 
         <button class="folio-item"
           data-images="assets/bg.jpg,assets/login.png,assets/bg.jpg"
+          data-lightbox="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
           data-title="Minimal Stool"
           data-desc="Studio product mockups."
           data-tech="3D,Lighting,Retouch">
@@ -912,6 +910,7 @@ html.dark .show-more,
 
         <button class="folio-item"
           data-images="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
+          data-lightbox="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
           data-title="Coffee & Tulips"
           data-desc="Still-life composition & color grading tests."
           data-tech="Color,Lighting,Compositing">
@@ -921,6 +920,7 @@ html.dark .show-more,
 
         <button class="folio-item"
           data-images="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
+          data-lightbox="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
           data-title="Monochrome Portrait"
           data-desc="B&W workflow & grain."
           data-tech="Film,Grain,DodgeBurn">
@@ -930,6 +930,7 @@ html.dark .show-more,
 
         <button class="folio-item"
           data-images="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
+          data-lightbox="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
           data-title="Hanging Lamp"
           data-desc="Studio lamp photography."
           data-tech="Studio,Texture,Retouch">
@@ -939,6 +940,7 @@ html.dark .show-more,
 
         <button class="folio-item"
           data-images="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
+          data-lightbox="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
           data-title="Green Leaves"
           data-desc="Macro foliage textures."
           data-tech="Macro,Texture,Light">
@@ -949,6 +951,7 @@ html.dark .show-more,
         <!-- hidden ones (shown after Show more) -->
         <button class="folio-item"
           data-images="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
+          data-lightbox="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
           data-title="Type Poster"
           data-desc="Typographic systems."
           data-tech="Type,Layout,Systems">
@@ -958,6 +961,7 @@ html.dark .show-more,
 
         <button class="folio-item"
           data-images="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
+          data-lightbox="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
           data-title="Product Grid"
           data-desc="E-commerce grid."
           data-tech="Grid,UI,States">
@@ -967,6 +971,7 @@ html.dark .show-more,
 
         <button class="folio-item"
           data-images="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
+          data-lightbox="assets/bg.jpg,assets/bg.jpg,assets/bg.jpg,assets/bg.jpg,assets/bg.jpg"
           data-title="Grid Study"
           data-desc="Responsive layout experiments."
           data-tech="Responsive,Breakpoints,Tests">
@@ -1049,10 +1054,7 @@ html.dark .show-more,
         if(viewEl){
           const firstThumb = imgs[0] || '';
           if(firstThumb){
-            // optionally set thumbnail behind view pill - commented out to keep pill text visible.
-            // viewEl.style.backgroundImage = `url(${firstThumb})`;
-            // viewEl.style.backgroundSize = 'cover';
-            // viewEl.style.backgroundPosition = 'center';
+            // left in place in case you want to style the pill with the first thumb later
           }
         }
 
@@ -1125,7 +1127,6 @@ html.dark .show-more,
             lbTrack.style.transform = `translateX(${offset}%)`;
           }
         }
-        
       }
       function lbNextFn(){ showLbSlide(lbCurrent + 1); }
       function lbPrevFn(){ showLbSlide(lbCurrent - 1); }
@@ -1133,7 +1134,10 @@ html.dark .show-more,
       function openAt(index){
         const item = items[index]; if(!item) return;
         lastFocused = document.activeElement;
-        const slides = (item.dataset.images || '').split(',').map(s=>s.trim()).filter(Boolean);
+
+        // <-- NEW: prefer data-lightbox; fallback to data-images
+        const slidesRaw = item.dataset.lightbox || item.dataset.images || '';
+        const slides = slidesRaw.split(',').map(s=>s.trim()).filter(Boolean);
         const slidesToUse = slides.length ? slides : ['assets/bg.jpg'];
 
         lbTitle.textContent = item.dataset.title || '';
@@ -1159,9 +1163,7 @@ html.dark .show-more,
         showLbSlide(0, true);
 
         lightbox.classList.add('open'); lightbox.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden';
-        lbClose.focus();
-
-        // NOTE: autoplay & hover-pause removed per request (only arrow control)
+        if(lbClose && typeof lbClose.focus === 'function') lbClose.focus();
       }
 
       function closeLB(){
@@ -1176,9 +1178,9 @@ html.dark .show-more,
         it.addEventListener('keydown', (ev) => { if(ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); openAt(idx); }} );
       });
 
-      lbClose.addEventListener('click', closeLB);
-      lbPrev.addEventListener('click', () => { lbPrevFn(); });
-      lbNext.addEventListener('click', () => { lbNextFn(); });
+      if(lbClose) lbClose.addEventListener('click', closeLB);
+      if(lbPrev) lbPrev.addEventListener('click', () => { lbPrevFn(); });
+      if(lbNext) lbNext.addEventListener('click', () => { lbNextFn(); });
 
       // click outside content closes (lightbox background)
       lightbox.addEventListener('click', (e) => { if(e.target === lightbox) closeLB(); });
@@ -1191,7 +1193,6 @@ html.dark .show-more,
         }
       });
 
-     
       // ------------ SEARCH / FILTER: efficient + highlight ------------
       function escapeRegExp(string) {
         return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -1208,7 +1209,7 @@ html.dark .show-more,
       function updateResultCount(){
         const total = items.length;
         const visible = items.filter(it => it.style.display !== 'none').length;
-        resultCount.textContent = `Showing ${visible} of ${total}`;
+        if(resultCount) resultCount.textContent = `Showing ${visible} of ${total}`;
       }
 
       function resetHighlights(){
@@ -1259,21 +1260,25 @@ html.dark .show-more,
       }
 
       let searchTO = null;
-      searchInput.addEventListener('input', (e) => {
-        clearTimeout(searchTO);
-        searchTO = setTimeout(() => {
-          applySearch(searchInput.value || '');
-        }, 140);
-      });
-      searchInput.addEventListener('keydown', (e) => {
-        if(e.key === 'Escape'){ searchInput.value = ''; applySearch(''); }
-      });
+      if(searchInput){
+        searchInput.addEventListener('input', (e) => {
+          clearTimeout(searchTO);
+          searchTO = setTimeout(() => {
+            applySearch(searchInput.value || '');
+          }, 140);
+        });
+        searchInput.addEventListener('keydown', (e) => {
+          if(e.key === 'Escape'){ searchInput.value = ''; applySearch(''); }
+        });
+      }
 
-      searchClear.addEventListener('click', () => {
-        searchInput.value = '';
-        applySearch('');
-        searchInput.focus();
-      });
+      if(searchClear) {
+        searchClear.addEventListener('click', () => {
+          if(searchInput) searchInput.value = '';
+          applySearch('');
+          if(searchInput) searchInput.focus();
+        });
+      }
 
       // Show more toggle: expands to show all hidden items; collapse back to six
       showMoreBtn.addEventListener('click', () => {
@@ -1314,6 +1319,7 @@ html.dark .show-more,
   </script>
 </section>
 <!-- ===== end WORKS ===== -->
+
 
 
 
