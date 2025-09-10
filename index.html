@@ -8,317 +8,154 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
-/* =====================
-   Theme variables
-   ===================== */
-:root{
-  --header-h:64px;
-  --primary: #2a33e1;
-  --accent:#2563eb; /* blue accent for active nav & socials */
-  --bg:#ffffff;
-  --panel:#f5f7fa;
-  --muted:#f3f4f6;
-  --text:#0b0b0b;
-  --glass: rgba(0,0,0,0.06);
-  --glass-strong: rgba(0,0,0,0.08);
-  --card-shadow: 0 8px 30px rgba(16,24,40,0.06);
-  --neon: rgba(225,74,42,0.95);
-}
-html[data-theme="dark"]{
-  --bg:#0b0b0b;
-  --panel:#0f0f12;
-  --muted:#0f0f12;
-  --text:#f7f7f8;
-  --glass: rgba(255,255,255,0.04);
-  --glass-strong: rgba(255,255,255,0.06);
-  --card-shadow: 0 10px 40px rgba(0,0,0,0.6);
-  --neon: rgba(42, 124, 225, 0.95);
-}
+    /* =====================
+       Theme variables
+       ===================== */
+    :root{
+      --header-h:64px;
+      --primary: #2a33e1;
+      --accent:#2563eb;
+      --bg:#ffffff;
+      --panel:#f5f7fa;
+      --muted:#7a7a7a;
+      --text:#0b0b0b;
+      --glass: rgba(0,0,0,0.06);
+      --glass-strong: rgba(0,0,0,0.08);
+      --card-shadow: 0 8px 30px rgba(16,24,40,0.06);
+    }
+    html[data-theme="dark"]{
+      --bg:#0b0b0b;
+      --panel:#0f0f12;
+      --muted:#bdbdbd;
+      --text:#f7f7f8;
+      --glass: rgba(255,255,255,0.04);
+      --glass-strong: rgba(255,255,255,0.06);
+      --card-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    }
 
-/* reset */
-*,*::before,*::after{box-sizing:border-box}
-html,body{height:100%;margin:0;padding:0}
-body{font-family:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;background:var(--bg);color:var(--text);line-height:1.45;-webkit-font-smoothing:antialiased}
+    /* reset + base */
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%;margin:0;padding:0}
+    body{font-family:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;background:var(--bg);color:var(--text);line-height:1.45;-webkit-font-smoothing:antialiased}
+    html { scroll-behavior: smooth; }
 
-/* allow native smooth behaviour as a graceful fallback for anchors */
-html { scroll-behavior: smooth; }
+    section{min-height:100vh}
 
-section{min-height:100vh}
+    /* header */
+    header{position:fixed;top:0;left:0;right:0;height:var(--header-h);display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:1200;background:linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.55));backdrop-filter:blur(6px);box-shadow:var(--card-shadow)}
+    html[data-theme="dark"] header{background:linear-gradient(180deg, rgba(8,8,8,0.6), rgba(8,8,8,0.45));}
 
-/* header */
-header{position:fixed;top:0;left:0;right:0;height:var(--header-h);display:flex;align-items:center;justify-content:space-between;padding:0 22px;z-index:1200;background:linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.55));backdrop-filter:blur(6px);box-shadow:var(--card-shadow)}
-html[data-theme="dark"] header{background:linear-gradient(180deg, rgba(8,8,8,0.6), rgba(8,8,8,0.45));}
+    .logo{font-family:'Playfair Display',serif;font-size:18px;color:var(--text)}
+    nav{display:flex;gap:12px;align-items:center}
+    nav a{position:relative;color:var(--text);text-decoration:none;padding:8px;border-radius:8px;font-weight:600;transition:color .18s ease}
+    .controls{display:flex;gap:12px;align-items:center}
+    .menu-btn{display:none;background:none;border:0;color:var(--text);font-size:28px;cursor:pointer;padding:8px;border-radius:8px}
 
-.logo{font-family:'Playfair Display',serif;font-size:20px;color:var(--text)}
-nav{display:flex;gap:16px;align-items:center}
-nav a{position:relative;color:var(--text);text-decoration:none;padding:8px;border-radius:8px;font-weight:600;transition:color .18s ease}
-nav a::after{
-  content:"";
-  position:absolute;
-  left:12px;
-  right:12px;
-  bottom:6px;
-  height:2px;
-  background:transparent;
-  transform:scaleX(0);
-  transform-origin:left;
-  transition:transform .22s cubic-bezier(.2,.9,.2,1), background .22s ease;
-  border-radius:2px;
-}
-nav a:hover{ color: var(--accent); }
-nav a.active{ color: var(--accent); }
-nav a.active::after{ background:var(--accent); transform:scaleX(1); }
+    .theme-btn{display:inline-flex;gap:10px;align-items:center;padding:10px;border-radius:12px;border:1px solid var(--glass-strong);background:transparent;color:var(--text);cursor:pointer;font-weight:700;font-size:14px}
+    .theme-btn i{font-size:16px}
 
-.controls{display:flex;gap:12px;align-items:center}
+    .section-inner{height:calc(100vh - var(--header-h));padding-top:var(--header-h);display:flex;align-items:center;position:relative;overflow:hidden}
+    .hero{display:grid;grid-template-columns:1fr 1fr;min-height:100%}
+    .hero-left{padding:72px 7vw;display:flex;align-items:flex-start}
+    .content{max-width:720px}
+    .kicker{letter-spacing:4px;color:var(--muted);font-weight:700;margin-bottom:12px;font-size:12px}
 
-/* larger theme button (desktop) */
-.theme-btn{
-  display:inline-flex;
-  gap:12px;
-  align-items:center;
-  padding:12px 18px;
-  border-radius:14px;
-  border:1px solid var(--glass-strong);
-  background:transparent;
-  color:var(--text);
-  cursor:pointer;
-  font-weight:700;
-  font-size:15px;
-  transition:transform .14s ease, box-shadow .14s ease, background .14s ease;
-}
-.theme-btn i{font-size:20px}
-.theme-btn:hover{ transform:translateY(-3px); box-shadow:0 12px 30px rgba(0,0,0,0.06); }
+    h1.headline{font-family:'Playfair Display',serif;font-size:48px;line-height:1.06;margin:0;color:var(--text);white-space:pre-line;word-break:break-word}
 
-/* menu button larger (hamburger) */
-.menu-btn{
-  display:none;
-  background:none;border:0;color:var(--text);
-  font-size:28px; /* bigger 3-line icon */
-  cursor:pointer;
-  padding:10px;
-  border-radius:8px;
-}
-.menu-btn:active{ transform:scale(.98); }
+    p.lead{margin-top:16px;max-width:54ch;opacity:.95;color:var(--text)}
 
-/* responsive nav overlay for mobile */
-@media(max-width:980px){
-  nav{display:flex;flex-direction:column;position:fixed;top:var(--header-h);left:0;right:0;background:var(--panel);padding:12px 6vw;gap:12px;box-shadow:0 8px 30px rgba(0,0,0,0.06);transform:translateY(-8px);opacity:0;pointer-events:none;transition:transform .28s cubic-bezier(.2,.9,.2,1),opacity .18s linear;backdrop-filter:blur(6px);z-index:1100}
-  nav.open{transform:translateY(0);opacity:1;pointer-events:auto}
-  .menu-btn{display:block}
-  .controls{gap:8px}
-  .theme-btn{padding:10px 14px;font-size:15px}
-}
+    .hero-buttons{margin-top:18px;display:flex;gap:12px;flex-wrap:wrap}
+    .btn{padding:10px 18px;border-radius:12px;border:1px solid var(--glass);background:transparent;color:var(--text);font-weight:700;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease}
+    .btn.primary{ background:var(--primary); color:#fff; border-color:var(--primary) }
+    .btn:hover{ transform: translateY(-4px); box-shadow:0 14px 40px rgba(0,0,0,0.12); }
 
-.section-inner{height:calc(100vh - var(--header-h));padding-top:var(--header-h);display:flex;align-items:center;position:relative;overflow:hidden}
+    .hero-right{position:relative;overflow:hidden;display:flex;align-items:stretch;height:100%;justify-content:center;padding:32px 7vw}
+    .hero-image-frame{width:100%;max-width:760px;border-radius:20px;padding:10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.02));box-shadow:0 12px 40px rgba(2,6,23,0.08);backdrop-filter:blur(6px)}
+    .hero-img{width:98%;height:360px;display:block;object-fit:cover;object-position:center;border-radius:18px;box-shadow:0 10px 30px rgba(2,6,23,0.25);transition:transform .9s,opacity .45s}
 
-/* hero: 50/50 columns so right half is image */
-.hero{display:grid;grid-template-columns:1fr 1fr;min-height:100%}
-.hero-left{padding:72px 7vw;display:flex;align-items:flex-start}
-.content{max-width:720px}
-.kicker{letter-spacing:3px;color:var(--primary);font-weight:800;margin-bottom:14px;font-size:13px}
+    /* socials row (desktop default) */
+    .image-socials{position:absolute;left:50%;top:22px;transform:translateX(-50%);z-index:18;display:flex;gap:18px;align-items:center;padding:6px;border-radius:999px;pointer-events:auto;background:transparent}
+    .image-socials a{display:inline-grid;place-items:center;width:64px;height:64px;border-radius:12px;text-decoration:none;color:var(--text);font-size:22px;background:transparent;border:1px solid rgba(0,0,0,0.06);transition:transform .18s ease,box-shadow .18s ease}
+    .image-socials a:hover{ transform:translateY(-6px); box-shadow:0 26px 60px rgba(37,99,235,0.12) }
+    .image-socials a:focus{ outline:4px solid rgba(37,99,235,0.12); outline-offset:4px; border-radius:10px }
 
-h1.headline{font-family:'Playfair Display',serif;font-size:48px;line-height:1.06;margin:0;color:var(--text);white-space:pre-line;word-break:break-word}
+    .cv-wrap{position:absolute;left:18px;bottom:18px;z-index:6}
+    .cv-btn{border:1px solid var(--glass-strong);background:transparent;color:var(--text);padding:8px 12px;border-radius:10px}
 
-.hero-buttons{margin-top:24px;display:flex;gap:14px;flex-wrap:wrap}
-/* button animation: lift + shadow */
-.btn{
-  padding:12px 20px;border-radius:10px;border:2px solid var(--glass);background:transparent;color:var(--text);font-weight:700;cursor:pointer;
-  transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease, background .18s ease;
-  will-change: transform, box-shadow;
-}
-.btn:hover{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(16,24,40,0.06); }
-.btn:active{ transform:translateY(-2px); box-shadow:0 10px 22px rgba(16,24,40,0.06); }
-.btn.primary{ background:var(--primary); color:#fff; border-color:var(--primary); box-shadow:0 14px 36px rgba(225,74,42,0.12); }
+    /* ============ MOBILE-ONLY STYLING ==============
+       This block ensures the screenshot-like look is applied only on small screens.
+       Adjust max-width if you want larger/smaller threshold.
+    */
+    @media (max-width: 600px) {
+      /* Stack hero and center everything */
+      .hero{display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+      .hero-right{order:-1;padding:18px 6vw;height:auto;align-items:center;justify-content:center}
+      .hero-left{padding:26px 6vw;align-items:center;text-align:center;order:1}
+      .content{width:100%}
+      h1.headline{font-size:36px;line-height:1.02;margin:8px 0 6px}
+      .kicker{letter-spacing:6px;font-size:12px;margin-bottom:10px}
+      p.lead{font-size:15px;max-width:46ch;margin:0 auto 12px;opacity:0.95}
 
-.hero-right{position:relative;overflow:hidden;display:flex;align-items:stretch;height:100%}
-.hero-img{
-  /* slightly smaller so there's a little space around the image */
-  width: calc(100% - 24px);   /* 12px gap each side */
-  height: calc(100% - 24px);  /* 12px gap top & bottom */
-  margin: 12px auto;          /* centers horizontally and creates the gap */
-  display: block;
-  box-sizing: border-box;
+      /* Make image card rounded rectangle, like screenshot */
+      .hero-image-frame{max-width:420px;border-radius:18px;padding:12px;background:linear-gradient(180deg, rgba(0,0,0,0.22), rgba(255,255,255,0.02));box-shadow: 0 18px 50px rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.02)}
+      .hero-img{height:260px;border-radius:16px;box-shadow: 0 20px 50px rgba(0,0,0,0.55);}
 
-  object-fit: cover;
-  object-position: center;
+      /* Social icons: large rounded squares at top center like screenshot */
+      .image-socials{
+        position:absolute;
+        top:12px;
+        left:50%;
+        transform:translateX(-50%);
+        gap:12px;
+        padding:12px 10px;
+        background:transparent;
+        z-index:60;
+        border-radius:14px;
+      }
 
-  /* curved corners */
-  border-radius: 28px;
+      .image-socials a{
+        width:76px;
+        height:76px;
+        border-radius:14px;
+        font-size:28px;
+        display:inline-grid;place-items:center;
+        background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.12));
+        border:1px solid rgba(255,255,255,0.06);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+        color:var(--text);
+      }
+      .image-socials a:hover{ transform: translateY(-6px) scale(1.04); box-shadow: 0 30px 60px rgba(0,0,0,0.6) }
 
-  transition: transform .9s cubic-bezier(.2,.9,.2,1), opacity .45s;
-  will-change: transform, opacity;
-}
+      /* Make buttons pill-like and centered */
+      .hero-buttons{justify-content:center}
+      .btn{padding:10px 16px;border-radius:14px;min-width:120px}
+      .btn.primary{background:rgba(0,0,0,0.6);color:#fff;border:1px solid rgba(255,255,255,0.06)}
+      .cv-wrap{display:none}
 
-/* DESKTOP ONLY: move whole image 2.5cm left */
-@media (min-width: 981px) {
-  .hero-img {
-    margin-left: calc(12px - 2.5cm);
-  }
-}
+      /* Header: make it more transparent on mobile, like the screenshot */
+      header{background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));backdrop-filter: blur(4px)}
+      html[data-theme="dark"] header{background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.12))}
 
+      /* Make text colors and small details match the mobile screenshot more closely */
+      html[data-theme="dark"] .kicker{ color: rgba(255,255,255,0.75) }
+      html[data-theme="dark"] h1.headline{ color: #ffffff }
+      html[data-theme="dark"] p.lead{ color: rgba(255,255,255,0.88) }
+      /* Light mode mobile adjustments */
+      html:not([data-theme="dark"]) .hero-image-frame{ background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.98)); box-shadow: 0 12px 30px rgba(16,24,40,0.06); border:1px solid rgba(0,0,0,0.04) }
+      html:not([data-theme="dark"]) .hero-img{ box-shadow: 0 8px 22px rgba(16,24,40,0.06) ; border-radius:14px }
+      html:not([data-theme="dark"]) .image-socials a{ background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.95)); border:1px solid rgba(0,0,0,0.06); box-shadow: 0 8px 18px rgba(16,24,40,0.06); color:var(--text) }
 
-.hero-placeholder{width:100%;height:100%;min-height:100%;background:linear-gradient(120deg,#222 0%, #333 100%)}
+      /* Slight horizontal inset to visually match screenshot edges */
+      body { padding-bottom: 18px; }
+    }
 
-/* socials: bigger and animated blue hover (desktop) */
-.image-socials{
-  position:absolute;left:50%;top:22px;transform:translateX(-50%);
-  z-index:18;display:flex;gap:20px;align-items:center;padding:6px;border-radius:999px;pointer-events:auto;
-  background:transparent; border: none; box-shadow:none;
-}
-
-.image-socials a{
-  display:inline-grid;place-items:center;
-  width:80px;
-  height:80px;
-  border-radius:16px;
-  text-decoration:none;
-  color:var(--text);
-  font-size:32px;
-  background:transparent;
-  border:none;
-  transition:transform .18s ease,filter .18s ease, box-shadow .25s ease;
-  will-change:transform, box-shadow;
-}
-.image-socials a i{color:inherit}
-.image-socials a:hover{
-  transform:translateY(-6px) scale(1.06);
-  box-shadow:0 26px 60px rgba(37,99,235,0.14), 0 10px 30px rgba(16,24,40,0.06);
-}
-.image-socials a:hover i{ color: var(--accent); filter: drop-shadow(0 14px 40px rgba(37,99,235,0.20)); }
-.image-socials a:focus{ outline:4px solid rgba(37,99,235,0.12); outline-offset:4px; border-radius:14px; }
-
-.cv-wrap{position:absolute;left:18px;bottom:18px;z-index:6}
-.cv-btn{border:1px solid var(--glass-strong);background:transparent;color:var(--text);padding:8px 12px;border-radius:10px}
-
-/* sections */
-#about,#works,#contact{display:flex;align-items:center;justify-content:center;background:transparent}
-.box{max-width:980px;padding:44px; background: transparent; border-radius:8px;}
-
-/* == MOBILE VIEW: match the provided mobile screenshot (dark theme) == */
-@media (max-width:980px){
-  /* stack & center layout */
-  .section-inner { padding-top: var(--header-h); display: block; }
-  .hero { display: block; grid-template-columns: none; }
-  .hero-left { order: 1; padding: 28px 6vw; align-items: center; text-align: center; }
-  .hero-right { order: -1; height: auto; padding: 0 6vw 26px; display: flex; justify-content: center; align-items: flex-start; }
-
-  /* dark rounded card that contains socials + image (like screenshot) */
-  .hero-card {
-    width: 100%;
-    max-width: 720px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    border-radius: 28px;
-    padding: 14px;
-    box-shadow: var(--card-shadow);
-    border: 1px solid rgba(255,255,255,0.02);
-    position: relative;
-    overflow: hidden;
-    margin: 12px auto;
-  }
-  html[data-theme="dark"] .hero-card {
-    background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.35));
-    border: 1px solid rgba(255,255,255,0.03);
-  }
-
-  /* image fills card, large rounded corners */
-  .hero-img {
-    width: calc(100% - 0px);
-    height: 320px;             /* mobile-friendly height — tweak if needed */
-    margin: 0 auto;
-    display: block;
-    object-fit: cover;
-    object-position: center;
-    border-radius: 18px;
-    transition: transform .45s ease, opacity .35s ease;
-    box-shadow: 0 18px 40px rgba(0,0,0,0.45);
-  }
-
-  /* socials pill above the image (centered), like your screenshot */
-  .image-socials {
-    position: absolute;
-    left: 50%;
-    top: 12px;
-    transform: translateX(-50%);
-    z-index: 30;
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    padding: 8px 12px;
-    border-radius: 16px;
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.03);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-    pointer-events: auto;
-  }
-
-  /* larger, touch-friendly social buttons (rounded squares) */
-  .image-socials a {
-    width: 72px;      /* matches screenshot */
-    height: 72px;
-    border-radius: 14px;
-    font-size: 26px;
-    display: inline-grid;
-    place-items: center;
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.02);
-    transition: transform .18s ease, box-shadow .18s ease;
-  }
-  .image-socials a i { font-size: 26px; }
-  .image-socials a:hover { transform: translateY(-6px) scale(1.04); }
-
-  /* text and buttons centered & scaled for mobile */
-  h1.headline { font-size: 28px; line-height: 1.08; margin-top: 18px; color: var(--text); }
-  .kicker { font-size: 12px; margin-bottom: 10px; color: var(--muted); }
-  .content { margin: 0 auto; padding-bottom: 8px; color: var(--muted); max-width: 720px; }
-
-  .hero-buttons { justify-content: center; gap: 12px; margin-top: 20px; }
-  .btn { padding: 12px 18px; border-radius: 12px; }
-
-  /* center the site title in header on mobile */
-  header { padding: 0 14px; }
-  header .logo { position: absolute; left: 50%; transform: translateX(-50%); top: 50%; transform: translate(-50%,-50%); }
-
-  /* hide desktop-only elements that clash with mobile card */
-  .cv-wrap { display: none; }
-
-  /* subtle overlay radius to mimic screenshot */
-  .hero-card::after { content:""; position:absolute; inset:0; pointer-events:none; border-radius:28px; }
-
-  /* small spacings */
-  .image-socials{gap:14px; top:14px}
-  .menu-btn{font-size:26px}
-  .theme-btn{padding:10px 14px}
-}
-
-/* modern reveal animations: initial state */
-.anim{
-  opacity:0;
-  transform: translateY(18px) scale(0.995);
-  transition: opacity 650ms cubic-bezier(.2,.9,.2,1), transform 650ms cubic-bezier(.2,.9,.2,1);
-  will-change: opacity, transform;
-}
-/* in-view state */
-.anim.in-view{
-  opacity:1;
-  transform: translateY(0) scale(1);
-}
-
-/* reduce motion if requested */
-@media (prefers-reduced-motion: reduce){
-  *{transition:none!important}
-  .hero-img{transition:none}
-  html { scroll-behavior: auto; }
-}
-
-/* desktop tweak: move social logos slightly left (keeps your original intent) */
-@media (min-width: 1024px) {
-  .image-socials a {
-    position: relative;
-    left: -1.2cm;
-  }
-}
-</style>
-
+    /* reduced motion preference */
+    @media (prefers-reduced-motion: reduce){
+      *{transition:none!important}
+      .hero-img{transition:none}
+      html { scroll-behavior: auto; }
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -333,7 +170,7 @@ h1.headline{font-family:'Playfair Display',serif;font-size:48px;line-height:1.06
     </nav>
 
     <div class="controls">
-      <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
+      <button class="theme-btn" id="themeBtn" aria-label="Toggle theme" title="Toggle theme (light / dark)">
         <i id="themeIco" class="fa-solid fa-moon" aria-hidden="true"></i>
       </button>
     </div>
@@ -346,8 +183,7 @@ h1.headline{font-family:'Playfair Display',serif;font-size:48px;line-height:1.06
         <div class="content">
           <div class="kicker anim">HELLO</div>
           <h1 class="headline anim">I'm Abhinand Babu\.................\...........</h1>
-          <p class="anim" style="margin-top:16px;max-width:54ch;opacity:.92"> B.Tech Computer Science Engineer with a strong foundation in software development and web
- technologies.</p>
+          <p class="lead anim">B.Tech Computer Science Engineer with a strong foundation in software development and web technologies.</p>
           <div class="hero-buttons anim">
             <button id="moreBtn" type="button" class="btn primary">MORE ABOUT ME</button>
             <button id="contactBtn" type="button" class="btn">GET IN TOUCH</button>
@@ -356,44 +192,83 @@ h1.headline{font-family:'Playfair Display',serif;font-size:48px;line-height:1.06
       </div>
 
       <div class="hero-right">
-        <img id="heroImgTag" class="hero-img" alt="Hero image" src="" />
-        <div id="heroPlaceholder" class="hero-placeholder" aria-hidden="true"></div>
-
-        <!-- socials: TOP CENTER icons-only -->
-        <div class="image-socials" aria-hidden="false">
-           <!-- Email anchor -->
-     <!-- move this OUT of .image-socials and place it as a direct child of .hero-right -->
-<a href="#"
-   id="email-link"
-   title="Email"
-   onclick="openGmailCompose(event)"
-   role="listitem"
-   class="social-link">
-  <i class="fa-solid fa-envelope" aria-hidden="true"></i>
-  <span class="sr-only">Email</span>
-</a>
-<style></style>
-<p>&nbsp;</p>
-      <a href="https://github.com/Abhinand2502" target="_blank" rel="noopener noreferrer" title="GitHub" class="social-link" role="listitem">
-        <i class="fa-brands fa-github" aria-hidden="true"></i>
-        <span class="sr-only">GitHub</span>
-      </a>
-<p>&nbsp;</p>
-      <a href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="social-link" role="listitem">
-        <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
-        <span class="sr-only">LinkedIn</span>
-      </a>
-<p>&nbsp;</p>
-      <a href="https://instagram.com/_abhinand_babu" target="_blank" rel="noopener noreferrer" title="Instagram" class="social-link" role="listitem">
-        <i class="fa-brands fa-instagram" aria-hidden="true"></i>
-        <span class="sr-only">Instagram</span>
-      </a>
+        <div class="hero-image-frame" aria-hidden="false">
+          <!-- place your hero image URL in the src below -->
+          <img id="heroImgTag" class="hero-img" alt="Hero image" src="" />
         </div>
 
-        
+        <!-- socials: TOP CENTER icons-only -->
+        <div class="image-socials" aria-hidden="false" role="list" aria-label="Social links">
+          <a href="#" id="email-link" title="Email" onclick="openGmailCompose(event)" role="listitem" class="social-link" aria-label="Email">
+            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+          </a>
+
+          <a href="https://github.com/Abhinand2502" target="_blank" rel="noopener noreferrer" title="GitHub" class="social-link" role="listitem" aria-label="GitHub">
+            <i class="fa-brands fa-github" aria-hidden="true"></i>
+          </a>
+
+          <a href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="social-link" role="listitem" aria-label="LinkedIn">
+            <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
+          </a>
+
+          <a href="https://instagram.com/_abhinand_babu" target="_blank" rel="noopener noreferrer" title="Instagram" class="social-link" role="listitem" aria-label="Instagram">
+            <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+          </a>
+        </div>
+
+        <div class="cv-wrap" aria-hidden="true">
+          <button class="cv-btn">CV</button>
+        </div>
       </div>
     </div>
   </section>
+
+  <script>
+    // THEME: toggle dark and light modes and persist in localStorage
+    (function () {
+      const root = document.documentElement;
+      const btn = document.getElementById('themeBtn');
+      const ico = document.getElementById('themeIco');
+
+      function setTheme(theme) {
+        if (theme === 'dark') {
+          root.setAttribute('data-theme', 'dark');
+          ico.className = 'fa-solid fa-sun';
+        } else {
+          root.removeAttribute('data-theme');
+          ico.className = 'fa-solid fa-moon';
+        }
+        try { localStorage.setItem('site-theme', theme); } catch (e) {}
+      }
+
+      // init
+      const stored = (function(){ try { return localStorage.getItem('site-theme'); } catch(e) { return null } })();
+      if (stored === 'dark') setTheme('dark');
+      else if (stored === 'light') setTheme('light');
+      else {
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        setTheme(prefersDark ? 'dark' : 'light');
+      }
+
+      btn.addEventListener('click', function () {
+        const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+        setTheme(current === 'dark' ? 'light' : 'dark');
+      });
+    })();
+
+    function openGmailCompose(ev) {
+      ev && ev.preventDefault();
+      window.location.href = 'mailto:your.email@example.com';
+    }
+
+    // Optionally inject an image URL into the hero image for testing:
+    (function(){
+      const img = document.getElementById('heroImgTag');
+      // Example: img.src = 'assets/hero.jpg';
+      // Leave empty if you will set it later.
+    })();
+  </script>
+
 
 <!-- ABOUT (fixed: education level bars + proper Django logo) -->
 <section id="about">
