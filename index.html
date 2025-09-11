@@ -184,15 +184,15 @@
       /* container width limited to hero image width and icons spaced evenly */
       .image-socials{
         position:absolute;
-        top: calc(var(--header-h) + 8px); /* place below fixed header so it doesn't hide under the header */
+        top: 20px;                /* placed below header */
         left:50%;
         transform:translateX(-50%);
-        z-index:1300; /* ensure icons are on top and visible */
+        z-index:60;
         gap:12px;
         padding:0 6px;
         display:flex;
         justify-content:space-between;
-        width: min(92%, 360px);   /* tightened width for small screens so they don't overflow */
+        width: min(92%, 420px);   /* match the hero-img max width so slabs don't overflow */
         pointer-events:auto;
       }
 
@@ -205,12 +205,13 @@
         display:inline-flex;
         align-items:center;
         justify-content:center;
-        /* don't override border here: theme rules above control exact color/strength */
         color: var(--text);                     /* icon color adapts */
-        box-shadow: 0 10px 22px rgba(0,0,0,0.06);
-        transition: transform .18s ease, box-shadow .18s ease;
+        box-shadow: 0 8px 22px rgba(0,0,0,0.06);
+        transition: transform .14s ease, box-shadow .14s ease;
         position:relative;
         background: var(--panel);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
       }
       .image-socials a i{ color: var(--text); z-index:2; }
 
@@ -231,12 +232,12 @@
       .image-socials a:hover{ transform:translateY(-6px); box-shadow:0 18px 36px rgba(0,0,0,0.10); }
 
       /* push image down so slabs and header spacing look correct
-         + reduced the previously large top offset to a compact, header-aware offset */
+         + added 0.5cm downward shift per your request */
       .hero-img{
         width: min(92%, 420px);
         height: auto;
         border-radius:20px;
-        margin: calc(12px + var(--header-h) + 8px) auto 18px; /* header-aware top spacing — keeps text and image close */
+        margin: calc(12px + 70px + 0.5cm) auto 18px; /* <- 0.5cm extra downward shift added */
         box-shadow: 0 20px 60px rgba(0,0,0,0.06);
         border: 1px solid rgba(0,0,0,0.06);
         z-index:20;
@@ -247,6 +248,12 @@
       .menu-btn{ font-size:26px }
       .theme-btn{ padding:10px 14px }
     }
+
+    /*
+      ----------  DESKTOP / GLOBAL ADJUSTMENTS (kept outside mobile @media)
+      These changes improve how the desktop layout behaves when the viewport becomes narrow,
+      while preserving your existing mobile rules exactly as you pasted them.
+    */
 
     .section-inner{height:calc(100vh - var(--header-h));padding-top:var(--header-h);display:flex;align-items:center;position:relative;overflow:hidden}
 
@@ -270,10 +277,16 @@
     .btn.primary{ background:var(--primary); color:#fff; border-color:var(--primary); box-shadow:0 14px 36px rgba(225,74,42,0.12); }
 
     .hero-right{position:relative;overflow:hidden;display:flex;align-items:stretch;height:100%}
+
+    /* ---------- UPDATED: make desktop image scale instead of forcing full container height
+       This prevents very large gaps when the layout gets narrow but mobile rules are not applied.
+       Mobile @media remains untouched so your mobile view stays exactly as you provided.
+    */
     .hero-img{
-      /* slightly smaller so there's a little space around the image */
+      /* keep the same visual spacing but make height adaptive */
       width: calc(100% - 24px);   /* 12px gap each side */
-      height: calc(100% - 24px);  /* 12px gap top & bottom */
+      height: auto;
+      max-height: calc(100vh - var(--header-h) - 120px); /* keep header + content breathing room */
       margin: 12px auto;          /* centers horizontally and creates the gap */
       display: block;
       box-sizing: border-box;
@@ -289,20 +302,36 @@
       z-index:1;
     }
 
-    /* DESKTOP ONLY: move whole image 2.5cm left */
+    /* DESKTOP ONLY: move whole image 2.5cm left (keeps your original behavior) */
     @media (min-width: 981px) {
       .hero-img {
         margin-left: calc(12px - 2.5cm);
+        /* allow the image to occupy taller space on large screens */
+        height: calc(100% - 24px);
+        max-height: none;
       }
     }
 
     .hero-placeholder{width:100%;height:100%;min-height:100%;background:linear-gradient(120deg,#222 0%, #333 100%)}
 
     /* socials: bigger and animated blue hover (desktop) */
+    /* ---------- UPDATED: place desktop socials below header so they remain visible on narrow viewports
+       Mobile @media overrides this so your mobile social placement remains the same. */
     .image-socials{
-      position:absolute;left:50%;top:22px;transform:translateX(-50%);
-      z-index:18;display:flex;gap:20px;align-items:center;padding:6px;border-radius:999px;pointer-events:auto;
-      background:transparent; border: none; box-shadow:none;
+      position:absolute;
+      left:50%;
+      top: calc(var(--header-h) + 8px);
+      transform:translateX(-50%);
+      z-index:18;
+      display:flex;
+      gap:20px;
+      align-items:center;
+      padding:6px;
+      border-radius:999px;
+      pointer-events:auto;
+      background:transparent;
+      border: none;
+      box-shadow:none;
     }
 
     .image-socials a{
@@ -370,15 +399,15 @@
       /* container width limited to hero image width and icons spaced evenly */
       .image-socials{
         position:absolute;
-        top: calc(var(--header-h) + 8px); /* place below fixed header */
+        top: 20px;                /* placed below header */
         left:50%;
         transform:translateX(-50%);
-        z-index:1300; /* higher than header so icons remain visible */
+        z-index:60;
         gap:12px;
         padding:0 6px;
         display:flex;
         justify-content:space-between;
-        width: min(92%, 360px);   /* tightened for small screens */
+        width: min(92%, 420px);   /* match the hero-img max width so slabs don't overflow */
         pointer-events:auto;
       }
 
@@ -391,41 +420,43 @@
         display:inline-flex;
         align-items:center;
         justify-content:center;
-        /* don't override border here: theme rules above control exact color/strength */
         color: var(--text);                     /* icon color adapts */
-        box-shadow: 0 10px 22px rgba(0,0,0,0.08);
-        transition: transform .18s ease, box-shadow .18s ease;
+        box-shadow: 0 8px 22px rgba(0,0,0,0.06);
+        transition: transform .14s ease, box-shadow .14s ease;
         position:relative;
         background: var(--panel);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
       }
       .image-socials a i{ color: var(--text); z-index:2; }
 
-      /* inner stroke — made thinner and subtler */
+      /* inner stroke — made thinner and subtler, respect theme */
       .image-socials a::after{
         content:"";
         position:absolute;
         width:60px;
         height:60px;
         border-radius:12px;
-        border: 1px solid rgba(255,255,255,0.8);
+        border: 1px solid rgba(0,0,0,0.06);
         top:6px;
         left:6px;
         pointer-events:none;
         opacity:0.06; /* subtle */
       }
 
-      .image-socials a:hover{ transform:translateY(-6px); box-shadow:0 20px 40px rgba(0,0,0,0.12); }
+      .image-socials a:hover{ transform:translateY(-6px); box-shadow:0 18px 36px rgba(0,0,0,0.10); }
 
-      /* push image down so slabs and header spacing look correct and slabs fit inside hero width
-         + added 0.5cm downward shift per your request -> replaced by header-aware spacing to remove long gap */
+      /* push image down so slabs and header spacing look correct
+         + added 0.5cm downward shift per your request */
       .hero-img{
         width: min(92%, 420px);
         height: auto;
         border-radius:20px;
-        margin: calc(12px + var(--header-h) + 8px) auto 18px; /* <- header-aware top spacing */
-        box-shadow: 0 30px 80px rgba(0,0,0,0.08);
+        margin: calc(12px + 70px + 0.5cm) auto 18px; /* <- 0.5cm extra downward shift added */
+        box-shadow: 0 20px 60px rgba(0,0,0,0.06);
         border: 1px solid rgba(0,0,0,0.06);
         z-index:20;
+        will-change: transform, opacity;
       }
 
       .cv-wrap{ display:none }
@@ -535,7 +566,6 @@
       </div>
     </div>
   </section>
-
 
 
 
