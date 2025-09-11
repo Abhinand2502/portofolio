@@ -184,15 +184,15 @@
       /* container width limited to hero image width and icons spaced evenly */
       .image-socials{
         position:absolute;
-        top: 20px;                /* placed below header */
+        top: calc(var(--header-h) + 8px); /* place below fixed header so it doesn't hide under the header */
         left:50%;
         transform:translateX(-50%);
-        z-index:60;
+        z-index:1300; /* ensure icons are on top and visible */
         gap:12px;
         padding:0 6px;
         display:flex;
         justify-content:space-between;
-        width: min(92%, 420px);   /* match the hero-img max width so slabs don't overflow */
+        width: min(92%, 360px);   /* tightened width for small screens so they don't overflow */
         pointer-events:auto;
       }
 
@@ -205,13 +205,12 @@
         display:inline-flex;
         align-items:center;
         justify-content:center;
+        /* don't override border here: theme rules above control exact color/strength */
         color: var(--text);                     /* icon color adapts */
-        box-shadow: 0 8px 22px rgba(0,0,0,0.06);
-        transition: transform .14s ease, box-shadow .14s ease;
+        box-shadow: 0 10px 22px rgba(0,0,0,0.06);
+        transition: transform .18s ease, box-shadow .18s ease;
         position:relative;
         background: var(--panel);
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
       }
       .image-socials a i{ color: var(--text); z-index:2; }
 
@@ -232,12 +231,12 @@
       .image-socials a:hover{ transform:translateY(-6px); box-shadow:0 18px 36px rgba(0,0,0,0.10); }
 
       /* push image down so slabs and header spacing look correct
-         + added 0.5cm downward shift per your request */
+         + reduced the previously large top offset to a compact, header-aware offset */
       .hero-img{
         width: min(92%, 420px);
         height: auto;
         border-radius:20px;
-        margin: calc(12px + 70px + 0.5cm) auto 18px; /* <- 0.5cm extra downward shift added */
+        margin: calc(12px + var(--header-h) + 8px) auto 18px; /* header-aware top spacing — keeps text and image close */
         box-shadow: 0 20px 60px rgba(0,0,0,0.06);
         border: 1px solid rgba(0,0,0,0.06);
         z-index:20;
@@ -371,15 +370,15 @@
       /* container width limited to hero image width and icons spaced evenly */
       .image-socials{
         position:absolute;
-        top: 20px;                /* placed below header */
+        top: calc(var(--header-h) + 8px); /* place below fixed header */
         left:50%;
         transform:translateX(-50%);
-        z-index:60;
+        z-index:1300; /* higher than header so icons remain visible */
         gap:12px;
         padding:0 6px;
         display:flex;
         justify-content:space-between;
-        width: min(92%, 420px);   /* match the hero-img max width so slabs don't overflow */
+        width: min(92%, 360px);   /* tightened for small screens */
         pointer-events:auto;
       }
 
@@ -418,12 +417,12 @@
       .image-socials a:hover{ transform:translateY(-6px); box-shadow:0 20px 40px rgba(0,0,0,0.12); }
 
       /* push image down so slabs and header spacing look correct and slabs fit inside hero width
-         + added 0.5cm downward shift per your request */
+         + added 0.5cm downward shift per your request -> replaced by header-aware spacing to remove long gap */
       .hero-img{
         width: min(92%, 420px);
         height: auto;
         border-radius:20px;
-        margin: calc(12px + 70px + 0.5cm) auto 18px; /* <- 0.5cm extra downward shift added */
+        margin: calc(12px + var(--header-h) + 8px) auto 18px; /* <- header-aware top spacing */
         box-shadow: 0 30px 80px rgba(0,0,0,0.08);
         border: 1px solid rgba(0,0,0,0.06);
         z-index:20;
