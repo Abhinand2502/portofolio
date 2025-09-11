@@ -349,88 +349,6 @@
     left: -1.2cm;
   }
 }
-
-/* =========================
-   ADDED: hamburger animation (keeps your markup)
-   - only CSS + tiny JS required
-   - uses .menu-btn::before and ::after to draw lines so we don't change HTML
-   ========================= */
-
-/* draw 3 lines via ::before (main line + box-shadow) and ::after
-   so we can morph into an X with smooth transitions */
-.menu-btn {
-  position: relative;
-  width: 48px;
-  height: 40px;
-  background: transparent;
-  border: 0;
-  padding: 8px;
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* hide the font-awesome glyph visually on mobile (we keep <i> for markup) */
-@media (max-width: 980px) {
-  .menu-btn i { opacity: 0; pointer-events: none; }
-}
-
-/* the middle line + top/bottom via box-shadow */
-.menu-btn::before {
-  content: "";
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  top: 50%;
-  height: 3px;
-  background: var(--text);
-  border-radius: 3px;
-  transform: translateY(-50%);
-  box-shadow: 0 -10px 0 0 var(--text), 0 10px 0 0 var(--text);
-  transition: transform .36s cubic-bezier(.2,.9,.2,1), box-shadow .28s ease, opacity .2s ease;
-  will-change: transform, box-shadow, opacity;
-}
-
-/* a second pseudo used to form the other diagonal in open state */
-.menu-btn::after {
-  content: "";
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  top: 50%;
-  height: 3px;
-  background: var(--text);
-  border-radius: 3px;
-  transform: translateY(-50%) scaleX(0);
-  opacity: 0;
-  transition: transform .36s cubic-bezier(.2,.9,.2,1), opacity .2s ease;
-  will-change: transform, opacity;
-}
-
-/* open state: rotate first into one diagonal and show the other to form an X */
-.menu-btn.open::before {
-  transform: translateY(-50%) rotate(45deg);
-  box-shadow: none;
-}
-.menu-btn.open::after {
-  transform: translateY(-50%) rotate(-45deg) scaleX(1);
-  opacity: 1;
-}
-.menu-btn.open {
-  transform: rotate(6deg) scale(1.02);
-  transition: transform .36s cubic-bezier(.2,.9,.2,1);
-}
-
-/* small focus outline */
-.menu-btn:focus { outline: 3px solid rgba(37,99,235,0.12); outline-offset: 3px; border-radius: 8px; }
-
-/* mobile nav link stagger (optional subtle nicety kept minimal) */
-@media (max-width: 980px) {
-  #mainNav a { opacity: 0; transform: translateY(-8px); transition: opacity .32s ease, transform .32s ease; }
-  #mainNav.open a { opacity: 1; transform: translateY(0); }
-  #mainNav.open a:nth-child(1){ transition-delay: 0.04s }
-  #mainNav.open a:nth-child(2){ transition-delay: 0.08s }
-  #mainNav.open a:nth-child(3){ transition-delay: 0.12s }
-  #mainNav.open a:nth-child(4){ transition-delay: 0.16s }
-}
   </style>
 </head>
 <body>
@@ -506,70 +424,6 @@
       </div>
     </div>
   </section>
-
-<script>
-  /* === Tiny behavior JS (only) ===
-     - toggles .open on .menu-btn and #mainNav
-     - keeps aria-expanded in sync
-     - closes the mobile menu as soon as the page leaves the very top (scrollY>0)
-     - closes on nav link click, ESC, or click outside
-     Nothing else changed in your markup or styles.
-  */
-  (function () {
-    const menuBtn = document.getElementById('menuBtn');
-    const nav = document.getElementById('mainNav');
-    const navLinks = Array.from(nav.querySelectorAll('a'));
-    const menuIco = document.getElementById('menuIco');
-
-    function openNav() {
-      nav.classList.add('open');
-      menuBtn.classList.add('open');
-      menuBtn.setAttribute('aria-expanded', 'true');
-      // swap fallback icon classes (visual icon hidden on mobile by CSS)
-      menuIco.classList.remove('fa-bars');
-      menuIco.classList.add('fa-xmark');
-    }
-    function closeNav() {
-      nav.classList.remove('open');
-      menuBtn.classList.remove('open');
-      menuBtn.setAttribute('aria-expanded', 'false');
-      menuIco.classList.remove('fa-xmark');
-      menuIco.classList.add('fa-bars');
-    }
-    function toggleNav() {
-      if (nav.classList.contains('open')) closeNav();
-      else openNav();
-    }
-
-    menuBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      toggleNav();
-    });
-
-    navLinks.forEach(a => a.addEventListener('click', () => closeNav()));
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeNav();
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!nav.contains(e.target) && !menuBtn.contains(e.target)) {
-        closeNav();
-      }
-    });
-
-    // close when leaving the very top (even 1px)
-    window.addEventListener('scroll', function () {
-      if (window.scrollY > 0) closeNav();
-    }, { passive: true });
-
-    // minimal a11y: ensure nav closed on resize to desktop
-    window.addEventListener('resize', () => {
-      if (window.matchMedia('(min-width:981px)').matches) closeNav();
-    });
-  })();
-</script>
-
 
 
 
@@ -2208,38 +2062,81 @@ body.dark .social-link {
     })();
     themeBtn.addEventListener('click', ()=>{ const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; setTheme(current==='dark' ? 'light' : 'dark'); });
 
-    // Mobile nav toggle (hamburger)
-    const menuBtn = document.getElementById('menuBtn');
-    const mainNav = document.getElementById('mainNav');
-    const menuIco = document.getElementById('menuIco');
-    function toggleNav(open){
-      const isOpen = typeof open === 'boolean' ? open : !mainNav.classList.contains('open');
-      mainNav.classList.toggle('open', isOpen);
-      menuBtn.setAttribute('aria-expanded', isOpen);
-      menuIco.className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
-    }
-    menuBtn.addEventListener('click', ()=> toggleNav());
-
-    // Close nav when clicking a link (mobile friendly)
-    mainNav.querySelectorAll('a[href^="#"]').forEach(a=> a.addEventListener('click', ()=>{ if(window.innerWidth <= 980) toggleNav(false); }));
-
-    // Animations (IntersectionObserver) for reveal
     (function(){
-      const animItems = document.querySelectorAll('.anim');
-      if('IntersectionObserver' in window){
-        const obs = new IntersectionObserver((entries, observer)=>{
-          entries.forEach(entry=>{
-            if(entry.isIntersecting){
-              entry.target.classList.add('in-view');
-              observer.unobserve(entry.target);
-            }
-          });
-        }, {threshold: 0.12});
-        animItems.forEach(i => obs.observe(i));
-      } else {
-        animItems.forEach(i => i.classList.add('in-view'));
-      }
-    })();
+  const menuBtn = document.getElementById('menuBtn');
+  const menuIco = document.getElementById('menuIco');
+  const nav = document.getElementById('mainNav');
+  const mq = window.matchMedia('(max-width:980px)');
+  const focusable = nav.querySelectorAll('a, button');
+
+  function openNav(){
+    nav.classList.add('open');
+    menuBtn.setAttribute('aria-expanded','true');
+    menuIco.classList.remove('fa-bars');
+    menuIco.classList.add('fa-xmark');
+    // prevent background scroll while menu is open
+    document.body.style.overflow = 'hidden';
+    // move focus to first link for accessibility (after CSS transition)
+    setTimeout(() => {
+      if (focusable[0]) focusable[0].focus();
+    }, 220);
+  }
+
+  function closeNav(){
+    nav.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded','false');
+    menuIco.classList.remove('fa-xmark');
+    menuIco.classList.add('fa-bars');
+    document.body.style.overflow = '';
+    // return focus to the button
+    menuBtn.focus();
+  }
+
+  // Toggle on burger click
+  menuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (nav.classList.contains('open')) closeNav();
+    else openNav();
+  });
+
+  // Close when a nav link is clicked (mobile only)
+  nav.addEventListener('click', (e) => {
+    if (e.target.tagName === 'A' && mq.matches) {
+      closeNav();
+    }
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && nav.classList.contains('open')) {
+      closeNav();
+    }
+  });
+
+  // Click outside to close (mobile only)
+  document.addEventListener('click', (e) => {
+    if (!mq.matches) return;
+    if (nav.classList.contains('open') && !nav.contains(e.target) && !menuBtn.contains(e.target)) {
+      closeNav();
+    }
+  });
+
+  // Ensure state resets when resizing to desktop
+  window.addEventListener('resize', () => {
+    if (!mq.matches) {
+      nav.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded','false');
+      menuIco.classList.remove('fa-xmark');
+      menuIco.classList.add('fa-bars');
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Respect reduced-motion preference by shortening transition (non-essential)
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    nav.style.transitionDuration = '120ms';
+  }
+})();
 
     // HERO image loader using <img> tag for reliability
     (function(){
