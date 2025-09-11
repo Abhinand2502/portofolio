@@ -249,38 +249,17 @@
       .theme-btn{ padding:10px 14px }
     }
 
-    /* -----------------------
-       DESKTOP / GLOBAL ADJUSTMENTS
-       (only these lines changed — mobile @media unchanged)
-       ----------------------- */
-
     .section-inner{height:calc(100vh - var(--header-h));padding-top:var(--header-h);display:flex;align-items:center;position:relative;overflow:hidden}
 
-    /* hero: 50/50 columns so right half is image
-       align items center so text & image sit closer vertically (reduces the gap)
-    */
-    .hero{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      min-height:100%;
-      align-items:center; /* <-- centers left and right vertically to remove big gap */
-      gap:18px;
-    }
-
-    /* reduce left column top padding so text sits closer to image */
-    .hero-left{
-      padding:48px 7vw; /* reduced from 72px to 48px */
-      display:flex;
-      align-items:center; /* center content vertically within left column */
-    }
-
+    /* hero: 50/50 columns so right half is image */
+    .hero{display:grid;grid-template-columns:1fr 1fr;min-height:100%}
+    .hero-left{padding:72px 7vw;display:flex;align-items:flex-start}
     .content{max-width:720px}
-    .kicker{letter-spacing:3px;color:var(--primary);font-weight:800;margin-bottom:8px;font-size:13px} /* tighter */
+    .kicker{letter-spacing:3px;color:var(--primary);font-weight:800;margin-bottom:14px;font-size:13px}
 
     h1.headline{font-family:'Playfair Display',serif;font-size:48px;line-height:1.06;margin:0;color:var(--text);white-space:pre-line;word-break:break-word}
 
-    .hero-buttons{margin-top:14px;display:flex;gap:14px;flex-wrap:wrap} /* slightly tighter */
-
+    .hero-buttons{margin-top:24px;display:flex;gap:14px;flex-wrap:wrap}
     /* button animation: lift + shadow */
     .btn{
       padding:12px 20px;border-radius:10px;border:2px solid var(--glass);background:transparent;color:var(--text);font-weight:700;cursor:pointer;
@@ -291,14 +270,11 @@
     .btn:active{ transform:translateY(-2px); box-shadow:0 10px 22px rgba(16,24,40,0.06); }
     .btn.primary{ background:var(--primary); color:#fff; border-color:var(--primary); box-shadow:0 14px 36px rgba(225,74,42,0.12); }
 
-    .hero-right{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;height:100%}
-
-    /* make desktop image scale instead of forcing full container height,
-       and ensure it vertically centers to reduce gap */
+    .hero-right{position:relative;overflow:hidden;display:flex;align-items:stretch;height:100%}
     .hero-img{
+      /* slightly smaller so there's a little space around the image */
       width: calc(100% - 24px);   /* 12px gap each side */
-      height: auto;
-      max-height: calc(100vh - var(--header-h) - 120px); /* keep header + content breathing room */
+      height: calc(100% - 24px);  /* 12px gap top & bottom */
       margin: 12px auto;          /* centers horizontally and creates the gap */
       display: block;
       box-sizing: border-box;
@@ -314,19 +290,16 @@
       z-index:1;
     }
 
-    /* DESKTOP ONLY: move whole image 2.5cm left (keeps your original behavior) */
+    /* DESKTOP ONLY: move whole image 2.5cm left */
     @media (min-width: 981px) {
       .hero-img {
         margin-left: calc(12px - 2.5cm);
-        /* allow the image to occupy taller space on large screens */
-        height: calc(100% - 24px);
-        max-height: none;
       }
     }
 
     .hero-placeholder{width:100%;height:100%;min-height:100%;background:linear-gradient(120deg,#222 0%, #333 100%)}
 
-    /* socials (global) — mobile @media still controls phone behavior */
+    /* socials: bigger and animated blue hover (desktop) */
     .image-socials{
       position:absolute;left:50%;top:22px;transform:translateX(-50%);
       z-index:18;display:flex;gap:20px;align-items:center;padding:6px;border-radius:999px;pointer-events:auto;
@@ -421,12 +394,10 @@
         justify-content:center;
         /* don't override border here: theme rules above control exact color/strength */
         color: var(--text);                     /* icon color adapts */
-        box-shadow: 0 8px 22px rgba(0,0,0,0.06);
-        transition: transform .14s ease, box-shadow .14s ease;
+        box-shadow: 0 10px 22px rgba(0,0,0,0.08);
+        transition: transform .18s ease, box-shadow .18s ease;
         position:relative;
         background: var(--panel);
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
       }
       .image-socials a i{ color: var(--text); z-index:2; }
 
@@ -437,23 +408,23 @@
         width:60px;
         height:60px;
         border-radius:12px;
-        border: 1px solid rgba(0,0,0,0.06);
+        border: 1px solid rgba(255,255,255,0.8);
         top:6px;
         left:6px;
         pointer-events:none;
         opacity:0.06; /* subtle */
       }
 
-      .image-socials a:hover{ transform:translateY(-6px); box-shadow:0 18px 36px rgba(0,0,0,0.10); }
+      .image-socials a:hover{ transform:translateY(-6px); box-shadow:0 20px 40px rgba(0,0,0,0.12); }
 
-      /* push image down so slabs and header spacing look correct
+      /* push image down so slabs and header spacing look correct and slabs fit inside hero width
          + added 0.5cm downward shift per your request */
       .hero-img{
         width: min(92%, 420px);
         height: auto;
         border-radius:20px;
         margin: calc(12px + 70px + 0.5cm) auto 18px; /* <- 0.5cm extra downward shift added */
-        box-shadow: 0 20px 60px rgba(0,0,0,0.06);
+        box-shadow: 0 30px 80px rgba(0,0,0,0.08);
         border: 1px solid rgba(0,0,0,0.06);
         z-index:20;
       }
@@ -565,6 +536,7 @@
       </div>
     </div>
   </section>
+
 
 
 
