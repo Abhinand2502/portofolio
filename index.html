@@ -215,6 +215,21 @@
     .image-socials a:hover i{ color: var(--accent); filter: drop-shadow(0 14px 40px rgba(37,99,235,0.20)); }
     .image-socials a:focus{ outline:4px solid rgba(37,99,235,0.12); outline-offset:4px; border-radius:14px; }
 
+    /* ====== THEME-SPECIFIC SOCIAL BORDER ======
+       Light mode: stronger black border
+       Dark mode: subtle light border (keeps behaviour unchanged)
+    ================================================== */
+    :root .image-socials a{
+      /* this will apply in light mode */
+      border: 1px solid rgba(0,0,0,0.14);
+      background: var(--panel);
+    }
+    html[data-theme="dark"] .image-socials a{
+      /* override in dark mode */
+      border: 1px solid rgba(255,255,255,0.06);
+      background: var(--panel);
+    }
+
     .cv-wrap{position:absolute;left:18px;bottom:18px;z-index:6}
     .cv-btn{border:1px solid var(--glass-strong);background:transparent;color:var(--text);padding:8px 12px;border-radius:10px}
 
@@ -223,12 +238,21 @@
     .box{max-width:980px;padding:44px; background: transparent; border-radius:8px;}
 
     /* == MOBILE VIEW: make slabs smaller, reduce border-size and fit inside image width
-       + move hero image 0.5cm down (as requested) */
+       + move hero image 0.5cm down (as requested) and center the header logo vertically */
     @media(max-width:980px){
       /* header arrangement */
-      .menu-btn{ display:block; position:absolute; left:14px; top:12px; z-index:1400; color:var(--text); font-size:22px; background:none; border:0; }
-      .logo{ position:absolute; left:50%; top:10px; transform:translateX(-50%); z-index:1400; color:var(--text); font-size:22px; }
-      .controls{ position:absolute; right:14px; top:8px; z-index:1400; }
+      .menu-btn{ display:block; position:absolute; left:14px; top:50%; transform:translateY(-50%); z-index:1400; color:var(--text); font-size:22px; background:none; border:0; }
+      /* center the logo both horizontally and vertically in the header on mobile */
+      .logo{
+        position:absolute;
+        left:50%;
+        top:50%;
+        transform:translate(-50%,-50%);
+        z-index:1400;
+        color:var(--text);
+        font-size:22px;
+      }
+      .controls{ position:absolute; right:14px; top:50%; transform:translateY(-50%); z-index:1400; }
 
       /* stacking */
       .hero{ display:flex; flex-direction:column; align-items:center; }
@@ -253,7 +277,7 @@
         pointer-events:auto;
       }
 
-      /* reduced slab size and subtler border */
+      /* reduced slab size and subtler border for mobile (theme-specific border above still applies) */
       .image-socials a{
         width:72px;
         height:72px;
@@ -262,12 +286,12 @@
         display:inline-flex;
         align-items:center;
         justify-content:center;
-        background: var(--panel);               /* adapts to light/dark */
-        border: 1px solid rgba(0,0,0,0.06);     /* subtle adaptive border */
+        /* don't override border here: theme rules above control exact color/strength */
         color: var(--text);                     /* icon color adapts */
         box-shadow: 0 10px 22px rgba(0,0,0,0.08);
         transition: transform .18s ease, box-shadow .18s ease;
         position:relative;
+        background: var(--panel);
       }
       .image-socials a i{ color: var(--text); z-index:2; }
 
@@ -406,6 +430,7 @@
       </div>
     </div>
   </section>
+
 
 
 <!-- ABOUT (fixed: education level bars + proper Django logo) -->
