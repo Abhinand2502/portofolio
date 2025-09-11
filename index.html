@@ -8,13 +8,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
-    /* =====================
-       Theme variables
-       ===================== */
+    /* ===================== Theme variables ===================== */
     :root{
       --header-h:64px;
       --primary: #2a33e1;
-      --accent:#2563eb; /* blue accent for active nav & socials */
+      --accent:#2563eb;
       --bg:#ffffff;
       --panel:#f5f7fa;
       --muted:#f3f4f6;
@@ -22,7 +20,6 @@
       --glass: rgba(0,0,0,0.06);
       --glass-strong: rgba(0,0,0,0.08);
       --card-shadow: 0 8px 30px rgba(16,24,40,0.06);
-      --neon: rgba(225,74,42,0.95);
     }
     html[data-theme="dark"]{
       --bg:#0b0b0b;
@@ -32,24 +29,29 @@
       --glass: rgba(255,255,255,0.04);
       --glass-strong: rgba(255,255,255,0.06);
       --card-shadow: 0 10px 40px rgba(0,0,0,0.6);
-      --neon: rgba(42, 124, 225, 0.95);
     }
 
     /* reset */
     *,*::before,*::after{box-sizing:border-box}
     html,body{height:100%;margin:0;padding:0}
     body{font-family:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;background:var(--bg);color:var(--text);line-height:1.45;-webkit-font-smoothing:antialiased}
-
-    /* allow native smooth behaviour as a graceful fallback for anchors */
-    html { scroll-behavior: smooth; }
-
+    html{scroll-behavior:smooth}
     section{min-height:100vh}
 
     /* header */
-    header{position:fixed;top:0;left:0;right:0;height:var(--header-h);display:flex;align-items:center;justify-content:space-between;padding:0 22px;z-index:1200;background:linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.55));backdrop-filter:blur(6px);box-shadow:var(--card-shadow)}
-    html[data-theme="dark"] header{background:linear-gradient(180deg, rgba(8,8,8,0.6), rgba(8,8,8,0.45));}
+    header{
+      position:fixed;top:0;left:0;right:0;height:var(--header-h);
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 22px;z-index:1200;
+      background:linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.55));
+      backdrop-filter:blur(6px);
+      box-shadow:var(--card-shadow);
+    }
+    html[data-theme="dark"] header{
+      background:linear-gradient(180deg, rgba(8,8,8,0.6), rgba(8,8,8,0.45));
+    }
 
-    /* improved, theme-aware logo styling (no JS changes to dark/light) */
+    /* logo */
     .logo{
       font-family:'Playfair Display',serif;
       font-size:20px;
@@ -60,195 +62,117 @@
       transition: background .18s ease, color .18s ease, box-shadow .18s ease, transform .12s ease;
       display:inline-block;
       line-height:1;
+      z-index:1400;
     }
-    /* light-mode logo look */
-    :root .logo{
-      background: rgba(255,255,255,0.9);
-      box-shadow: 0 10px 30px rgba(16,24,40,0.06);
-      color: var(--text);
-      transform: translateY(0);
-    }
-    /* dark-mode logo look (uses your existing vars so it remains consistent) */
-    html[data-theme="dark"] .logo{
-      background: rgba(255,255,255,0.03);
-      box-shadow: 0 8px 28px rgba(0,0,0,0.6);
-      color: var(--text);
-      transform: translateY(0);
-    }
-    .logo:active{ transform: translateY(1px); }
+    :root .logo{ background: rgba(255,255,255,0.9); box-shadow: 0 10px 30px rgba(16,24,40,0.06); }
+    html[data-theme="dark"] .logo{ background: rgba(255,255,255,0.03); box-shadow: 0 8px 28px rgba(0,0,0,0.6); }
 
     nav{display:flex;gap:16px;align-items:center}
     nav a{position:relative;color:var(--text);text-decoration:none;padding:8px;border-radius:8px;font-weight:600;transition:color .18s ease}
-    nav a::after{
-      content:"";
-      position:absolute;
-      left:12px;
-      right:12px;
-      bottom:6px;
-      height:2px;
-      background:transparent;
-      transform:scaleX(0);
-      transform-origin:left;
-      transition:transform .22s cubic-bezier(.2,.9,.2,1), background .22s ease;
-      border-radius:2px;
-    }
+    nav a::after{ content:""; position:absolute; left:12px; right:12px; bottom:6px; height:2px; background:transparent; transform:scaleX(0); transform-origin:left; transition:transform .22s cubic-bezier(.2,.9,.2,1), background .22s ease; border-radius:2px; }
     nav a:hover{ color: var(--accent); }
     nav a.active{ color: var(--accent); }
     nav a.active::after{ background:var(--accent); transform:scaleX(1); }
 
     .controls{display:flex;gap:12px;align-items:center}
 
-    /* larger theme button (desktop) */
     .theme-btn{
-      display:inline-flex;
-      gap:12px;
-      align-items:center;
-      padding:12px 18px;
-      border-radius:14px;
-      border:1px solid var(--glass-strong);
-      background:transparent;
-      color:var(--text);
-      cursor:pointer;
-      font-weight:700;
-      font-size:15px;
-      transition:transform .14s ease, box-shadow .14s ease, background .14s ease;
+      display:inline-flex;gap:12px;align-items:center;padding:12px 18px;border-radius:14px;border:1px solid var(--glass-strong);
+      background:transparent;color:var(--text);cursor:pointer;font-weight:700;font-size:15px;transition:transform .14s ease, box-shadow .14s ease, background .14s ease;
     }
     .theme-btn i{font-size:20px}
     .theme-btn:hover{ transform:translateY(-3px); box-shadow:0 12px 30px rgba(0,0,0,0.06); }
 
-    /* menu button larger (hamburger) */
+    /* animated hamburger button (desktop hidden, mobile shown) */
     .menu-btn{
       display:none;
       background:none;border:0;color:var(--text);
-      font-size:28px; /* bigger 3-line icon */
-      cursor:pointer;
-      padding:10px;
-      border-radius:8px;
+      cursor:pointer;padding:8px;border-radius:10px;
+      width:48px;height:48px;align-items:center;justify-content:center;
     }
-    .menu-btn:active{ transform:scale(.98); }
+    .menu-icon{ display:inline-block; position:relative; width:28px; height:28px; }
+    .menu-icon i{ position:absolute; left:0; top:0; width:100%; height:100%; display:inline-flex; align-items:center; justify-content:center; font-size:26px; transition: transform .38s cubic-bezier(.2,.9,.2,1), opacity .24s ease; }
+    .menu-icon i.fa-xmark{ transform: rotate(-90deg) scale(.6); opacity:0; }
+    .menu-btn.is-open .menu-icon i.fa-bars{ transform: rotate(30deg) scale(.6); opacity:0; }
+    .menu-btn.is-open .menu-icon i.fa-xmark{ transform: rotate(0deg) scale(1); opacity:1; }
 
-    /* responsive nav overlay for mobile */
+    /* nav overlay for mobile (keeps your original look) */
     @media(max-width:980px){
-      nav{display:flex;flex-direction:column;position:fixed;top:var(--header-h);left:0;right:0;background:var(--panel);padding:12px 6vw;gap:12px;box-shadow:0 8px 30px rgba(0,0,0,0.06);transform:translateY(-8px);opacity:0;pointer-events:none;transition:transform .28s cubic-bezier(.2,.9,.2,1),opacity .18s linear;backdrop-filter:blur(6px);z-index:1100}
-      nav.open{transform:translateY(0);opacity:1;pointer-events:auto}
-      .menu-btn{display:block}
-      .controls{gap:8px}
-      .theme-btn{padding:10px 14px;font-size:15px}
+      nav{
+        display:flex;flex-direction:column;position:fixed;top:var(--header-h);left:0;right:0;background:var(--panel);
+        padding:12px 6vw;gap:12px;box-shadow:0 8px 30px rgba(0,0,0,0.06);
+        transform:translateY(-8px);opacity:0;pointer-events:none;
+        transition:transform .28s cubic-bezier(.2,.9,.2,1),opacity .18s linear;
+        backdrop-filter:blur(6px);z-index:1100
+      }
+      nav.open{ transform:translateY(0); opacity:1; pointer-events:auto; }
+
+      /* show hamburger, hide logo on mobile (per your earlier request) */
+      .menu-btn{ display:flex; position:absolute; left:12px; top:50%; transform:translateY(-50%); z-index:1400; }
+      .logo{ display:none; } /* removed on mobile */
+      .controls{ position:absolute; right:14px; top:50%; transform:translateY(-50%); z-index:1400; }
     }
 
+    /* section + hero */
     .section-inner{height:calc(100vh - var(--header-h));padding-top:var(--header-h);display:flex;align-items:center;position:relative;overflow:hidden}
-
-    /* hero: 50/50 columns so right half is image */
     .hero{display:grid;grid-template-columns:1fr 1fr;min-height:100%}
     .hero-left{padding:72px 7vw;display:flex;align-items:flex-start}
     .content{max-width:720px}
     .kicker{letter-spacing:3px;color:var(--primary);font-weight:800;margin-bottom:14px;font-size:13px}
-
     h1.headline{font-family:'Playfair Display',serif;font-size:48px;line-height:1.06;margin:0;color:var(--text);white-space:pre-line;word-break:break-word}
-
     .hero-buttons{margin-top:24px;display:flex;gap:14px;flex-wrap:wrap}
-    /* button animation: lift + shadow */
-    .btn{
-      padding:12px 20px;border-radius:10px;border:2px solid var(--glass);background:transparent;color:var(--text);font-weight:700;cursor:pointer;
-      transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease, background .18s ease;
-      will-change: transform, box-shadow;
-    }
+    .btn{ padding:12px 20px;border-radius:10px;border:2px solid var(--glass);background:transparent;color:var(--text);font-weight:700;cursor:pointer; transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease, background .18s ease; }
     .btn:hover{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(16,24,40,0.06); }
-    .btn:active{ transform:translateY(-2px); box-shadow:0 10px 22px rgba(16,24,40,0.06); }
     .btn.primary{ background:var(--primary); color:#fff; border-color:var(--primary); box-shadow:0 14px 36px rgba(225,74,42,0.12); }
 
     .hero-right{position:relative;overflow:hidden;display:flex;align-items:stretch;height:100%}
     .hero-img{
-  /* slightly smaller so there's a little space around the image */
-  width: calc(100% - 24px);   /* 12px gap each side */
-  height: calc(100% - 24px);  /* 12px gap top & bottom */
-  margin: 12px auto;          /* centers horizontally and creates the gap */
-  display: block;
-  box-sizing: border-box;
+      width: calc(100% - 24px);
+      height: calc(100% - 24px);
+      margin: 12px auto;
+      display: block;
+      box-sizing: border-box;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 28px;
+      transition: transform .9s cubic-bezier(.2,.9,.2,1), opacity .45s;
+      will-change: transform, opacity;
+      z-index:1;
+    }
 
-  object-fit: cover;
-  object-position: center;
-
-  /* curved corners */
-  border-radius: 28px;
-
-  transition: transform .9s cubic-bezier(.2,.9,.2,1), opacity .45s;
-  will-change: transform, opacity;
-  z-index:1;
-}
-
-/* DESKTOP ONLY: move whole image 2.5cm left */
-@media (min-width: 981px) {
-  .hero-img {
-    margin-left: calc(12px - 2.5cm);
-  }
-}
-
+    @media (min-width: 981px) {
+      .hero-img { margin-left: calc(12px - 2.5cm); }
+    }
 
     .hero-placeholder{width:100%;height:100%;min-height:100%;background:linear-gradient(120deg,#222 0%, #333 100%)}
 
-    /* socials: bigger and animated blue hover (desktop) */
+    /* socials */
     .image-socials{
       position:absolute;left:50%;top:22px;transform:translateX(-50%);
-      z-index:18;display:flex;gap:20px;align-items:center;padding:6px;border-radius:999px;pointer-events:auto;
-      background:transparent; border: none; box-shadow:none;
+      z-index:18;display:flex;gap:20px;align-items:center;padding:6px;border-radius:999px;pointer-events:auto;background:transparent;border:none;
     }
 
+    /* default desktop slab size */
     .image-socials a{
       display:inline-grid;place-items:center;
-      width:80px;
-      height:80px;
-      border-radius:16px;
-      text-decoration:none;
-      color:var(--text);
-      font-size:32px;
-      background:transparent;
-      border:none;
+      width:80px;height:80px;border-radius:16px;text-decoration:none;color:var(--text);font-size:32px;background:transparent;border:none;
       transition:transform .18s ease,filter .18s ease, box-shadow .25s ease;
-      will-change:transform, box-shadow;
     }
     .image-socials a i{color:inherit}
-    .image-socials a:hover{
-      transform:translateY(-6px) scale(1.06);
-      box-shadow:0 26px 60px rgba(37,99,235,0.14), 0 10px 30px rgba(16,24,40,0.06);
-    }
-    .image-socials a:hover i{ color: var(--accent); filter: drop-shadow(0 14px 40px rgba(37,99,235,0.20)); }
-    .image-socials a:focus{ outline:4px solid rgba(37,99,235,0.12); outline-offset:4px; border-radius:14px; }
+    .image-socials a:hover{ transform:translateY(-6px) scale(1.06); box-shadow:0 26px 60px rgba(37,99,235,0.14), 0 10px 30px rgba(16,24,40,0.06); }
 
-    /* ====== THEME-SPECIFIC SOCIAL BORDER ======
-       Light mode: stronger black border
-       Dark mode: subtle light border (keeps behaviour unchanged)
-    ================================================== */
-    :root .image-socials a{
-      /* this will apply in light mode */
-      border: 1px solid rgba(0,0,0,0.14);
-      background: var(--panel);
-    }
-    html[data-theme="dark"] .image-socials a{
-      /* override in dark mode */
-      border: 1px solid rgba(255,255,255,0.06);
-      background: var(--panel);
-    }
+    /* theme-specific social border: stronger black border in light mode, subtle in dark */
+    :root .image-socials a{ border: 1px solid rgba(0,0,0,0.14); background: var(--panel); }
+    html[data-theme="dark"] .image-socials a{ border: 1px solid rgba(255,255,255,0.06); background: var(--panel); }
 
     .cv-wrap{position:absolute;left:18px;bottom:18px;z-index:6}
-    .cv-btn{border:1px solid var(--glass-strong);background:transparent;color:var(--text);padding:8px 12px;border-radius:10px}
+    .cv-btn{border:1px solid:var(--glass-strong);background:transparent;color:var(--text);padding:8px 12px;border-radius:10px}
 
-    /* sections */
     #about,#works,#contact{display:flex;align-items:center;justify-content:center;background:transparent}
-    .box{max-width:980px;padding:44px; background: transparent; border-radius:8px;}
+    .box{max-width:980px;padding:44px;background:transparent;border-radius:8px;}
 
-    /* == MOBILE VIEW: make slabs smaller, reduce border-size and fit inside image width
-       + move hero image 0.5cm down (as requested) and hide logo in mobile */
+    /* Mobile-specific: reduce social slab size, ensure they fit inside hero image width, move image down 0.5cm */
     @media(max-width:980px){
-      /* header arrangement */
-      .menu-btn{ display:block; position:absolute; left:14px; top:50%; transform:translateY(-50%); z-index:1400; color:var(--text); font-size:22px; background:none; border:0; }
-      /* hide the logo entirely on mobile as requested */
-      .logo{
-        display:none;
-      }
-      .controls{ position:absolute; right:14px; top:50%; transform:translateY(-50%); z-index:1400; }
-
-      /* stacking */
       .hero{ display:flex; flex-direction:column; align-items:center; }
       .hero-right{ order:-1; width:100%; display:flex; flex-direction:column; align-items:center; position:relative; padding-top:8px }
       .hero-left{ padding:28px 6vw; align-items:center; text-align:center; order:1 }
@@ -256,10 +180,9 @@
       .hero-buttons{ justify-content:center }
       h1.headline{ font-size:28px }
 
-      /* container width limited to hero image width and icons spaced evenly */
       .image-socials{
         position:absolute;
-        top: 20px;                /* placed below header */
+        top: 20px; /* placed below header */
         left:50%;
         transform:translateX(-50%);
         z-index:60;
@@ -267,93 +190,59 @@
         padding:0 6px;
         display:flex;
         justify-content:space-between;
-        width: min(92%, 420px);   /* match the hero-img max width so slabs don't overflow */
+        width: min(92%, 420px);
         pointer-events:auto;
       }
 
-      /* reduced slab size and subtler border for mobile (theme-specific border above still applies) */
       .image-socials a{
-        width:72px;
-        height:72px;
-        font-size:24px;
-        border-radius:14px;
-        display:inline-flex;
-        align-items:center;
-        justify-content:center;
-        /* don't override border here: theme rules above control exact color/strength */
-        color: var(--text);                     /* icon color adapts */
-        box-shadow: 0 10px 22px rgba(0,0,0,0.08);
-        transition: transform .18s ease, box-shadow .18s ease;
-        position:relative;
-        background: var(--panel);
+        width:72px;height:72px;font-size:24px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;
+        color: var(--text); box-shadow: 0 10px 22px rgba(0,0,0,0.08); transition: transform .18s ease, box-shadow .18s ease;
+        position:relative; background: var(--panel);
       }
-      .image-socials a i{ color: var(--text); z-index:2; }
+      .image-socials a::after{ content:""; position:absolute; width:60px; height:60px; border-radius:12px; border: 1px solid rgba(255,255,255,0.8); top:6px; left:6px; pointer-events:none; opacity:0.06; }
 
-      /* inner stroke — made thinner and subtler */
-      .image-socials a::after{
-        content:"";
-        position:absolute;
-        width:60px;
-        height:60px;
-        border-radius:12px;
-        border: 1px solid rgba(255,255,255,0.8);
-        top:6px;
-        left:6px;
-        pointer-events:none;
-        opacity:0.06; /* subtle */
-      }
-
-      .image-socials a:hover{ transform:translateY(-6px); box-shadow:0 20px 40px rgba(0,0,0,0.12); }
-
-      /* push image down so slabs and header spacing look correct and slabs fit inside hero width
-         + added 0.5cm downward shift per your request */
       .hero-img{
         width: min(92%, 420px);
         height: auto;
         border-radius:20px;
-        margin: calc(12px + 70px + 0.5cm) auto 18px; /* <- 0.5cm extra downward shift added */
+        margin: calc(12px + 70px + 0.5cm) auto 18px; /* added 0.5cm downward shift */
         box-shadow: 0 30px 80px rgba(0,0,0,0.08);
         border: 1px solid rgba(0,0,0,0.06);
         z-index:20;
       }
 
-      .cv-wrap{ display:none }
       .menu-btn{ font-size:26px }
       .theme-btn{ padding:10px 14px }
+      .cv-wrap{ display:none }
     }
 
-    /* modern reveal animations: initial state */
-    .anim{
-      opacity:0;
-      transform: translateY(18px) scale(0.995);
-      transition: opacity 650ms cubic-bezier(.2,.9,.2,1), transform 650ms cubic-bezier(.2,.9,.2,1);
-      will-change: opacity, transform;
-    }
-    /* in-view state */
-    .anim.in-view{
-      opacity:1;
-      transform: translateY(0) scale(1);
+    /* small desktop tweak: offset social logos left (keeps your previous behavior) */
+    @media (min-width: 1024px) {
+      .image-socials a { position: relative; left: -1.2cm; }
     }
 
-    /* optional: reduce motion for users who prefer reduced-motion */
+    /* animations reveal */
+    .anim{ opacity:0; transform: translateY(18px) scale(.995); transition: opacity 650ms cubic-bezier(.2,.9,.2,1), transform 650ms cubic-bezier(.2,.9,.2,1); will-change: opacity, transform; }
+    .anim.in-view{ opacity:1; transform: translateY(0) scale(1); }
+
     @media (prefers-reduced-motion: reduce){
       *{transition:none!important}
       .hero-img{transition:none}
-      html { scroll-behavior: auto; }
+      html{scroll-behavior:auto}
     }
 
-    /* Move all social logos 0.7 cm left (desktop unchanged) */
-@media (min-width: 1024px) {
-  .image-socials a {
-    position: relative;
-    left: -1.2cm;
-  }
-}
   </style>
 </head>
 <body>
   <header>
-    <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false"><i id="menuIco" class="fa-solid fa-bars"></i></button>
+    <!-- animated hamburger button -->
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">
+      <span class="menu-icon" aria-hidden="true">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </span>
+    </button>
+
     <div class="logo" id="logo">Abhinand</div>
 
     <nav id="mainNav" aria-label="Main navigation">
@@ -377,8 +266,9 @@
         <div class="content">
           <div class="kicker anim">HELLO</div>
           <h1 class="headline anim">I'm Abhinand Babu\.................\...........</h1>
-          <p class="anim" style="margin-top:16px;max-width:54ch;opacity:.92"> B.Tech Computer Science Engineer with a strong foundation in software development and web
- technologies.</p>
+          <p class="anim" style="margin-top:16px;max-width:54ch;opacity:.92">
+            B.Tech Computer Science Engineer with a strong foundation in software development and web technologies.
+          </p>
           <div class="hero-buttons anim">
             <button id="moreBtn" type="button" class="btn primary">MORE ABOUT ME</button>
             <button id="contactBtn" type="button" class="btn">GET IN TOUCH</button>
@@ -387,44 +277,84 @@
       </div>
 
       <div class="hero-right">
+        <!-- put your hero image src here -->
         <img id="heroImgTag" class="hero-img" alt="Hero image" src="" />
         <div id="heroPlaceholder" class="hero-placeholder" aria-hidden="true"></div>
 
         <!-- socials: TOP CENTER icons-only -->
         <div class="image-socials" aria-hidden="false">
-           <!-- Email anchor -->
-     <!-- move this OUT of .image-socials and place it as a direct child of .hero-right -->
-<a href="#"
-   id="email-link"
-   title="Email"
-   onclick="openGmailCompose(event)"
-   role="listitem"
-   class="social-link">
-  <i class="fa-solid fa-envelope" aria-hidden="true"></i>
-  <span class="sr-only">Email</span>
-</a>
-<p>&nbsp;</p>
-      <a href="https://github.com/Abhinand2502" target="_blank" rel="noopener noreferrer" title="GitHub" class="social-link" role="listitem">
-        <i class="fa-brands fa-github" aria-hidden="true"></i>
-        <span class="sr-only">GitHub</span>
-      </a>
-<p>&nbsp;</p>
-      <a href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="social-link" role="listitem">
-        <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
-        <span class="sr-only">LinkedIn</span>
-      </a>
-<p>&nbsp;</p>
-      <a href="https://instagram.com/_abhinand_babu" target="_blank" rel="noopener noreferrer" title="Instagram" class="social-link" role="listitem">
-        <i class="fa-brands fa-instagram" aria-hidden="true"></i>
-        <span class="sr-only">Instagram</span>
-      </a>
+          <a href="#" id="email-link" title="Email" onclick="openGmailCompose(event)" role="listitem" class="social-link" aria-label="Email">
+            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+          </a>
+
+          <a href="https://github.com/Abhinand2502" target="_blank" rel="noopener noreferrer" title="GitHub" class="social-link" role="listitem" aria-label="GitHub">
+            <i class="fa-brands fa-github" aria-hidden="true"></i>
+          </a>
+
+          <a href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="social-link" role="listitem" aria-label="LinkedIn">
+            <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
+          </a>
+
+          <a href="https://instagram.com/_abhinand_babu" target="_blank" rel="noopener noreferrer" title="Instagram" class="social-link" role="listitem" aria-label="Instagram">
+            <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+          </a>
         </div>
 
-        
       </div>
     </div>
-  </section>
 
+
+  <script>
+    // Simple hamburger behaviour + accessible aria updates + close on nav link click + outside click (mobile)
+    (function() {
+      const menuBtn = document.getElementById('menuBtn');
+      const mainNav = document.getElementById('mainNav');
+
+      if (!menuBtn || !mainNav) return;
+
+      const setOpen = (open) => {
+        mainNav.classList.toggle('open', open);
+        menuBtn.classList.toggle('is-open', open);
+        menuBtn.setAttribute('aria-expanded', String(!!open));
+      };
+
+      menuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = mainNav.classList.toggle('open');
+        menuBtn.classList.toggle('is-open', isOpen);
+        menuBtn.setAttribute('aria-expanded', String(!!isOpen));
+      });
+
+      // Close when a nav link is clicked (mobile)
+      Array.from(mainNav.querySelectorAll('a')).forEach(a => {
+        a.addEventListener('click', () => {
+          if (mainNav.classList.contains('open')) {
+            setOpen(false);
+          }
+        });
+      });
+
+      // Close when clicking outside on mobile
+      document.addEventListener('click', (ev) => {
+        if (window.innerWidth > 980) return;
+        if (!mainNav.classList.contains('open')) return;
+        const clickedInsideNav = mainNav.contains(ev.target);
+        const clickedMenuBtn = menuBtn.contains(ev.target);
+        if (!clickedInsideNav && !clickedMenuBtn) setOpen(false);
+      });
+
+      // keyboard: close on Escape
+      document.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Escape' && mainNav.classList.contains('open')) {
+          setOpen(false);
+          menuBtn.focus();
+        }
+      });
+    })();
+  </script>
+
+
+  </section>
 
 
 
