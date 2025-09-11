@@ -425,6 +425,127 @@
     </div>
   </section>
 
+  <!-- =========================
+       SCRIPT: Hamburger / Mobile Nav behavior
+       Paste this right before </body> (already placed here)
+       ========================= -->
+  <script>
+  (function () {
+    const menuBtn = document.getElementById('menuBtn');
+    const menuIco = document.getElementById('menuIco');
+    const nav = document.getElementById('mainNav');
+    const header = document.querySelector('header');
+    const mq = window.matchMedia('(max-width:980px)');
+    const navLinks = Array.from(nav.querySelectorAll('a'));
+    let wasOpenByResize = false;
+
+    // Utility: open nav
+    function openNav() {
+      if (!mq.matches) return; // only on mobile
+      nav.classList.add('open');
+      menuBtn.setAttribute('aria-expanded', 'true');
+      menuIco.classList.remove('fa-bars');
+      menuIco.classList.add('fa-xmark');
+      // lock scroll
+      document.documentElement.style.scrollBehavior = 'auto'; // avoid scroll jump on some browsers
+      document.body.style.overflow = 'hidden';
+      // focus first link after animation (short delay)
+      const delay = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 10 : 220;
+      setTimeout(() => {
+        if (navLinks[0]) navLinks[0].focus();
+      }, delay);
+    }
+
+    // Utility: close nav
+    function closeNav() {
+      if (!nav.classList.contains('open')) return;
+      nav.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded', 'false');
+      menuIco.classList.remove('fa-xmark');
+      menuIco.classList.add('fa-bars');
+      document.body.style.overflow = '';
+      // return focus to burger
+      menuBtn.focus();
+    }
+
+    // Toggle on click
+    menuBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (nav.classList.contains('open')) closeNav();
+      else openNav();
+    });
+
+    // Close when a nav link is clicked (mobile)
+    nav.addEventListener('click', function (e) {
+      const target = e.target;
+      if (target.tagName === 'A' && mq.matches) {
+        // allow default anchor behavior, but close menu immediately
+        closeNav();
+      }
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && nav.classList.contains('open')) {
+        e.preventDefault();
+        closeNav();
+      }
+    });
+
+    // Click outside to close (mobile only)
+    document.addEventListener('click', function (e) {
+      if (!mq.matches) return;
+      if (!nav.classList.contains('open')) return;
+      const clickInsideNav = nav.contains(e.target) || menuBtn.contains(e.target);
+      if (!clickInsideNav) closeNav();
+    });
+
+    // Ensure state resets when resizing to desktop
+    window.addEventListener('resize', function () {
+      // if we cross the breakpoint from mobile->desktop, close the nav
+      if (!mq.matches) {
+        if (nav.classList.contains('open')) {
+          wasOpenByResize = true;
+        }
+        nav.classList.remove('open');
+        menuBtn.setAttribute('aria-expanded', 'false');
+        menuIco.classList.remove('fa-xmark');
+        menuIco.classList.add('fa-bars');
+        document.body.style.overflow = '';
+      } else {
+        // when entering mobile again, nothing special required
+        if (wasOpenByResize) {
+          // keep it closed for predictability
+          wasOpenByResize = false;
+        }
+      }
+    });
+
+    // Trap focus inside nav while open (lightweight)
+    document.addEventListener('focus', function (e) {
+      if (!nav.classList.contains('open')) return;
+      if (!mq.matches) return;
+      const first = navLinks[0];
+      const last = navLinks[navLinks.length - 1];
+      if (e.target === last && e.shiftKey === false) return; // natural tabbing allowed
+      // If focus moved outside nav while menu is open, return it to first link
+      if (!nav.contains(e.target) && !menuBtn.contains(e.target)) {
+        e.stopPropagation();
+        e.preventDefault();
+        if (first) first.focus();
+      }
+    }, true);
+
+    // Accessibility: if reduced-motion, shorten transition timers (no visual change required)
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      // no-op in script — CSS handles transitions respecting reduced motion already
+    }
+  })();
+  </script>
+
+</body>
+</html>
+
 
 
 
@@ -2062,81 +2183,38 @@ body.dark .social-link {
     })();
     themeBtn.addEventListener('click', ()=>{ const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; setTheme(current==='dark' ? 'light' : 'dark'); });
 
+    // Mobile nav toggle (hamburger)
+    const menuBtn = document.getElementById('menuBtn');
+    const mainNav = document.getElementById('mainNav');
+    const menuIco = document.getElementById('menuIco');
+    function toggleNav(open){
+      const isOpen = typeof open === 'boolean' ? open : !mainNav.classList.contains('open');
+      mainNav.classList.toggle('open', isOpen);
+      menuBtn.setAttribute('aria-expanded', isOpen);
+      menuIco.className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+    }
+    menuBtn.addEventListener('click', ()=> toggleNav());
+
+    // Close nav when clicking a link (mobile friendly)
+    mainNav.querySelectorAll('a[href^="#"]').forEach(a=> a.addEventListener('click', ()=>{ if(window.innerWidth <= 980) toggleNav(false); }));
+
+    // Animations (IntersectionObserver) for reveal
     (function(){
-  const menuBtn = document.getElementById('menuBtn');
-  const menuIco = document.getElementById('menuIco');
-  const nav = document.getElementById('mainNav');
-  const mq = window.matchMedia('(max-width:980px)');
-  const focusable = nav.querySelectorAll('a, button');
-
-  function openNav(){
-    nav.classList.add('open');
-    menuBtn.setAttribute('aria-expanded','true');
-    menuIco.classList.remove('fa-bars');
-    menuIco.classList.add('fa-xmark');
-    // prevent background scroll while menu is open
-    document.body.style.overflow = 'hidden';
-    // move focus to first link for accessibility (after CSS transition)
-    setTimeout(() => {
-      if (focusable[0]) focusable[0].focus();
-    }, 220);
-  }
-
-  function closeNav(){
-    nav.classList.remove('open');
-    menuBtn.setAttribute('aria-expanded','false');
-    menuIco.classList.remove('fa-xmark');
-    menuIco.classList.add('fa-bars');
-    document.body.style.overflow = '';
-    // return focus to the button
-    menuBtn.focus();
-  }
-
-  // Toggle on burger click
-  menuBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    if (nav.classList.contains('open')) closeNav();
-    else openNav();
-  });
-
-  // Close when a nav link is clicked (mobile only)
-  nav.addEventListener('click', (e) => {
-    if (e.target.tagName === 'A' && mq.matches) {
-      closeNav();
-    }
-  });
-
-  // Close on Escape
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && nav.classList.contains('open')) {
-      closeNav();
-    }
-  });
-
-  // Click outside to close (mobile only)
-  document.addEventListener('click', (e) => {
-    if (!mq.matches) return;
-    if (nav.classList.contains('open') && !nav.contains(e.target) && !menuBtn.contains(e.target)) {
-      closeNav();
-    }
-  });
-
-  // Ensure state resets when resizing to desktop
-  window.addEventListener('resize', () => {
-    if (!mq.matches) {
-      nav.classList.remove('open');
-      menuBtn.setAttribute('aria-expanded','false');
-      menuIco.classList.remove('fa-xmark');
-      menuIco.classList.add('fa-bars');
-      document.body.style.overflow = '';
-    }
-  });
-
-  // Respect reduced-motion preference by shortening transition (non-essential)
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    nav.style.transitionDuration = '120ms';
-  }
-})();
+      const animItems = document.querySelectorAll('.anim');
+      if('IntersectionObserver' in window){
+        const obs = new IntersectionObserver((entries, observer)=>{
+          entries.forEach(entry=>{
+            if(entry.isIntersecting){
+              entry.target.classList.add('in-view');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {threshold: 0.12});
+        animItems.forEach(i => obs.observe(i));
+      } else {
+        animItems.forEach(i => i.classList.add('in-view'));
+      }
+    })();
 
     // HERO image loader using <img> tag for reliability
     (function(){
