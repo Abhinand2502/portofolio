@@ -195,7 +195,7 @@
     #about,#works,#contact{display:flex;align-items:center;justify-content:center;background:transparent}
     .box{max-width:980px;padding:44px; background: transparent; border-radius:8px;}
 
-    /* == MOBILE VIEW: adjust slabs so everything sits below header and image is pushed down slightly */
+    /* == MOBILE VIEW: make slabs smaller, reduce border-size and fit inside image width */
     @media(max-width:980px){
       /* header arrangement */
       .menu-btn{ display:block; position:absolute; left:14px; top:12px; z-index:1400; color:var(--text); font-size:22px; background:none; border:0; }
@@ -210,59 +210,61 @@
       .hero-buttons{ justify-content:center }
       h1.headline{ font-size:28px }
 
-      /* slabs centered and positioned below the header (no overlap with header) */
+      /* container width limited to hero image width and icons spaced evenly */
       .image-socials{
         position:absolute;
-        top: 20px;                /* placed below the header so slabs don't sit under the header */
+        top: 20px;                /* placed below header */
         left:50%;
         transform:translateX(-50%);
         z-index:60;
-        gap:14px;
-        padding:6px;
-        background:transparent;
+        gap:12px;
+        padding:0 6px;
+        display:flex;
+        justify-content:space-between;
+        width: min(92%, 420px);   /* match the hero-img max width so slabs don't overflow */
         pointer-events:auto;
       }
 
-      /* slab visuals: use theme variables so dark/light still works exactly as before */
+      /* reduced slab size and subtler border */
       .image-socials a{
-        width:86px;
-        height:86px;
-        font-size:26px;
-        border-radius:18px;
+        width:72px;
+        height:72px;
+        font-size:24px;
+        border-radius:14px;
         display:inline-flex;
         align-items:center;
         justify-content:center;
         background: var(--panel);               /* adapts to light/dark */
-        border: 1px solid var(--glass-strong);  /* subtle border that adapts */
+        border: 1px solid rgba(0,0,0,0.06);     /* subtle adaptive border */
         color: var(--text);                     /* icon color adapts */
-        box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+        box-shadow: 0 10px 22px rgba(0,0,0,0.08);
         transition: transform .18s ease, box-shadow .18s ease;
         position:relative;
       }
       .image-socials a i{ color: var(--text); z-index:2; }
 
+      /* inner stroke — made thinner and subtler */
       .image-socials a::after{
-        /* thin inner stroke to give the mild inner rim like your light example */
         content:"";
         position:absolute;
-        width:74px;
-        height:74px;
-        border-radius:14px;
-        border: 2px solid rgba(255,255,255,0.8);
+        width:60px;
+        height:60px;
+        border-radius:12px;
+        border: 1px solid rgba(255,255,255,0.8);
         top:6px;
         left:6px;
         pointer-events:none;
-        opacity:0.08;
+        opacity:0.06; /* subtle */
       }
 
-      .image-socials a:hover{ transform:translateY(-6px); box-shadow:0 26px 60px rgba(0,0,0,0.18); }
+      .image-socials a:hover{ transform:translateY(-6px); box-shadow:0 20px 40px rgba(0,0,0,0.12); }
 
-      /* push the image down so slabs and header spacing look like your screenshot */
+      /* push image down so slabs and header spacing look correct and slabs fit inside hero width */
       .hero-img{
         width: min(92%, 420px);
         height: auto;
         border-radius:20px;
-        margin: calc(12px + 90px) auto 18px; /* increased so the image shifts down below header and slabs */
+        margin: calc(12px + 70px) auto 18px; /* slightly reduced so slabs visually sit just above image */
         box-shadow: 0 30px 80px rgba(0,0,0,0.08);
         border: 1px solid rgba(0,0,0,0.06);
         z-index:20;
