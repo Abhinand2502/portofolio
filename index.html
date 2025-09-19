@@ -7,19 +7,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Abhinand — Portfolio (hero fixes)</title>
-
-  <!-- Font Awesome (remove if already present) -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-
-  <style>
+<style>
   /* =====================
-     Theme variables (UNCHANGED)
+     Theme variables
      ===================== */
     :root{
       --header-h:64px;
@@ -45,227 +35,401 @@
       --neon: rgba(42, 124, 225, 0.95);
     }
 
-    /* reset + base */
+    /* reset */
     *,*::before,*::after{box-sizing:border-box}
     html,body{height:100%;margin:0;padding:0}
     body{font-family:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;background:var(--bg);color:var(--text);line-height:1.45;-webkit-font-smoothing:antialiased}
-    html { scroll-behavior:smooth }
+
+    /* allow native smooth behaviour as a graceful fallback for anchors */
+    html { scroll-behavior: smooth; }
+
     section{min-height:100vh}
 
-    /* ============== HEADER (left unchanged, just added safe img sizing) ============== */
+    /* header */
     header{position:fixed;top:0;left:0;right:0;height:var(--header-h);display:flex;align-items:center;justify-content:space-between;padding:0 22px;z-index:1200;background:linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.55));backdrop-filter:blur(6px);box-shadow:var(--card-shadow)}
     html[data-theme="dark"] header{background:linear-gradient(180deg, rgba(8,8,8,0.6), rgba(8,8,8,0.45));}
 
+    /* improved, theme-aware logo styling (no JS changes to dark/light) */
     .logo{
       font-family:'Playfair Display',serif;
-      font-size:22px;        /* slightly larger logo text */
+      font-size:20px;
       color:var(--text);
       padding:8px 14px;
       border-radius:14px;
       background: transparent;
       transition: background .18s ease, color .18s ease, box-shadow .18s ease, transform .12s ease;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
+      display:inline-block;
       line-height:1;
     }
-
-    /* if you use an <img> inside .logo increase its visible size (only the img) */
-    .logo img{ height:34px; width:auto; display:block; }
+    /* light-mode logo look */
+    :root .logo{
+      background: rgba(255,255,255,0.9);
+      box-shadow: 0 10px 30px rgba(16,24,40,0.06);
+      color: var(--text);
+      transform: translateY(0);
+    }
+    /* dark-mode logo look (uses your existing vars so it remains consistent) */
+    html[data-theme="dark"] .logo{
+      background: rgba(255,255,255,0.03);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.6);
+      color: var(--text);
+      transform: translateY(0);
+    }
+    .logo:active{ transform: translateY(1px); }
 
     nav{display:flex;gap:16px;align-items:center}
     nav a{position:relative;color:var(--text);text-decoration:none;padding:8px;border-radius:8px;font-weight:600;transition:color .18s ease}
-    nav a::after{ content:""; position:absolute; left:12px; right:12px; bottom:6px; height:2px; background:transparent; transform:scaleX(0); transform-origin:left; transition:transform .22s cubic-bezier(.2,.9,.2,1), background .22s ease; border-radius:2px; }
-    nav a:hover{ color: var(--accent); } nav a.active{ color: var(--accent); } nav a.active::after{ background:var(--accent); transform:scaleX(1); }
+    nav a::after{
+      content:"";
+      position:absolute;
+      left:12px;
+      right:12px;
+      bottom:6px;
+      height:2px;
+      background:transparent;
+      transform:scaleX(0);
+      transform-origin:left;
+      transition:transform .22s cubic-bezier(.2,.9,.2,1), background .22s ease;
+      border-radius:2px;
+    }
+    nav a:hover{ color: var(--accent); }
+    nav a.active{ color: var(--accent); }
+    nav a.active::after{ background:var(--accent); transform:scaleX(1); }
 
     .controls{display:flex;gap:12px;align-items:center}
 
+    /* larger theme button (desktop) */
     .theme-btn{
-      display:inline-flex;gap:12px;align-items:center;padding:12px 18px;border-radius:14px;border:1px solid var(--glass-strong);background:transparent;color:var(--text);cursor:pointer;font-weight:700;font-size:15px;transition:transform .14s ease, box-shadow .14s ease, background .14s ease;
+      display:inline-flex;
+      gap:12px;
+      align-items:center;
+      padding:12px 18px;
+      border-radius:14px;
+      border:1px solid var(--glass-strong);
+      background:transparent;
+      color:var(--text);
+      cursor:pointer;
+      font-weight:700;
+      font-size:15px;
+      transition:transform .14s ease, box-shadow .14s ease, background .14s ease;
     }
     .theme-btn i{font-size:20px}
     .theme-btn:hover{ transform:translateY(-3px); box-shadow:0 12px 30px rgba(0,0,0,0.06); }
 
-    /* mobile show menu button, ensure it sits above anything */
-    .menu-btn{ display:none; background:none;border:0;color:var(--text); font-size:28px; cursor:pointer; padding:10px; border-radius:8px; transition: transform .12s ease; -webkit-tap-highlight-color: transparent; z-index:1400 }
+    /* menu button larger (hamburger) */
+    .menu-btn{
+      display:none;
+      background:none;border:0;color:var(--text);
+      font-size:28px; /* bigger 3-line icon */
+      cursor:pointer;
+      padding:10px;
+      border-radius:8px;
+      transition: transform .12s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
     .menu-btn:active{ transform:scale(.98); }
 
-    /* ===========================
-       Original hero CSS kept mostly unchanged.
-       New behavior & fixes are scoped to .home-hero below.
-       =========================== */
+    /* responsive nav overlay for mobile */
+    @media(max-width:980px){
+      /* Use a lightweight, non-blur overlay to avoid heavy rendering on mobile */
+      nav{
+        display:flex;
+        flex-direction:column;
+        position:fixed;
+        top:var(--header-h);
+        left:0;
+        right:0;
+        background:var(--panel);
+        padding:12px 6vw;
+        gap:12px;
+        /* reduced shadow and removed backdrop-filter to avoid mobile lag */
+        box-shadow:0 6px 22px rgba(0,0,0,0.08);
+        transform:translateY(-8px);
+        opacity:0;
+        pointer-events:none;
+        transition: transform .18s cubic-bezier(.2,.9,.2,1), opacity .12s linear;
+        will-change: transform, opacity;
+        z-index:1100;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+      }
+      nav.open{transform:translateY(0);opacity:1;pointer-events:auto}
+      .menu-btn{display:block}
+      .controls{gap:8px}
+      .theme-btn{padding:10px 14px;font-size:15px}
 
-    .section-inner{height:calc(100vh - var(--header-h));padding-top:var(--header-h);display:flex;align-items:center;position:relative;overflow:hidden}
-    .hero{display:grid;grid-template-columns:1fr 1fr;min-height:100%}
-    .hero-left{padding:72px 7vw;display:flex;align-items:flex-start}
-    .content{max-width:720px}
-    .kicker{letter-spacing:3px;color:var(--primary);font-weight:800;margin-bottom:14px;font-size:13px}
-    h1.headline{font-family:'Playfair Display',serif;font-size:48px;line-height:1.06;margin:0;color:var(--text);white-space:pre-line;word-break:break-word}
-    .hero-buttons{margin-top:24px;display:flex;gap:14px;flex-wrap:wrap}
-    .btn{padding:12px 20px;border-radius:10px;border:2px solid var(--glass);background:transparent;color:var(--text);font-weight:700;cursor:pointer;transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease, background .18s ease; will-change: transform, box-shadow;}
-    .btn.primary{ background:var(--primary); color:#fff; border-color:var(--primary); box-shadow:0 14px 36px rgba(225,74,42,0.12); }
+      /* avoid expensive filter effects on mobile */
+      header{backdrop-filter:none}
+      html[data-theme="dark"] header{background:linear-gradient(180deg, rgba(8,8,8,0.88), rgba(8,8,8,0.70));}
 
-    /* hero image base */
-    .hero-right{position:relative;overflow:hidden;display:flex;align-items:stretch;height:100%}
-    .hero-img{
-      width: calc(100% - 24px);
-      height: calc(100% - 24px);
-      margin: 12px auto;
-      display: block;
-      object-fit: cover;
-      object-position: center;
-      border-radius: 28px;
-      transition: transform .9s cubic-bezier(.2,.9,.2,1), opacity .45s;
-      will-change: transform, opacity;
-      z-index:1;
-    }
 
-    /* social slabs (desktop) */
-    .image-socials{ position:absolute;left:50%;top:22px;transform:translateX(-50%); z-index:18; display:flex; gap:20px; align-items:center; padding:6px; border-radius:999px; pointer-events:auto; }
-    .image-socials a{ display:inline-grid; place-items:center; width:80px; height:80px; border-radius:16px; text-decoration:none; color:var(--text); font-size:32px; background:transparent; border:none; transition:transform .18s ease,filter .18s ease, box-shadow .25s ease; }
-    .image-socials a:hover{ transform:translateY(-6px) scale(1.06); box-shadow:0 26px 60px rgba(37,99,235,0.14), 0 10px 30px rgba(16,24,40,0.06); }
-    .image-socials a:hover i{ color: var(--accent); filter: drop-shadow(0 14px 40px rgba(37,99,235,0.20)); }
-
-    @media (max-width:980px){
-      nav{ display:flex; flex-direction:column; position:fixed; top:var(--header-h); left:0; right:0; background:var(--panel); padding:12px 6vw; gap:12px; box-shadow:0 6px 22px rgba(0,0,0,0.08); transform:translateY(-8px); opacity:0; pointer-events:none; transition: transform .18s cubic-bezier(.2,.9,.2,1), opacity .12s linear; will-change: transform, opacity; z-index:1100; }
-      nav.open{ transform:translateY(0); opacity:1; pointer-events:auto; }
+      /* menu button placement for mobile */
       .menu-btn{ display:block; position:absolute; left:14px; top:50%; transform:translateY(-50%); z-index:1400; color:var(--text); font-size:22px; background:none; border:0; }
+
+      /* hide the logo entirely on mobile as requested */
       .logo{ display:none; }
+
       .controls{ position:absolute; right:14px; top:50%; transform:translateY(-50%); z-index:1400; }
+
+      /* stacking */
       .hero{ display:flex; flex-direction:column; align-items:center; }
       .hero-right{ order:-1; width:100%; display:flex; flex-direction:column; align-items:center; position:relative; padding-top:8px }
       .hero-left{ padding:28px 6vw; align-items:center; text-align:center; order:1 }
       .content{ margin:0 auto }
       .hero-buttons{ justify-content:center }
       h1.headline{ font-size:28px }
-      .image-socials{ position:absolute; top:20px; left:50%; transform:translateX(-50%); z-index:60; gap:12px; padding:0 6px; display:flex; justify-content:space-between; width: min(92%, 420px); pointer-events:auto; }
-      .image-socials a{ width:72px; height:72px; font-size:24px; border-radius:14px; display:inline-flex; align-items:center; justify-content:center; color: var(--text); box-shadow: 0 10px 22px rgba(0,0,0,0.06); transition: transform .18s ease, box-shadow .18s ease; position:relative; background: var(--panel); -webkit-backface-visibility: hidden; backface-visibility: hidden; }
-      .image-socials a::after{ content:""; position:absolute; width:60px; height:60px; border-radius:12px; border: 1px solid rgba(255,255,255,0.8); top:6px; left:6px; pointer-events:none; opacity:0.06; }
-      .image-socials a:hover{ transform:translateY(-6px); box-shadow:0 20px 40px rgba(0,0,0,0.12); }
 
-      .hero-img{ width: min(92%, 420px); height:auto; border-radius:20px; margin: calc(12px + 70px + 0.5cm) auto 18px; box-shadow: 0 30px 80px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.06); z-index:20; will-change: transform, opacity; }
-      .cv-wrap{ display:none } .menu-btn{ font-size:26px } .theme-btn{ padding:10px 14px }
-    }
-
-    /* modern reveal */
-    .anim{ opacity:0; transform: translateY(18px) scale(.995); transition: opacity 650ms cubic-bezier(.2,.9,.2,1), transform 650ms cubic-bezier(.2,.9,.2,1); will-change: opacity, transform; }
-    .anim.in-view{ opacity:1; transform: translateY(0) scale(1); }
-
-    @media (prefers-reduced-motion: reduce){ *{transition:none!important} .hero-img{transition:none} html { scroll-behavior: auto; } }
-  </style>
-
-  <!-- =========================
-       SCOPE: home-hero fixes (no global leaks)
-       ========================= -->
-  <style>
-    /* wrap everything inside .home-hero so no other pages are affected */
-    .home-hero .section-inner{ height:calc(100vh - var(--header-h)); padding-top:var(--header-h); display:flex; align-items:center; position:relative; overflow:hidden; }
-
-    .home-hero .hero{ display:grid; grid-template-columns:1fr 1fr; gap:0; min-height:100%; }
-
-    /* ----- right column: socials + image wrapper ----- */
-    .home-hero .hero-right{ position:relative; display:flex; align-items:center; justify-content:center; padding:12px; }
-
-    /* thin cyan rim using a padded outer wrapper (2px) */
-    .home-hero .hero-img-outer{
-      width:100%;
-      max-width:640px;
-      margin:12px;
-      padding:2px;                 /* rim thickness */
-      border-radius:14px;
-      background: linear-gradient(90deg, #2EE1FF, #2EE1FF); /* pure cyan rim */
-      position:relative;
-      z-index:20;
-      pointer-events:none;         /* let socials receive pointer events */
-      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
-    }
-
-    /* inner image: less rounded corners so it looks clean */
-    .home-hero .hero-img-inner{
-      display:block;
-      width:100%;
-      height:auto;
-      border-radius:10px;
-      object-fit:cover;
-      background:var(--panel);
-      border:1px solid rgba(255,255,255,0.02);
-      pointer-events:auto;
-      vertical-align:middle;
-      box-shadow:none;
-      max-height: calc(100vh - var(--header-h) - 120px); /* keep it from becoming extremely tall on small viewports */
-    }
-
-    /* halo outside rim - very subtle */
-    .home-hero .hero-img-outer::after{
-      content:"";
-      position:absolute;
-      inset:-6px;
-      border-radius: calc(14px + 6px);
-      pointer-events:none;
-      filter: blur(8px);
-      opacity:0.06;
-      background: #2EE1FF;
-      z-index:1;
-    }
-
-    /* Socials: desktop (absolute above image) */
-    .home-hero .image-socials{ position:absolute; top:14px; left:50%; transform:translateX(-50%); z-index:30; display:flex; gap:18px; align-items:center; justify-content:center; pointer-events:auto; width:min(80%,760px); padding:6px; }
-
-    .home-hero .social-link{ position:relative; display:inline-grid; place-items:center; width:78px; height:78px; border-radius:14px; text-decoration:none; cursor:pointer; background:transparent; border:none; transition:transform .14s ease, box-shadow .18s ease; pointer-events:auto; }
-
-    .home-hero .social-link .tile{ position:absolute; inset:9px; border-radius:12px; background:rgba(0,0,0,0.78); z-index:2; display:grid; place-items:center; box-shadow: inset 0 1px 2px rgba(255,255,255,0.02); transition: box-shadow .14s ease, background .14s ease; }
-    .home-hero .social-link i{ position:relative; z-index:3; font-size:20px; color:#fff; transition: color .12s ease, filter .12s ease; }
-
-    .home-hero .social-link:hover{ transform: translateY(-6px); box-shadow:0 20px 44px rgba(37,99,235,0.12); }
-    .home-hero .social-link:hover .tile{ box-shadow: 0 8px 28px rgba(37,99,235,0.10), inset 0 1px 2px rgba(255,255,255,0.02); background: rgba(0,0,0,0.82); }
-    .home-hero .social-link:hover i{ color: var(--accent); filter: drop-shadow(0 12px 32px rgba(37,99,235,0.22)); }
-
-    /* text contrast & theme polish (scoped) */
-    .home-hero .headline{ color: var(--text); text-shadow: none; }
-    .home-hero .content p{ color: var(--text); opacity: .94; line-height:1.55; }
-
-    /* Mobile: socials must sit directly below the fixed header (in-flow) */
-    @media (max-width:980px){
-      .home-hero .hero{ display:flex; flex-direction:column; align-items:center; }
-
-      /* place socials in flow and ensure they appear below header */
-      .home-hero .image-socials{
-        position:static;
-        transform:none;
-        margin: calc(var(--header-h) / 1.0) auto 6px; /* pushes the socials below the fixed header visually */
-        width: min(92%,420px);
+      /* container width limited to hero image width and icons spaced evenly */
+      .image-socials{
+        position:absolute;
+        top: 20px;                /* placed below header */
+        left:50%;
+        transform:translateX(-50%);
+        z-index:60;
         gap:12px;
+        padding:0 6px;
+        display:flex;
+        justify-content:space-between;
+        width: min(92%, 420px);   /* match the hero-img max width so slabs don't overflow */
+        pointer-events:auto;
       }
 
-      /* slightly smaller slabs on mobile */
-      .home-hero .social-link{ width:72px; height:72px; border-radius:14px; }
-      .home-hero .social-link .tile{ inset:8px; border-radius:10px; }
-      .home-hero .social-link i{ font-size:18px; }
+      /* reduced slab size and subtler border for mobile (theme-specific border above still applies) */
+      .image-socials a{
+        width:72px;
+        height:72px;
+        font-size:24px;
+        border-radius:14px;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        color: var(--text);                     /* icon color adapts */
+        box-shadow: 0 8px 22px rgba(0,0,0,0.06);
+        transition: transform .14s ease, box-shadow .14s ease;
+        position:relative;
+        background: var(--panel);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+      }
+      .image-socials a i{ color: var(--text); z-index:2; }
 
-      /* reduce image size on phones so it fits 5"-9" screens comfortably */
-      .home-hero .hero-img-outer{ max-width:420px; padding:2px; border-radius:12px; margin-top:6px; }
-      .home-hero .hero-img-inner{ border-radius:8px; max-height: calc(60vh); } /* keep image height limited on mobile */
+      /* inner stroke — made thinner and subtler, respect theme */
+      .image-socials a::after{
+        content:"";
+        position:absolute;
+        width:60px;
+        height:60px;
+        border-radius:12px;
+        border: 1px solid rgba(0,0,0,0.06);
+        top:6px;
+        left:6px;
+        pointer-events:none;
+        opacity:0.06; /* subtle */
+      }
 
-      /* ensure the order: socials -> image -> text/buttons */
-      .home-hero .hero-right{ order:2; width:100%; display:flex; flex-direction:column; align-items:center; padding:6px; }
-      .home-hero .hero-left{ order:3; padding:24px 6vw; text-align:center; }
+      .image-socials a:hover{ transform:translateY(-6px); box-shadow:0 18px 36px rgba(0,0,0,0.10); }
 
-      .home-hero h1.headline{ font-size:28px; }
-      .home-hero .hero-buttons{ justify-content:center; gap:12px; }
+
+      .cv-wrap{ display:none }
+      .menu-btn{ font-size:26px }
+      .theme-btn{ padding:10px 14px }
     }
 
+    .section-inner{height:calc(100vh - var(--header-h));padding-top:var(--header-h);display:flex;align-items:center;position:relative;overflow:hidden}
+
+    /* hero: 50/50 columns so right half is image */
+    .hero{display:grid;grid-template-columns:1fr 1fr;min-height:100%}
+    .hero-left{padding:72px 7vw;display:flex;align-items:flex-start}
+    .content{max-width:720px}
+    .kicker{letter-spacing:3px;color:var(--primary);font-weight:800;margin-bottom:14px;font-size:13px}
+
+    h1.headline{font-family:'Playfair Display',serif;font-size:48px;line-height:1.06;margin:0;color:var(--text);white-space:pre-line;word-break:break-word}
+
+    .hero-buttons{margin-top:24px;display:flex;gap:14px;flex-wrap:wrap}
+    /* button animation: lift + shadow */
+    .btn{
+      padding:12px 20px;border-radius:10px;border:2px solid var(--glass);background:transparent;color:var(--text);font-weight:700;cursor:pointer;
+      transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease, background .18s ease;
+      will-change: transform, box-shadow;
+    }
+    .btn:hover{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(16,24,40,0.06); }
+    .btn:active{ transform:translateY(-2px); box-shadow:0 10px 22px rgba(16,24,40,0.06); }
+    .btn.primary{ background:var(--primary); color:#fff; border-color:var(--primary); box-shadow:0 14px 36px rgba(225,74,42,0.12); }
+
+    .hero-right{position:relative;overflow:hidden;display:flex;align-items:stretch;height:100%}
+
+
+    .hero-placeholder{width:100%;height:100%;min-height:100%;background:linear-gradient(120deg,#222 0%, #333 100%)}
+
+    /* socials: bigger and animated blue hover (desktop) */
+    .image-socials{
+      position:absolute;left:50%;top:22px;transform:translateX(-50%);
+      z-index:18;display:flex;gap:20px;align-items:center;padding:6px;border-radius:999px;pointer-events:auto;
+      background:transparent; border: none; box-shadow:none;
+    }
+
+    .image-socials a{
+      display:inline-grid;place-items:center;
+      width:80px;
+      height:80px;
+      border-radius:16px;
+      text-decoration:none;
+      color:var(--text);
+      font-size:32px;
+      background:transparent;
+      border:none;
+      transition:transform .18s ease,filter .18s ease, box-shadow .25s ease;
+      will-change:transform, box-shadow;
+    }
+    .image-socials a i{color:inherit}
+    .image-socials a:hover{
+      transform:translateY(-6px) scale(1.06);
+      box-shadow:0 26px 60px rgba(37,99,235,0.14), 0 10px 30px rgba(16,24,40,0.06);
+    }
+    .image-socials a:hover i{ color: var(--accent); filter: drop-shadow(0 14px 40px rgba(37,99,235,0.20)); }
+    .image-socials a:focus{ outline:4px solid rgba(37,99,235,0.12); outline-offset:4px; border-radius:14px; }
+
+    /* ====== THEME-SPECIFIC SOCIAL BORDER ======
+       Light mode: stronger black border
+       Dark mode: subtle light border (keeps behaviour unchanged)
+    ================================================== */
+    :root .image-socials a{
+      /* this will apply in light mode */
+      border: 1px solid rgba(0,0,0,0.14);
+      background: var(--panel);
+    }
+    html[data-theme="dark"] .image-socials a{
+      /* override in dark mode */
+      border: 1px solid rgba(255,255,255,0.06);
+      background: var(--panel);
+    }
+
+    .cv-wrap{position:absolute;left:18px;bottom:18px;z-index:6}
+    .cv-btn{border:1px solid var(--glass-strong);background:transparent;color:var(--text);padding:8px 12px;border-radius:10px}
+
+    /* sections */
+    #about,#works,#contact{display:flex;align-items:center;justify-content:center;background:transparent}
+    .box{max-width:980px;padding:44px; background: transparent; border-radius:8px;}
+
+    /* == MOBILE VIEW: make slabs smaller, reduce border-size and fit inside image width
+       + move hero image 0.5cm down (as requested) and hide logo in mobile */
+    @media(max-width:980px){
+      /* header arrangement */
+      .menu-btn{ display:block; position:absolute; left:14px; top:50%; transform:translateY(-50%); z-index:1400; color:var(--text); font-size:22px; background:none; border:0; }
+      /* hide the logo entirely on mobile as requested */
+      .logo{
+        display:none;
+      }
+      .controls{ position:absolute; right:14px; top:50%; transform:translateY(-50%); z-index:1400; }
+
+      /* stacking */
+      .hero{ display:flex; flex-direction:column; align-items:center; }
+      .hero-right{ order:-1; width:100%; display:flex; flex-direction:column; align-items:center; position:relative; padding-top:8px }
+      .hero-left{ padding:28px 6vw; align-items:center; text-align:center; order:1 }
+      .content{ margin:0 auto }
+      .hero-buttons{ justify-content:center }
+      h1.headline{ font-size:28px }
+
+      /* container width limited to hero image width and icons spaced evenly */
+      .image-socials{
+        position:absolute;
+        top: 20px;                /* placed below header */
+        left:50%;
+        transform:translateX(-50%);
+        z-index:60;
+        gap:12px;
+        padding:0 6px;
+        display:flex;
+        justify-content:space-between;
+        width: min(92%, 420px);   /* match the hero-img max width so slabs don't overflow */
+        pointer-events:auto;
+      }
+
+      /* reduced slab size and subtler border for mobile (theme-specific border above still applies) */
+      .image-socials a{
+        width:72px;
+        height:72px;
+        font-size:24px;
+        border-radius:14px;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        /* don't override border here: theme rules above control exact color/strength */
+        color: var(--text);                     /* icon color adapts */
+        box-shadow: 0 10px 22px rgba(0,0,0,0.08);
+        transition: transform .18s ease, box-shadow .18s ease;
+        position:relative;
+        background: var(--panel);
+      }
+      .image-socials a i{ color: var(--text); z-index:2; }
+
+      /* inner stroke — made thinner and subtler */
+      .image-socials a::after{
+        content:"";
+        position:absolute;
+        width:60px;
+        height:60px;
+        border-radius:12px;
+        border: 1px solid rgba(255,255,255,0.8);
+        top:6px;
+        left:6px;
+        pointer-events:none;
+        opacity:0.06; /* subtle */
+      }
+
+      .image-socials a:hover{ transform:translateY(-6px); box-shadow:0 20px 40px rgba(0,0,0,0.12); }
+
+      /* push image down so slabs and header spacing look correct and slabs fit inside hero width
+         + added 0.5cm downward shift per your request */
+      .hero-img{
+        width: min(92%, 420px);
+        height: auto;
+        border-radius:20px;
+        margin: calc(12px + 70px + 0.5cm) auto 18px; /* <- 0.5cm extra downward shift added */
+        box-shadow: 0 30px 80px rgba(0,0,0,0.08);
+        border: 1px solid rgba(0,0,0,0.06);
+        z-index:20;
+      }
+
+      .cv-wrap{ display:none }
+      .menu-btn{ font-size:26px }
+      .theme-btn{ padding:10px 14px }
+    }
+
+    /* modern reveal animations: initial state */
+    .anim{
+      opacity:0;
+      transform: translateY(18px) scale(0.995);
+      transition: opacity 650ms cubic-bezier(.2,.9,.2,1), transform 650ms cubic-bezier(.2,.9,.2,1);
+      will-change: opacity, transform;
+    }
+    /* in-view state */
+    .anim.in-view{
+      opacity:1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* optional: reduce motion for users who prefer reduced-motion */
     @media (prefers-reduced-motion: reduce){
-      .home-hero *{ transition:none!important; }
+      *{transition:none!important}
+      .hero-img{transition:none}
+      html { scroll-behavior: auto; }
     }
-  </style>
+
+    /* Move all social logos 0.7 cm left (desktop unchanged) */
+    @media (min-width: 1024px) {
+      .image-socials a {
+        position: relative;
+        left: -1.2cm;
+      }
+    }
+</style>
+
 </head>
 <body>
-  <!-- =============== HEADER (kept exactly like your original markup) =============== -->
   <header>
     <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false"><i id="menuIco" class="fa-solid fa-bars"></i></button>
-
-    <!-- If you have an image logo, keep it inside .logo (we increase only the inner img size above) -->
-    <div class="logo" id="logo"><img src="logo.png" alt="Abhinand logo" style="display:none">Abhinand</div>
+    <div class="logo" id="logo">Abhinand</div>
 
     <nav id="mainNav" aria-label="Main navigation">
       <a href="#intro">HOME</a>
@@ -281,20 +445,16 @@
     </div>
   </header>
 
-  <!-- =============== HERO (scoped as .home-hero) =============== -->
-  <section id="intro" class="home-hero" aria-labelledby="introTitle">
+  <!-- HERO -->
+  <section id="intro">
     <div class="section-inner hero" id="heroSection">
       <div class="hero-left">
         <div class="content">
           <div class="kicker anim">HELLO</div>
           <h1 class="headline anim">I'm Abhinand Babu\.................\...........</h1>
-          <div class="headline-underline anim" aria-hidden="true"></div>
-
-          <p class="anim" style="margin-top:16px;max-width:54ch;opacity:.92">
-            B.Tech Computer Science Engineer with a strong foundation in software development and web technologies.
-          </p>
-
-          <div class="hero-buttons anim" style="margin-top:18px">
+          <p class="anim" style="margin-top:16px;max-width:54ch;opacity:.92"> B.Tech Computer Science Engineer with a strong foundation in software development and web
+ technologies.</p>
+          <div class="hero-buttons anim">
             <button id="moreBtn" type="button" class="btn primary">MORE ABOUT ME</button>
             <button id="contactBtn" type="button" class="btn">GET IN TOUCH</button>
           </div>
@@ -302,92 +462,44 @@
       </div>
 
       <div class="hero-right">
-        <!-- socials -->
-        <div class="image-socials" role="list" aria-label="Social links">
-          <a href="#" id="email-link" title="Email" onclick="openGmailCompose(event)" class="social-link" role="listitem" aria-label="Email">
-            <span class="tile" aria-hidden="true"></span><i class="fa-solid fa-envelope"></i>
-          </a>
+        <img id="heroImgTag" class="hero-img" alt="Hero image" src="" />
+        <div id="heroPlaceholder" class="hero-placeholder" aria-hidden="true"></div>
 
-          <a href="https://github.com/Abhinand2502" target="_blank" rel="noopener noreferrer" title="GitHub" class="social-link" role="listitem" aria-label="GitHub">
-            <span class="tile" aria-hidden="true"></span><i class="fa-brands fa-github"></i>
-          </a>
-
-          <a href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="social-link" role="listitem" aria-label="LinkedIn">
-            <span class="tile" aria-hidden="true"></span><i class="fa-brands fa-linkedin"></i>
-          </a>
-
-          <a href="https://instagram.com/_abhinand_babu" target="_blank" rel="noopener noreferrer" title="Instagram" class="social-link" role="listitem" aria-label="Instagram">
-            <span class="tile" aria-hidden="true"></span><i class="fa-brands fa-instagram"></i>
-          </a>
+        <!-- socials: TOP CENTER icons-only -->
+        <div class="image-socials" aria-hidden="false">
+           <!-- Email anchor -->
+     <!-- move this OUT of .image-socials and place it as a direct child of .hero-right -->
+<a href="#"
+   id="email-link"
+   title="Email"
+   onclick="openGmailCompose(event)"
+   role="listitem"
+   class="social-link">
+  <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+  <span class="sr-only">Email</span>
+</a>
+<p>&nbsp;</p>
+      <a href="https://github.com/Abhinand2502" target="_blank" rel="noopener noreferrer" title="GitHub" class="social-link" role="listitem">
+        <i class="fa-brands fa-github" aria-hidden="true"></i>
+        <span class="sr-only">GitHub</span>
+      </a>
+<p>&nbsp;</p>
+      <a href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="social-link" role="listitem">
+        <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
+        <span class="sr-only">LinkedIn</span>
+      </a>
+<p>&nbsp;</p>
+      <a href="https://instagram.com/_abhinand_babu" target="_blank" rel="noopener noreferrer" title="Instagram" class="social-link" role="listitem">
+        <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+        <span class="sr-only">Instagram</span>
+      </a>
         </div>
 
-        <!-- image wrapper with thin cyan rim -->
-        <div class="hero-img-outer" aria-hidden="false">
-          <!-- replace hero.jpg with your image -->
-          <img id="heroImgTag" class="hero-img-inner" alt="Hero image" src="hero.jpg" />
-        </div>
+        
       </div>
     </div>
   </section>
 
-  <script>
-    /* ===== Mobile nav (hamburger) fix =====
-       This code:
-       - runs after DOM ready,
-       - toggles nav.open and aria-expanded,
-       - prevents the header/button from being occluded by other elements,
-       - also closes nav when clicking outside or pressing Escape.
-       It does NOT modify your header DOM or theme code.
-    */
-    (function () {
-      function onReady(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
-
-      onReady(function(){
-        const menuBtn = document.getElementById('menuBtn');
-        const nav = document.getElementById('mainNav');
-
-        if(!menuBtn || !nav) return;
-
-        // ensure button is accessible and visible
-        menuBtn.setAttribute('aria-controls', 'mainNav');
-
-        function toggleMenu(){
-          const isOpen = nav.classList.toggle('open');
-          menuBtn.setAttribute('aria-expanded', String(isOpen));
-          // Add small body class to optionally lock scroll if you want
-          if(isOpen) document.documentElement.classList.add('nav-open'); else document.documentElement.classList.remove('nav-open');
-        }
-
-        menuBtn.addEventListener('click', function(e){
-          e.stopPropagation();
-          toggleMenu();
-        });
-
-        // close nav when clicking outside on mobile
-        document.addEventListener('click', function(e){
-          if (!nav.classList.contains('open')) return;
-          const clickInsideNav = nav.contains(e.target) || menuBtn.contains(e.target);
-          if (!clickInsideNav) { nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); document.documentElement.classList.remove('nav-open'); }
-        });
-
-        // close with Escape
-        document.addEventListener('keydown', function(e){
-          if(e.key === 'Escape' && nav.classList.contains('open')){
-            nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); document.documentElement.classList.remove('nav-open');
-          }
-        });
-
-        // ensure header/menu button remains on top visually
-        menuBtn.style.zIndex = 1400;
-      });
-
-      // mailto helper
-      window.openGmailCompose = function(ev){
-        ev && ev.preventDefault && ev.preventDefault();
-        window.location.href = "mailto:your-email@example.com"; // replace with your address
-      };
-    }());
-  </script>
 
 
 
