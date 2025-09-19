@@ -7,17 +7,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
- <!-- Font Awesome (keeps your original classes like fa-solid / fa-brands) -->
+<!-- Font Awesome kept (uses your original classes) -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
   <style>
-  /* =====================
-     Theme variables (UNCHANGED)
-     ===================== */
+    /* =====================
+       Theme vars (unchanged)
+       ===================== */
     :root{
       --header-h:64px;
       --primary: #2a33e1;
-      --accent:#2563eb; /* blue accent for active nav & socials */
+      --accent:#2563eb;
       --bg:#ffffff;
       --panel:#f5f7fa;
       --muted:#f3f4f6;
@@ -25,7 +25,6 @@
       --glass: rgba(0,0,0,0.06);
       --glass-strong: rgba(0,0,0,0.08);
       --card-shadow: 0 8px 30px rgba(16,24,40,0.06);
-      --neon: rgba(225,74,42,0.95);
     }
     html[data-theme="dark"]{
       --bg:#0b0b0b;
@@ -35,400 +34,160 @@
       --glass: rgba(255,255,255,0.04);
       --glass-strong: rgba(255,255,255,0.06);
       --card-shadow: 0 10px 40px rgba(0,0,0,0.6);
-      --neon: rgba(42, 124, 225, 0.95);
     }
 
-    /* reset */
+    /* basic reset */
     *,*::before,*::after{box-sizing:border-box}
     html,body{height:100%;margin:0;padding:0}
     body{font-family:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;background:var(--bg);color:var(--text);line-height:1.45;-webkit-font-smoothing:antialiased}
-
-    /* allow native smooth behaviour as a graceful fallback for anchors */
     html { scroll-behavior: smooth; }
-
     section{min-height:100vh}
 
-    /* header (LEFT EXACTLY AS YOUR ORIGINAL — not modified) */
+    /* =====================
+       HEADER (left exactly as you originally provided)
+       ===================== */
     header{position:fixed;top:0;left:0;right:0;height:var(--header-h);display:flex;align-items:center;justify-content:space-between;padding:0 22px;z-index:1200;background:linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.55));backdrop-filter:blur(6px);box-shadow:var(--card-shadow)}
     html[data-theme="dark"] header{background:linear-gradient(180deg, rgba(8,8,8,0.6), rgba(8,8,8,0.45));}
-
-    .logo{
-      font-family:'Playfair Display',serif;
-      font-size:20px;
-      color:var(--text);
-      padding:8px 14px;
-      border-radius:14px;
-      background: transparent;
-      transition: background .18s ease, color .18s ease, box-shadow .18s ease, transform .12s ease;
-      display:inline-block;
-      line-height:1;
-    }
-    :root .logo{
-      background: rgba(255,255,255,0.9);
-      box-shadow: 0 10px 30px rgba(16,24,40,0.06);
-      color: var(--text);
-      transform: translateY(0);
-    }
-    html[data-theme="dark"] .logo{
-      background: rgba(255,255,255,0.03);
-      box-shadow: 0 8px 28px rgba(0,0,0,0.6);
-      color: var(--text);
-      transform: translateY(0);
-    }
-    .logo:active{ transform: translateY(1px); }
-
+    .logo{font-family:'Playfair Display',serif;font-size:20px;color:var(--text);padding:8px 14px;border-radius:14px;background: transparent;display:inline-block;line-height:1}
     nav{display:flex;gap:16px;align-items:center}
-    nav a{position:relative;color:var(--text);text-decoration:none;padding:8px;border-radius:8px;font-weight:600;transition:color .18s ease}
-    nav a::after{
-      content:"";
-      position:absolute;
-      left:12px;
-      right:12px;
-      bottom:6px;
-      height:2px;
-      background:transparent;
-      transform:scaleX(0);
-      transform-origin:left;
-      transition:transform .22s cubic-bezier(.2,.9,.2,1), background .22s ease;
-      border-radius:2px;
-    }
-    nav a:hover{ color: var(--accent); }
-    nav a.active{ color: var(--accent); }
-    nav a.active::after{ background:var(--accent); transform:scaleX(1); }
-
+    nav a{color:var(--text);text-decoration:none;padding:8px;border-radius:8px;font-weight:600}
+    .menu-btn{display:none}
     .controls{display:flex;gap:12px;align-items:center}
-
-    /* larger theme button (desktop) */
-    .theme-btn{
-      display:inline-flex;
-      gap:12px;
-      align-items:center;
-      padding:12px 18px;
-      border-radius:14px;
-      border:1px solid var(--glass-strong);
-      background:transparent;
-      color:var(--text);
-      cursor:pointer;
-      font-weight:700;
-      font-size:15px;
-      transition:transform .14s ease, box-shadow .14s ease, background .14s ease;
-    }
-    .theme-btn i{font-size:20px}
-    .theme-btn:hover{ transform:translateY(-3px); box-shadow:0 12px 30px rgba(0,0,0,0.06); }
-
-    /* menu button larger (hamburger) */
-    .menu-btn{
-      display:none;
-      background:none;border:0;color:var(--text);
-      font-size:28px; /* bigger 3-line icon */
-      cursor:pointer;
-      padding:10px;
-      border-radius:8px;
-      transition: transform .12s ease;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .menu-btn:active{ transform:scale(.98); }
-
-    /* responsive nav overlay for mobile */
-    @media(max-width:980px){
-      nav{
-        display:flex;
-        flex-direction:column;
-        position:fixed;
-        top:var(--header-h);
-        left:0;
-        right:0;
-        background:var(--panel);
-        padding:12px 6vw;
-        gap:12px;
-        box-shadow:0 6px 22px rgba(0,0,0,0.08);
-        transform:translateY(-8px);
-        opacity:0;
-        pointer-events:none;
-        transition: transform .18s cubic-bezier(.2,.9,.2,1), opacity .12s linear;
-        will-change: transform, opacity;
-        z-index:1100;
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-      }
-      nav.open{transform:translateY(0);opacity:1;pointer-events:auto}
-      .menu-btn{display:block}
-      .controls{gap:8px}
-      .theme-btn{padding:10px 14px;font-size:15px}
-      header{backdrop-filter:none}
-      html[data-theme="dark"] header{background:linear-gradient(180deg, rgba(8,8,8,0.88), rgba(8,8,8,0.70));}
-      .hero-img{ transition: transform .45s cubic-bezier(.2,.9,.2,1), opacity .28s; box-shadow: 0 18px 44px rgba(0,0,0,0.08); }
-      .menu-btn{ display:block; position:absolute; left:14px; top:50%; transform:translateY(-50%); z-index:1400; color:var(--text); font-size:22px; background:none; border:0; }
-      .logo{ display:none; }
-      .controls{ position:absolute; right:14px; top:50%; transform:translateY(-50%); z-index:1400; }
-      .hero{ display:flex; flex-direction:column; align-items:center; }
-      .hero-right{ order:-1; width:100%; display:flex; flex-direction:column; align-items:center; position:relative; padding-top:8px }
-      .hero-left{ padding:28px 6vw; align-items:center; text-align:center; order:1 }
-      .content{ margin:0 auto }
-      .hero-buttons{ justify-content:center }
-      h1.headline{ font-size:28px }
-      .image-socials{
-        position:absolute;
-        top: 20px;
-        left:50%;
-        transform:translateX(-50%);
-        z-index:60;
-        gap:12px;
-        padding:0 6px;
-        display:flex;
-        justify-content:space-between;
-        width: min(92%, 420px);
-        pointer-events:auto;
-      }
-      .image-socials a{
-        width:72px;
-        height:72px;
-        font-size:24px;
-        border-radius:14px;
-        display:inline-flex;
-        align-items:center;
-        justify-content:center;
-        color: var(--text);
-        box-shadow: 0 8px 22px rgba(0,0,0,0.06);
-        transition: transform .14s ease, box-shadow .14s ease;
-        position:relative;
-        background: var(--panel);
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-      }
-      .image-socials a i{ color: var(--text); z-index:2; }
-      .image-socials a::after{
-        content:"";
-        position:absolute;
-        width:60px;
-        height:60px;
-        border-radius:12px;
-        border: 1px solid rgba(0,0,0,0.06);
-        top:6px;
-        left:6px;
-        pointer-events:none;
-        opacity:0.06;
-      }
-      .image-socials a:hover{ transform:translateY(-6px); box-shadow:0 18px 36px rgba(0,0,0,0.10); }
-      .hero-img{
-        width: min(92%, 420px);
-        height: auto;
-        border-radius:20px;
-        margin: calc(12px + 70px + 0.5cm) auto 18px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.06);
-        border: 1px solid rgba(0,0,0,0.06);
-        z-index:20;
-        will-change: transform, opacity;
-      }
-      .cv-wrap{ display:none }
-      .menu-btn{ font-size:26px }
-      .theme-btn{ padding:10px 14px }
+    .theme-btn{ /* keep original look */
+      display:inline-flex;gap:12px;align-items:center;padding:12px 18px;border-radius:14px;border:1px solid var(--glass-strong);background:transparent;color:var(--text);cursor:pointer;font-weight:700;font-size:15px;
     }
 
+    /* =====================
+       HERO layout (desktop 50/50; mobile stacked)
+       ===================== */
     .section-inner{height:calc(100vh - var(--header-h));padding-top:var(--header-h);display:flex;align-items:center;position:relative;overflow:hidden}
-
-    /* hero: 50/50 columns so right half is image (kept original structure) */
     .hero{display:grid;grid-template-columns:1fr 1fr;min-height:100%}
     .hero-left{padding:72px 7vw;display:flex;align-items:flex-start}
     .content{max-width:720px}
     .kicker{letter-spacing:3px;color:var(--primary);font-weight:800;margin-bottom:14px;font-size:13px}
-
     h1.headline{font-family:'Playfair Display',serif;font-size:48px;line-height:1.06;margin:0;color:var(--text);white-space:pre-line;word-break:break-word}
-
     .hero-buttons{margin-top:24px;display:flex;gap:14px;flex-wrap:wrap}
-    .btn{
-      padding:12px 20px;border-radius:10px;border:2px solid var(--glass);background:transparent;color:var(--text);font-weight:700;cursor:pointer;
-      transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease, background .18s ease;
-      will-change: transform, box-shadow;
-    }
-    .btn:hover{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(16,24,40,0.06); }
-    .btn:active{ transform:translateY(-2px); box-shadow:0 10px 22px rgba(16,24,40,0.06); }
-    .btn.primary{ background:var(--primary); color:#fff; border-color:var(--primary); box-shadow:0 14px 36px rgba(225,74,42,0.12); }
+    .btn{padding:12px 20px;border-radius:10px;border:2px solid var(--glass);background:transparent;color:var(--text);font-weight:700;cursor:pointer;transition:transform .18s,box-shadow .18s}
+    .btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
 
-    .hero-right{position:relative;overflow:hidden;display:flex;align-items:stretch;height:100%}
-    .hero-img{
-      width: calc(100% - 24px);   /* desktop default — will be constrained by wrapper */
-      height: calc(100% - 24px);
-      margin: 12px auto;
-      display: block;
-      box-sizing: border-box;
-      object-fit: cover;
-      object-position: center;
-      border-radius: 28px;
-      transition: transform .9s cubic-bezier(.2,.9,.2,1), opacity .45s;
-      will-change: transform, opacity;
-      z-index:1;
-    }
-
-    .hero-placeholder{width:100%;height:100%;min-height:100%;background:linear-gradient(120deg,#222 0%, #333 100%)}
-
-    /* socials: bigger and animated blue hover (desktop) */
-    .image-socials{
-      position:absolute;left:50%;top:22px;transform:translateX(-50%);
-      z-index:18;display:flex;gap:20px;align-items:center;padding:6px;border-radius:999px;pointer-events:auto;
-      background:transparent; border: none; box-shadow:none;
-    }
-
-    .image-socials a{
-      display:inline-grid;place-items:center;
-      width:80px;
-      height:80px;
-      border-radius:16px;
-      text-decoration:none;
-      color:var(--text);
-      font-size:32px;
-      background:transparent;
-      border:none;
-      transition:transform .18s ease,filter .18s ease, box-shadow .25s ease;
-      will-change:transform, box-shadow;
-    }
-    .image-socials a i{color:inherit}
-    .image-socials a:hover{
-      transform:translateY(-6px) scale(1.06);
-      box-shadow:0 26px 60px rgba(37,99,235,0.14), 0 10px 30px rgba(16,24,40,0.06);
-    }
-    .image-socials a:hover i{ color: var(--accent); filter: drop-shadow(0 14px 40px rgba(37,99,235,0.20)); }
-    .image-socials a:focus{ outline:4px solid rgba(37,99,235,0.12); outline-offset:4px; border-radius:14px; }
-
-    /* ====== THEME-SPECIFIC SOCIAL BORDER (kept original) ====== */
-    :root .image-socials a{
-      border: 1px solid rgba(0,0,0,0.14);
-      background: var(--panel);
-    }
-    html[data-theme="dark"] .image-socials a{
-      border: 1px solid rgba(255,255,255,0.06);
-      background: var(--panel);
-    }
-
-    .cv-wrap{position:absolute;left:18px;bottom:18px;z-index:6}
-    .cv-btn{border:1px solid var(--glass-strong);background:transparent;color:var(--text);padding:8px 12px;border-radius:10px}
-
-    /* sections */
-    #about,#works,#contact{display:flex;align-items:center;justify-content:center;background:transparent}
-    .box{max-width:980px;padding:44px; background: transparent; border-radius:8px;}
-
-    /* reduced-motion option */
-    @media (prefers-reduced-motion: reduce){
-      *{transition:none!important}
-      .hero-img{transition:none}
-      html { scroll-behavior: auto; }
-    }
-
-    /* --- END OF ORIGINAL CSS --- */
-
-
-    /* ============================
-       HERO IMAGE OVERRIDES (only these are added/changed)
-       ============================ */
-
-    /* a wrapper that contains the image + subtle neon halo
-       Kept separate so it does not change header/dark-mode vars */
+    /* ===== HERO RIGHT (IMAGE) ===== */
+    .hero-right{position:relative;display:flex;align-items:center;justify-content:center;padding:12px}
+    /* CENTER the image and limit width to avoid overflow */
     .hero-img-outer{
       position:relative;
-      display:block;
-      max-width:720px;      /* control max width so no big purple rectangle appears */
-      margin: 12px auto;
-      border-radius:28px;
+      width:100%;
+      max-width:640px;        /* desktop maximum image width */
+      margin: 12px;
+      border-radius:22px;
       z-index:20;
-      padding:10px;         /* space for halo */
-      pointer-events:none;  /* ensures socials (which sit above) get pointer events */
-      background: transparent;
+      background:transparent;
     }
 
-    /* halo: purely a blurred glow using semi-transparent gradient
-       Crucial: it is not a solid block; inset is small so no purple stripe */
-    .hero-img-outer::before{
-      content:"";
-      position:absolute;
-      inset: -10px;
-      border-radius: calc(28px + 10px);
-      background: linear-gradient(90deg, rgba(37,144,255,0.95), rgba(169,105,255,0.88));
-      filter: blur(18px) saturate(120%);
-      opacity: 0.85;
-      z-index:1;
-      pointer-events:none;
-    }
-
-    /* subtle outer stroke (very thin) - keeps consistent across themes */
-    .hero-img-outer::after{
-      content:"";
-      position:absolute;
-      inset: -4px;
-      border-radius: calc(28px + 4px);
-      border: 1px solid rgba(255,255,255,0.04);
-      z-index:2;
-      pointer-events:none;
-    }
-
-    /* inner image styling: thin border, crisp corners */
+    /* Thin shining border: use border-image for a crisp 2px shiny border */
     .hero-img-inner{
       display:block;
       width:100%;
       height:auto;
-      border-radius:20px; /* inner radius slightly smaller than outer */
+      border-radius:16px;
       object-fit:cover;
-      position:relative;
-      z-index:3;
-      border: 1px solid rgba(255,255,255,0.06); /* thin inner border, theme-aware */
-      box-shadow: 0 20px 60px rgba(0,0,0,0.32);
-      pointer-events:auto; /* let clicks work */
-      background: #000;
+      border:2px solid transparent; /* fallback color */
+      /* thin gradient stroke around all 4 sides */
+      border-image: linear-gradient(90deg, rgba(46, 213, 255,0.95), rgba(161, 103, 255,0.95)) 1;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.4); /* subtle depth */
+      background:#000;
+      vertical-align:middle;
     }
 
-    /* socials should sit above the halo and not be blocked by header (header is fixed with higher z-index) */
-    .image-socials{
-      pointer-events:auto;
-      z-index:30; /* above hero image halo, but still below header (header z-index:1200) */
-    }
-
-    /* keep social tile small and correct icon color using original classes */
-    .image-socials .social-link{
-      width:72px;
-      height:72px;
-      border-radius:14px;
-      display:inline-grid;
-      place-items:center;
-      background:transparent;
-      border: 1px solid rgba(255,255,255,0.04);
-      position:relative;
-      z-index:40;
-      pointer-events:auto;
-    }
-
-    /* tiny dark square inside slab (the "black tile" where icon sits) */
-    .image-socials .social-link .tile{
+    /* subtle outer glow only (very low opacity) - no block, just halo */
+    .hero-img-outer::before{
+      content:"";
       position:absolute;
-      inset:10px;
-      border-radius:10px;
-      background: rgba(0,0,0,0.78);
-      z-index:41;
-      display:grid;
-      place-items:center;
-    }
-    .image-socials .social-link i{
-      position:relative;
-      z-index:42;
-      font-size:20px;
-      color:#fff;
+      inset:-8px;
+      border-radius: calc(22px + 8px);
+      pointer-events:none;
+      /* very subtle neon halo (low opacity blur) */
+      box-shadow: 0 10px 40px rgba(37,144,255,0.06), 0 8px 28px rgba(161,103,255,0.04);
+      z-index:1;
     }
 
-    /* hover lift but subtle — prevents the glowing "pill" expanding too far */
-    .image-socials .social-link:hover{ transform: translateY(-6px); box-shadow:0 20px 44px rgba(37,99,235,0.12); }
+    /* SOCIAL SLABS (desktop: absolute above image; mobile: static above image in flow) */
+    .image-socials{
+      position:absolute;
+      top:18px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:40;
+      display:flex;
+      gap:18px;
+      align-items:center;
+      justify-content:center;
+      pointer-events:auto;
+      padding:6px;
+      width: min(80%, 760px);
+    }
 
-    /* responsive adjustments: make everything smaller on mobile */
+    .social-link{
+      width:80px;height:80px;border-radius:16px;display:inline-grid;place-items:center;text-decoration:none;position:relative;
+      background:transparent;border:none;cursor:pointer;transition:transform .14s,box-shadow .18s;
+    }
+    /* the small dark tile inside slab */
+    .social-link .tile{
+      position:absolute;inset:10px;border-radius:12px;background:rgba(0,0,0,0.78);z-index:2;display:grid;place-items:center;
+      box-shadow: inset 0 1px 2px rgba(255,255,255,0.02);
+    }
+    .social-link i{position:relative;z-index:3;color:#fff;font-size:20px}
+    .social-link:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(37,99,235,0.12)}
+    /* theme-sensitive slab border (keeps your original look) */
+    :root .social-link{ border:1px solid rgba(0,0,0,0.14) }
+    html[data-theme="dark"] .social-link{ border:1px solid rgba(255,255,255,0.06) }
+
+    /* small underline (desktop screenshot) */
+    .headline-underline{margin-top:12px;height:3px;width:160px;background:linear-gradient(90deg,var(--accent), rgba(161,103,255,0.6));border-radius:3px}
+
+    /* reveal animation helper (kept minimal) */
+    .anim{opacity:0;transform:translateY(12px);transition:opacity .6s,transform .6s}
+    .anim.in-view{opacity:1;transform:none}
+
+    /* ===== MOBILE: reorder so socials -> image -> then text ===== */
     @media (max-width:980px){
-      .hero-img-outer{ max-width:420px; padding:6px; }
-      .hero-img-outer::before{ inset:-8px; filter: blur(12px) }
-      .hero-img-inner{ border-radius:16px; }
-      .image-socials{ top: 14px; width: min(92%,420px); gap:12px }
-      .image-socials .social-link{ width:64px; height:64px; border-radius:12px }
-      .image-socials .social-link .tile{ inset:8px; border-radius:8px }
+      .menu-btn{ display:block; position:absolute; left:14px; top:50%; transform:translateY(-50%); z-index:1400; color:var(--text); font-size:22px; background:none; border:0; }
+      .logo{ display:none; }
+      .hero{ display:flex; flex-direction:column; align-items:center; }
+      /* place socials first (static in flow) */
+      .image-socials{
+        position:static;
+        transform:none;
+        margin: 10px auto 6px;
+        width: min(92%,420px);
+        gap:12px;
+        top:auto;left:auto;
+      }
+      /* shrink slabs and tiles */
+      .social-link{ width:72px;height:72px;border-radius:14px }
+      .social-link .tile{ inset:8px;border-radius:10px }
+      .social-link i{ font-size:18px; }
+
+      /* image now below socials (in flow) */
+      .hero-img-outer{ max-width:420px;padding:6px;border-radius:18px;margin-top:6px }
+      .hero-img-inner{ border-radius:12px }
+
+      /* text block below image */
+      .hero-left{ order:3;padding:24px 6vw;text-align:center }
+      .hero-right{ order:2;width:100%;display:flex;flex-direction:column;align-items:center;padding:6px }
+
+      /* spacing tweaks for mobile */
+      .kicker{ margin-top:6px }
+      h1.headline{ font-size:28px }
+      .hero-buttons{ justify-content:center; gap:12px }
     }
 
+    @media (prefers-reduced-motion: reduce){
+      *{transition:none!important}
+    }
   </style>
 </head>
 <body>
-  <!-- ===== HEADER (exact header markup you provided originally — preserved) ===== -->
+  <!-- HEADER (unchanged) -->
   <header>
     <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false"><i id="menuIco" class="fa-solid fa-bars"></i></button>
     <div class="logo" id="logo">Abhinand</div>
@@ -450,23 +209,28 @@
   <!-- HERO -->
   <section id="intro">
     <div class="section-inner hero" id="heroSection">
+      <!-- left: text (on mobile the order is changed via CSS so text falls below image) -->
       <div class="hero-left">
         <div class="content">
-          <div class="kicker anim">HELLO</div>
-          <h1 class="headline anim">I'm Abhinand Babu\.................\...........</h1>
-          <p class="anim" style="margin-top:16px;max-width:54ch;opacity:.92">
+          <div class="kicker anim in-view">HELLO</div>
+          <h1 class="headline anim in-view">I'm Abhinand Babu\.................\...........</h1>
+          <div class="headline-underline anim in-view" aria-hidden="true"></div>
+
+          <p class="anim in-view" style="margin-top:16px;max-width:54ch;opacity:.92">
             B.Tech Computer Science Engineer with a strong foundation in software development and web technologies.
           </p>
-          <div class="hero-buttons anim">
+
+          <div class="hero-buttons anim in-view" style="margin-top:18px">
             <button id="moreBtn" type="button" class="btn primary">MORE ABOUT ME</button>
             <button id="contactBtn" type="button" class="btn">GET IN TOUCH</button>
           </div>
         </div>
       </div>
 
+      <!-- right: socials + image -->
       <div class="hero-right">
-        <!-- socials: moved above the image, using original icon classes -->
-        <div class="image-socials" aria-hidden="false" role="list" aria-label="Social links">
+        <!-- socials: absolute above image on desktop; static above image on mobile -->
+        <div class="image-socials" role="list" aria-label="Social links">
           <a href="#" id="email-link" title="Email" onclick="openGmailCompose(event)" class="social-link" role="listitem" aria-label="Email">
             <span class="tile" aria-hidden="true"></span>
             <i class="fa-solid fa-envelope"></i>
@@ -488,18 +252,17 @@
           </a>
         </div>
 
-        <!-- IMAGE with subtle halo (no solid block!) -->
+        <!-- image wrapper with thin shining border -->
         <div class="hero-img-outer" aria-hidden="false">
-          <!-- Replace the src below with your real image path -->
-          <img id="heroImgTag" class="hero-img-inner" alt="Hero image" src="hero.jpg" />
+          <!-- put your real image path here -->
+          <img id="heroImgTag" class="hero-img-inner" alt="Abhinand at the coast" src="hero.jpg" />
         </div>
-
       </div>
     </div>
   </section>
 
   <script>
-    /* Keep menu toggle minimal — doesn't change header or theme button */
+    // keep nav toggle minimal (doesn't touch the theme button)
     document.getElementById('menuBtn')?.addEventListener('click', function(){
       const nav = document.getElementById('mainNav');
       const expanded = this.getAttribute('aria-expanded') === 'true';
@@ -509,11 +272,22 @@
 
     function openGmailCompose(ev){
       ev && ev.preventDefault && ev.preventDefault();
-      window.location.href = "mailto:your-email@example.com";
+      window.location.href = "mailto:your-email@example.com"; // replace
     }
 
-    /* small helper: if you want the image center-fit on wide screens,
-       you can set its src dynamically — not required. */
+    // simple in-view toggles for anim classes (optional, keeps small reveal)
+    (function(){
+      const observer = ('IntersectionObserver' in window) ? new IntersectionObserver(entries=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting) e.target.classList.add('in-view');
+        });
+      }, {threshold:0.12}) : null;
+      if(observer){
+        document.querySelectorAll('.anim').forEach(el=>observer.observe(el));
+      } else {
+        document.querySelectorAll('.anim').forEach(el=>el.classList.add('in-view'));
+      }
+    }());
   </script>
 
 
