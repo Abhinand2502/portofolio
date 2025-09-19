@@ -6,6 +6,7 @@
   <title>Abhinand — Portfolio</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
   /* =====================
      Theme variables
@@ -22,13 +23,7 @@
       --glass-strong: rgba(0,0,0,0.08);
       --card-shadow: 0 8px 30px rgba(16,24,40,0.06);
       --neon: rgba(225,74,42,0.95);
-
-      /* pink border/glow variables */
-      --pink-border: rgba(255,105,180,0.95);
-      --pink-glow-strong: rgba(255,105,180,0.40);
-      --pink-glow-soft: rgba(255,105,180,0.22);
     }
-
     html[data-theme="dark"]{
       --bg:#0b0b0b;
       --panel:#0f0f12;
@@ -38,11 +33,6 @@
       --glass-strong: rgba(255,255,255,0.06);
       --card-shadow: 0 10px 40px rgba(0,0,0,0.6);
       --neon: rgba(42, 124, 225, 0.95);
-
-      /* slightly cooler pink for dark mode so it sits nicely */
-      --pink-border: rgba(255,105,180,0.95);
-      --pink-glow-strong: rgba(255,105,180,0.30);
-      --pink-glow-soft: rgba(255,105,180,0.14);
     }
 
     /* reset */
@@ -225,7 +215,7 @@
       }
       .image-socials a i{ color: var(--text); z-index:2; }
 
-      /* inner stroke — made thinner and subtler */
+      /* inner stroke — made thinner and subtler, respect theme */
       .image-socials a::after{
         content:"";
         position:absolute;
@@ -282,12 +272,11 @@
 
     .hero-right{position:relative;overflow:hidden;display:flex;align-items:stretch;height:100%}
     .hero-img{
-      /* layout-friendly default: fill the hero-right while preserving aspect ratio */
-      display:block;
-      width: min(520px, calc(100% - 24px)); /* desktop-friendly maximum */
-      max-width: 92%;
-      height: auto;
+      /* slightly smaller so there's a little space around the image */
+      width: calc(100% - 24px);   /* 12px gap each side */
+      height: calc(100% - 24px);  /* 12px gap top & bottom */
       margin: 12px auto;          /* centers horizontally and creates the gap */
+      display: block;
       box-sizing: border-box;
 
       object-fit: cover;
@@ -296,13 +285,12 @@
       /* curved corners */
       border-radius: 28px;
 
-      transition: transform .9s cubic-bezier(.2,.9,.2,1), opacity .45s, box-shadow .25s ease;
+      transition: transform .9s cubic-bezier(.2,.9,.2,1), opacity .45s;
       will-change: transform, opacity;
       z-index:1;
-      align-self: center;
     }
 
-    /* DESKTOP ONLY: move whole image 2.5cm left (keeps your existing intent) */
+    /* DESKTOP ONLY: move whole image 2.5cm left */
     @media (min-width: 981px) {
       .hero-img {
         margin-left: calc(12px - 2.5cm);
@@ -339,7 +327,10 @@
     .image-socials a:hover i{ color: var(--accent); filter: drop-shadow(0 14px 40px rgba(37,99,235,0.20)); }
     .image-socials a:focus{ outline:4px solid rgba(37,99,235,0.12); outline-offset:4px; border-radius:14px; }
 
-    /* ====== THEME-SPECIFIC SOCIAL BORDER (base rules, overridden below) ====== */
+    /* ====== THEME-SPECIFIC SOCIAL BORDER ======
+       Light mode: stronger black border
+       Dark mode: subtle light border (keeps behaviour unchanged)
+    ================================================== */
     :root .image-socials a{
       /* this will apply in light mode */
       border: 1px solid rgba(0,0,0,0.14);
@@ -470,67 +461,7 @@
         left: -1.2cm;
       }
     }
-
-    /* =======================================================
-       OVERRIDES: Pink thin glowing border + improved image fit
-       (placed last so it overrides earlier border rules)
-       ======================================================= */
-
-    /* make border + glow thin and consistent for hero image */
-    .hero-img {
-      /* thin, modern pink border and subtle glow */
-      border: 1.5px solid var(--pink-border);
-      box-shadow: 0 0 8px var(--pink-glow-strong), 0 0 18px var(--pink-glow-soft);
-    }
-
-    /* social slabs: thin pink border + soft glow */
-    .image-socials a {
-      border: 1.5px solid var(--pink-border);
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.02));
-      box-shadow: 0 0 6px var(--pink-glow-strong), 0 0 14px var(--pink-glow-soft);
-    }
-
-    /* stronger glow on hover for both */
-    .image-socials a:hover,
-    .hero-img:hover {
-      box-shadow: 0 0 14px var(--pink-glow-strong), 0 0 28px var(--pink-glow-soft);
-      transform: translateZ(0) scale(1.02);
-    }
-
-    /* ensure hero image respects aspect ratio and fits both columns nicely */
-    @media (min-width: 981px) {
-      .hero-img {
-        width: min(520px, calc(50vw + 60px)); /* try to occupy the right column nicely without overflow */
-        max-width: 86%;
-        height: auto;
-      }
-    }
-
-    /* mobile-specific fit improvements */
-    @media (max-width: 980px) {
-      .hero-img {
-        width: min(420px, 92%);
-        max-width: 92%;
-        margin: calc(12px + 70px + 0.5cm) auto 18px; /* preserve your requested downward shift */
-        border-radius: 18px;
-      }
-
-      /* ensure social slabs match the pink style on mobile too */
-      .image-socials a{
-        border: 1.2px solid var(--pink-border);
-        box-shadow: 0 0 6px var(--pink-glow-strong), 0 0 12px var(--pink-glow-soft);
-      }
-    }
-
-    /* Accessibility: slightly stronger focus indicator matching the pink theme */
-    .image-socials a:focus {
-      outline: 3px solid rgba(255,105,180,0.16);
-      outline-offset: 4px;
-      border-radius: 12px;
-    }
-
 </style>
-
 
 </head>
 <body>
