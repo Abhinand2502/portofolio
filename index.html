@@ -424,83 +424,52 @@
       }
     }
 
+    /* === Override: slightly thicker blue neon rim for the hero image ===
+   Paste this at the END of your existing <style> so it takes priority. */
 
-    /* ---------- Neon-rim image (scoped) ----------
-   Paste this AFTER any old .hero-img rules or replace them entirely.
-   Uses border-image for a crisp 2px neon rim + subtle glow.
-   Safe for both desktop and mobile (5"–9" phones). */
+#intro .hero-img,
+.hero-img {
+  display: block !important;
+  width: 100% !important;
+  max-width: 640px !important;
+  height: auto !important;
+  margin: 12px auto !important;
+  object-fit: cover !important;
+  object-position: center !important;
 
-.home-hero .hero-img {
-  display: block;
-  width: 100%;
-  max-width: 640px;                 /* desktop cap */
-  height: auto;
-  margin: 12px auto;                /* center the image */
-  object-fit: cover;
-  object-position: center;
-  border-radius: 12px;              /* inner corner radius (tweakable) */
+  /* increased rim thickness (3px) with cyan→blue→violet gradient */
+  border: 3px solid transparent !important;
+  -webkit-border-image: linear-gradient(90deg, #2EE1FF 0%, #2AA8FF 50%, #6A5CFF 100%) 1 !important;
+  border-image: linear-gradient(90deg, #2EE1FF 0%, #2AA8FF 50%, #6A5CFF 100%) 1 !important;
 
-  /* Thin 2px shining neon rim (keeps edges crisp) */
-  border: 2px solid transparent;
-  border-image: linear-gradient(90deg,
-                  rgba(46,225,255,0.98) 0%,
-                  rgba(46,160,255,0.98) 45%,
-                  rgba(106,92,255,0.92) 100%) 1;
+  /* slightly less rounded than before so image doesn't look too circular */
+  border-radius: 16px !important;
 
-  /* soft glow outside rim (low opacity so no solid block) */
+  /* subtle glow outside the rim */
   box-shadow:
-    0 10px 30px rgba(16,24,40,0.35),              /* base drop shadow for depth */
-    0 6px 22px rgba(46,225,255,0.06),             /* cyan halo */
-    0 0 18px rgba(106,92,255,0.04);               /* violet tint for subtle gradient glow */
+    0 14px 40px rgba(16,24,40,0.30),
+    0 6px 22px rgba(46,225,255,0.06),
+    0 0 18px rgba(106,92,255,0.03) !important;
 
-  transition: transform .45s cubic-bezier(.2,.9,.2,1), box-shadow .28s ease, opacity .28s ease;
+  transition: transform .36s cubic-bezier(.2,.9,.2,1), box-shadow .28s ease, opacity .24s ease !important;
   will-change: transform, box-shadow, opacity;
-  z-index: 1;
+  z-index: 1 !important;
+  margin-left: 0 !important; /* remove any previous left-shift */
 }
 
-/* remove any desktop-only left-shift that caused overflow */
-@media (min-width: 981px) {
-  .home-hero .hero-img {
-    margin-left: 0;            /* override previous `margin-left: calc(12px - 2.5cm)` */
-  }
-}
-
-/* Mobile: ensure image fits many phone sizes and appears below header nicely */
+/* mobile: keep the thicker rim but slightly smaller overall image on phones */
 @media (max-width: 980px) {
-  .home-hero .hero-img {
-    width: min(92%, 420px);            /* fits most phones (5"–9") */
-    max-width: 420px;
-    margin: calc(12px + 12px) auto 18px; /* small top offset; header spacing handled elsewhere */
-    border-radius: 10px;               /* slightly smaller radius on phones */
-    box-shadow:
-      0 12px 36px rgba(16,24,40,0.28),
-      0 4px 14px rgba(46,225,255,0.05);
-    max-height: calc(60vh);            /* ensures the image won't become too tall on short phones */
+  #intro .hero-img,
+  .hero-img {
+    width: min(92%, 420px) !important;
+    max-width: 420px !important;
+    margin: calc(8px + var(--header-h)) auto 18px !important;
+    border-radius: 10px !important;
+    border: 3px solid transparent !important;
+    -webkit-border-image: linear-gradient(90deg, #2EE1FF 0%, #2AA8FF 50%, #6A5CFF 100%) 1 !important;
+    border-image: linear-gradient(90deg, #2EE1FF 0%, #2AA8FF 50%, #6A5CFF 100%) 1 !important;
+    max-height: calc(60vh) !important;
   }
-
-  /* If socials are absolutely positioned, ensure they don't overlap the fixed header:
-     this keeps the image and socials visible below the header when the page loads. */
-  .home-hero .image-socials {
-    top: initial;
-    position: static;
-    margin-top: calc(var(--header-h) * 0.1); /* small spacer; adjust if needed */
-  }
-}
-
-/* Optional: stronger hover glow on large screens (subtle) */
-@media (hover: hover) and (pointer: fine) {
-  .home-hero .hero-img:hover {
-    transform: translateY(-4px) scale(1.006);
-    box-shadow:
-      0 18px 46px rgba(16,24,40,0.36),
-      0 12px 36px rgba(46,225,255,0.10),
-      0 0 26px rgba(106,92,255,0.06);
-  }
-}
-
-/* Accessibility: reduce motion */
-@media (prefers-reduced-motion: reduce) {
-  .home-hero .hero-img { transition: none !important; transform: none !important; }
 }
 
 </style>
