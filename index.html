@@ -632,6 +632,30 @@
       .skills-grid { grid-template-columns: repeat(2, 1fr); }
       .stat-grid { grid-template-columns: repeat(2, 1fr); }
     }
+
+    /* ==== Pink shining border effect ==== */
+
+/* Hero image with thin glowing pink border */
+.hero-img {
+  border: 2px solid rgba(255, 20, 147, 0.8); /* thin pink line */
+  box-shadow: 0 0 10px rgba(255, 20, 147, 0.6),
+              0 0 20px rgba(255, 20, 147, 0.4);
+}
+
+/* Social logo slabs with pink glowing border */
+.image-socials a {
+  border: 2px solid rgba(255, 20, 147, 0.8); /* thin pink line */
+  box-shadow: 0 0 8px rgba(255, 20, 147, 0.5),
+              0 0 16px rgba(255, 20, 147, 0.3);
+}
+
+/* On hover: make glow stronger */
+.image-socials a:hover,
+.hero-img:hover {
+  box-shadow: 0 0 12px rgba(255, 20, 147, 0.8),
+              0 0 28px rgba(255, 20, 147, 0.6);
+}
+
   </style>
 
   <div class="about-inner">
