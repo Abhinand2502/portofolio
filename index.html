@@ -424,27 +424,27 @@
       }
     }
 
-    /* === Mobile visibility fixes — paste AT THE END of your stylesheet ===
-   Restores logo on mobile and ensures socials sit below fixed header. */
-
+    /* === Mobile fixes — paste at END of your stylesheet === */
 @media (max-width: 980px) {
-  /* show the logo again on mobile (overrides any previous .logo{display:none}) */
+  /* Logo stays visible (no need to hide/show anymore) */
   .logo {
     display: inline-flex !important;
     align-items: center;
     gap: 8px;
-    font-size: 20px !important;       /* slightly smaller than desktop but visible */
+    font-size: 20px !important;
     padding: 6px 10px !important;
-    margin-left: 48px !important;     /* leaves space for the left hamburger */
-    z-index: 1450 !important;         /* above socials but below header controls if needed */
+    margin-left: 48px !important;  /* leaves space for hamburger */
+    z-index: 1450 !important;
   }
 
-  /* if you use an <img> inside logo, ensure it is visible and sized */
-  .logo img { display: block !important; height: 28px !important; width: auto !important; }
-
-  /* make sure the menu button remains tappable and sits above other elements */
-  .menu-btn {
+  .logo img {
     display: block !important;
+    height: 28px !important;
+    width: auto !important;
+  }
+
+  /* Keep menu button tappable */
+  .menu-btn {
     position: absolute !important;
     left: 12px !important;
     top: 50% !important;
@@ -452,29 +452,38 @@
     z-index: 1500 !important;
   }
 
-  /* push the socials so they are clearly below the fixed header (not hidden) */
+  /* Socials clearly below the header */
   .image-socials,
   #intro .image-socials {
-    position: static !important;
-    transform: none !important;
-    margin: calc(var(--header-h) + 8px) auto 10px !important; /* sits below header */
+    margin: calc(var(--header-h) + 8px) auto 12px !important;
     width: min(92%, 420px) !important;
     display: flex !important;
     justify-content: space-between !important;
     gap: 12px !important;
-    z-index: 1100 !important; /* below the header (1200) but above content */
+    z-index: 1100 !important;
+    position: relative !important;
   }
 
-  /* ensure social buttons are visible and not tiny */
   .image-socials a,
   .social-link {
-    width: 64px !important;
-    height: 64px !important;
+    width: 56px !important;
+    height: 56px !important;
     font-size: 20px !important;
     border-radius: 12px !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
+  }
+
+  /* Push hero image a bit further down so it doesn't collide */
+  #intro .hero-right {
+    margin-top: 20px !important; 
+  }
+
+  #intro .hero-img {
+    border-radius: 24px !important; /* keep rounded edges */
+    display: block;
+    margin: 0 auto;
   }
 }
 
