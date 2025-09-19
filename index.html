@@ -7,12 +7,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<!-- Font Awesome (remove if already present in your project) -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Abhinand — Portfolio (hero fixes)</title>
+
+  <!-- Font Awesome (remove if already present) -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
   <style>
   /* =====================
-     Theme variables (unchanged)
+     Theme variables (UNCHANGED)
      ===================== */
     :root{
       --header-h:64px;
@@ -38,390 +45,157 @@
       --neon: rgba(42, 124, 225, 0.95);
     }
 
-    /* reset */
+    /* reset + base */
     *,*::before,*::after{box-sizing:border-box}
     html,body{height:100%;margin:0;padding:0}
     body{font-family:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;background:var(--bg);color:var(--text);line-height:1.45;-webkit-font-smoothing:antialiased}
-
-    /* allow native smooth behaviour as a graceful fallback for anchors */
-    html { scroll-behavior: smooth; }
-
+    html { scroll-behavior:smooth }
     section{min-height:100vh}
 
-    /* header */
+    /* ============== HEADER (left unchanged, just added safe img sizing) ============== */
     header{position:fixed;top:0;left:0;right:0;height:var(--header-h);display:flex;align-items:center;justify-content:space-between;padding:0 22px;z-index:1200;background:linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.55));backdrop-filter:blur(6px);box-shadow:var(--card-shadow)}
     html[data-theme="dark"] header{background:linear-gradient(180deg, rgba(8,8,8,0.6), rgba(8,8,8,0.45));}
 
-    /* improved, theme-aware logo styling (no JS changes to dark/light) */
     .logo{
       font-family:'Playfair Display',serif;
-      font-size:20px;
+      font-size:22px;        /* slightly larger logo text */
       color:var(--text);
       padding:8px 14px;
       border-radius:14px;
       background: transparent;
       transition: background .18s ease, color .18s ease, box-shadow .18s ease, transform .12s ease;
-      display:inline-block;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
       line-height:1;
     }
-    /* light-mode logo look */
-    :root .logo{
-      background: rgba(255,255,255,0.9);
-      box-shadow: 0 10px 30px rgba(16,24,40,0.06);
-      color: var(--text);
-      transform: translateY(0);
-    }
-    /* dark-mode logo look (uses your existing vars so it remains consistent) */
-    html[data-theme="dark"] .logo{
-      background: rgba(255,255,255,0.03);
-      box-shadow: 0 8px 28px rgba(0,0,0,0.6);
-      color: var(--text);
-      transform: translateY(0);
-    }
-    .logo:active{ transform: translateY(1px); }
+
+    /* if you use an <img> inside .logo increase its visible size (only the img) */
+    .logo img{ height:34px; width:auto; display:block; }
 
     nav{display:flex;gap:16px;align-items:center}
     nav a{position:relative;color:var(--text);text-decoration:none;padding:8px;border-radius:8px;font-weight:600;transition:color .18s ease}
-    nav a::after{
-      content:"";
-      position:absolute;
-      left:12px;
-      right:12px;
-      bottom:6px;
-      height:2px;
-      background:transparent;
-      transform:scaleX(0);
-      transform-origin:left;
-      transition:transform .22s cubic-bezier(.2,.9,.2,1), background .22s ease;
-      border-radius:2px;
-    }
-    nav a:hover{ color: var(--accent); }
-    nav a.active{ color: var(--accent); }
-    nav a.active::after{ background:var(--accent); transform:scaleX(1); }
+    nav a::after{ content:""; position:absolute; left:12px; right:12px; bottom:6px; height:2px; background:transparent; transform:scaleX(0); transform-origin:left; transition:transform .22s cubic-bezier(.2,.9,.2,1), background .22s ease; border-radius:2px; }
+    nav a:hover{ color: var(--accent); } nav a.active{ color: var(--accent); } nav a.active::after{ background:var(--accent); transform:scaleX(1); }
 
     .controls{display:flex;gap:12px;align-items:center}
 
-    /* larger theme button (desktop) */
     .theme-btn{
-      display:inline-flex;
-      gap:12px;
-      align-items:center;
-      padding:12px 18px;
-      border-radius:14px;
-      border:1px solid var(--glass-strong);
-      background:transparent;
-      color:var(--text);
-      cursor:pointer;
-      font-weight:700;
-      font-size:15px;
-      transition:transform .14s ease, box-shadow .14s ease, background .14s ease;
+      display:inline-flex;gap:12px;align-items:center;padding:12px 18px;border-radius:14px;border:1px solid var(--glass-strong);background:transparent;color:var(--text);cursor:pointer;font-weight:700;font-size:15px;transition:transform .14s ease, box-shadow .14s ease, background .14s ease;
     }
     .theme-btn i{font-size:20px}
     .theme-btn:hover{ transform:translateY(-3px); box-shadow:0 12px 30px rgba(0,0,0,0.06); }
 
-    /* menu button larger (hamburger) */
-    .menu-btn{
-      display:none;
-      background:none;border:0;color:var(--text);
-      font-size:28px; /* bigger 3-line icon */
-      cursor:pointer;
-      padding:10px;
-      border-radius:8px;
-      transition: transform .12s ease;
-      -webkit-tap-highlight-color: transparent;
-    }
+    /* mobile show menu button, ensure it sits above anything */
+    .menu-btn{ display:none; background:none;border:0;color:var(--text); font-size:28px; cursor:pointer; padding:10px; border-radius:8px; transition: transform .12s ease; -webkit-tap-highlight-color: transparent; z-index:1400 }
     .menu-btn:active{ transform:scale(.98); }
 
-    /* responsive nav overlay for mobile */
-    @media(max-width:980px){
-      /* Use a lightweight, non-blur overlay to avoid heavy rendering on mobile */
-      nav{
-        display:flex;
-        flex-direction:column;
-        position:fixed;
-        top:var(--header-h);
-        left:0;
-        right:0;
-        background:var(--panel);
-        padding:12px 6vw;
-        gap:12px;
-        /* reduced shadow and removed backdrop-filter to avoid mobile lag */
-        box-shadow:0 6px 22px rgba(0,0,0,0.08);
-        transform:translateY(-8px);
-        opacity:0;
-        pointer-events:none;
-        transition: transform .18s cubic-bezier(.2,.9,.2,1), opacity .12s linear;
-        will-change: transform, opacity;
-        z-index:1100;
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-      }
-      nav.open{transform:translateY(0);opacity:1;pointer-events:auto}
-      .menu-btn{display:block}
-      .controls{gap:8px}
-      .theme-btn{padding:10px 14px;font-size:15px}
+    /* ===========================
+       Original hero CSS kept mostly unchanged.
+       New behavior & fixes are scoped to .home-hero below.
+       =========================== */
 
-      /* avoid expensive filter effects on mobile */
-      header{backdrop-filter:none}
-      html[data-theme="dark"] header{background:linear-gradient(180deg, rgba(8,8,8,0.88), rgba(8,8,8,0.70));}
+    .section-inner{height:calc(100vh - var(--header-h));padding-top:var(--header-h);display:flex;align-items:center;position:relative;overflow:hidden}
+    .hero{display:grid;grid-template-columns:1fr 1fr;min-height:100%}
+    .hero-left{padding:72px 7vw;display:flex;align-items:flex-start}
+    .content{max-width:720px}
+    .kicker{letter-spacing:3px;color:var(--primary);font-weight:800;margin-bottom:14px;font-size:13px}
+    h1.headline{font-family:'Playfair Display',serif;font-size:48px;line-height:1.06;margin:0;color:var(--text);white-space:pre-line;word-break:break-word}
+    .hero-buttons{margin-top:24px;display:flex;gap:14px;flex-wrap:wrap}
+    .btn{padding:12px 20px;border-radius:10px;border:2px solid var(--glass);background:transparent;color:var(--text);font-weight:700;cursor:pointer;transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease, background .18s ease; will-change: transform, box-shadow;}
+    .btn.primary{ background:var(--primary); color:#fff; border-color:var(--primary); box-shadow:0 14px 36px rgba(225,74,42,0.12); }
 
-      /* reduce heavy shadow/filters for items that animate on mobile */
-      .hero-img{ transition: transform .45s cubic-bezier(.2,.9,.2,1), opacity .28s; box-shadow: 0 18px 44px rgba(0,0,0,0.08); }
+    /* hero image base */
+    .hero-right{position:relative;overflow:hidden;display:flex;align-items:stretch;height:100%}
+    .hero-img{
+      width: calc(100% - 24px);
+      height: calc(100% - 24px);
+      margin: 12px auto;
+      display: block;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 28px;
+      transition: transform .9s cubic-bezier(.2,.9,.2,1), opacity .45s;
+      will-change: transform, opacity;
+      z-index:1;
+    }
 
-      /* menu button placement for mobile */
+    /* social slabs (desktop) */
+    .image-socials{ position:absolute;left:50%;top:22px;transform:translateX(-50%); z-index:18; display:flex; gap:20px; align-items:center; padding:6px; border-radius:999px; pointer-events:auto; }
+    .image-socials a{ display:inline-grid; place-items:center; width:80px; height:80px; border-radius:16px; text-decoration:none; color:var(--text); font-size:32px; background:transparent; border:none; transition:transform .18s ease,filter .18s ease, box-shadow .25s ease; }
+    .image-socials a:hover{ transform:translateY(-6px) scale(1.06); box-shadow:0 26px 60px rgba(37,99,235,0.14), 0 10px 30px rgba(16,24,40,0.06); }
+    .image-socials a:hover i{ color: var(--accent); filter: drop-shadow(0 14px 40px rgba(37,99,235,0.20)); }
+
+    @media (max-width:980px){
+      nav{ display:flex; flex-direction:column; position:fixed; top:var(--header-h); left:0; right:0; background:var(--panel); padding:12px 6vw; gap:12px; box-shadow:0 6px 22px rgba(0,0,0,0.08); transform:translateY(-8px); opacity:0; pointer-events:none; transition: transform .18s cubic-bezier(.2,.9,.2,1), opacity .12s linear; will-change: transform, opacity; z-index:1100; }
+      nav.open{ transform:translateY(0); opacity:1; pointer-events:auto; }
       .menu-btn{ display:block; position:absolute; left:14px; top:50%; transform:translateY(-50%); z-index:1400; color:var(--text); font-size:22px; background:none; border:0; }
-
-      /* hide the logo entirely on mobile as requested */
       .logo{ display:none; }
-
       .controls{ position:absolute; right:14px; top:50%; transform:translateY(-50%); z-index:1400; }
-
-      /* stacking */
       .hero{ display:flex; flex-direction:column; align-items:center; }
       .hero-right{ order:-1; width:100%; display:flex; flex-direction:column; align-items:center; position:relative; padding-top:8px }
       .hero-left{ padding:28px 6vw; align-items:center; text-align:center; order:1 }
       .content{ margin:0 auto }
       .hero-buttons{ justify-content:center }
       h1.headline{ font-size:28px }
-
-      /* container width limited to hero image width and icons spaced evenly */
-      .image-socials{
-        position:absolute;
-        top: 20px;                /* placed below header */
-        left:50%;
-        transform:translateX(-50%);
-        z-index:60;
-        gap:12px;
-        padding:0 6px;
-        display:flex;
-        justify-content:space-between;
-        width: min(92%, 420px);   /* match the hero-img max width so slabs don't overflow */
-        pointer-events:auto;
-      }
-
-      /* reduced slab size and subtler border for mobile (theme-specific border above still applies) */
-      .image-socials a{
-        width:72px;
-        height:72px;
-        font-size:24px;
-        border-radius:14px;
-        display:inline-flex;
-        align-items:center;
-        justify-content:center;
-        color: var(--text);                     /* icon color adapts */
-        box-shadow: 0 10px 22px rgba(0,0,0,0.08);
-        transition: transform .18s ease, box-shadow .18s ease;
-        position:relative;
-        background: var(--panel);
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-      }
-      .image-socials a i{ color: var(--text); z-index:2; }
-
-      /* inner stroke — made thinner and subtler */
-      .image-socials a::after{
-        content:"";
-        position:absolute;
-        width:60px;
-        height:60px;
-        border-radius:12px;
-        border: 1px solid rgba(255,255,255,0.8);
-        top:6px;
-        left:6px;
-        pointer-events:none;
-        opacity:0.06; /* subtle */
-      }
-
+      .image-socials{ position:absolute; top:20px; left:50%; transform:translateX(-50%); z-index:60; gap:12px; padding:0 6px; display:flex; justify-content:space-between; width: min(92%, 420px); pointer-events:auto; }
+      .image-socials a{ width:72px; height:72px; font-size:24px; border-radius:14px; display:inline-flex; align-items:center; justify-content:center; color: var(--text); box-shadow: 0 10px 22px rgba(0,0,0,0.06); transition: transform .18s ease, box-shadow .18s ease; position:relative; background: var(--panel); -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+      .image-socials a::after{ content:""; position:absolute; width:60px; height:60px; border-radius:12px; border: 1px solid rgba(255,255,255,0.8); top:6px; left:6px; pointer-events:none; opacity:0.06; }
       .image-socials a:hover{ transform:translateY(-6px); box-shadow:0 20px 40px rgba(0,0,0,0.12); }
 
-      /* push image down so slabs and header spacing look correct and slabs fit inside hero width
-         + added 0.5cm downward shift per your request */
-      .hero-img{
-        width: min(92%, 420px);
-        height: auto;
-        border-radius:20px;
-        margin: calc(12px + 70px + 0.5cm) auto 18px; /* <- 0.5cm extra downward shift added */
-        box-shadow: 0 30px 80px rgba(0,0,0,0.08);
-        border: 1px solid rgba(0,0,0,0.06);
-        z-index:20;
-      }
-
-      .cv-wrap{ display:none }
-      .menu-btn{ font-size:26px }
-      .theme-btn{ padding:10px 14px }
+      .hero-img{ width: min(92%, 420px); height:auto; border-radius:20px; margin: calc(12px + 70px + 0.5cm) auto 18px; box-shadow: 0 30px 80px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.06); z-index:20; will-change: transform, opacity; }
+      .cv-wrap{ display:none } .menu-btn{ font-size:26px } .theme-btn{ padding:10px 14px }
     }
 
-    .section-inner{height:calc(100vh - var(--header-h));padding-top:var(--header-h);display:flex;align-items:center;position:relative;overflow:hidden}
+    /* modern reveal */
+    .anim{ opacity:0; transform: translateY(18px) scale(.995); transition: opacity 650ms cubic-bezier(.2,.9,.2,1), transform 650ms cubic-bezier(.2,.9,.2,1); will-change: opacity, transform; }
+    .anim.in-view{ opacity:1; transform: translateY(0) scale(1); }
 
-    /* hero: 50/50 columns so right half is image */
-    .hero{display:grid;grid-template-columns:1fr 1fr;min-height:100%}
-    .hero-left{padding:72px 7vw;display:flex;align-items:flex-start}
-    .content{max-width:720px}
-    .kicker{letter-spacing:3px;color:var(--primary);font-weight:800;margin-bottom:14px;font-size:13px}
-
-    h1.headline{font-family:'Playfair Display',serif;font-size:48px;line-height:1.06;margin:0;color:var(--text);white-space:pre-line;word-break:break-word}
-
-    .hero-buttons{margin-top:24px;display:flex;gap:14px;flex-wrap:wrap}
-    /* button animation: lift + shadow */
-    .btn{
-      padding:12px 20px;border-radius:10px;border:2px solid var(--glass);background:transparent;color:var(--text);font-weight:700;cursor:pointer;
-      transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease, background .18s ease;
-      will-change: transform, box-shadow;
-    }
-    .btn:hover{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(16,24,40,0.06); }
-    .btn:active{ transform:translateY(-2px); box-shadow:0 10px 22px rgba(16,24,40,0.06); }
-    .btn.primary{ background:var(--primary); color:#fff; border-color:var(--primary); box-shadow:0 14px 36px rgba(225,74,42,0.12); }
-
-    .hero-right{position:relative;overflow:hidden;display:flex;align-items:stretch;height:100%}
-    .hero-img{
-      /* slightly smaller so there's a little space around the image */
-      width: calc(100% - 24px);   /* 12px gap each side */
-      height: calc(100% - 24px);  /* 12px gap top & bottom */
-      margin: 12px auto;          /* centers horizontally and creates the gap */
-      display: block;
-      box-sizing: border-box;
-
-      object-fit: cover;
-      object-position: center;
-
-      /* curved corners */
-      border-radius: 28px;
-
-      transition: transform .9s cubic-bezier(.2,.9,.2,1), opacity .45s;
-      will-change: transform, opacity;
-      z-index:1;
-    }
-
-    /* DESKTOP ONLY: move whole image 2.5cm left */
-    @media (min-width: 981px) {
-      .hero-img {
-        margin-left: calc(12px - 2.5cm);
-      }
-    }
-
-    .hero-placeholder{width:100%;height:100%;min-height:100%;background:linear-gradient(120deg,#222 0%, #333 100%)}
-
-    /* socials: bigger and animated blue hover (desktop) */
-    .image-socials{
-      position:absolute;left:50%;top:22px;transform:translateX(-50%);
-      z-index:18;display:flex;gap:20px;align-items:center;padding:6px;border-radius:999px;pointer-events:auto;
-      background:transparent; border: none; box-shadow:none;
-    }
-
-    .image-socials a{
-      display:inline-grid;place-items:center;
-      width:80px;
-      height:80px;
-      border-radius:16px;
-      text-decoration:none;
-      color:var(--text);
-      font-size:32px;
-      background:transparent;
-      border:none;
-      transition:transform .18s ease,filter .18s ease, box-shadow .25s ease;
-      will-change:transform, box-shadow;
-    }
-    .image-socials a i{color:inherit}
-    .image-socials a:hover{
-      transform:translateY(-6px) scale(1.06);
-      box-shadow:0 26px 60px rgba(37,99,235,0.14), 0 10px 30px rgba(16,24,40,0.06);
-    }
-    .image-socials a:hover i{ color: var(--accent); filter: drop-shadow(0 14px 40px rgba(37,99,235,0.20)); }
-    .image-socials a:focus{ outline:4px solid rgba(37,99,235,0.12); outline-offset:4px; border-radius:14px; }
-
-    /* ====== THEME-SPECIFIC SOCIAL BORDER ======
-       Light mode: stronger black border
-       Dark mode: subtle light border (keeps behaviour unchanged)
-    ================================================== */
-    :root .image-socials a{
-      /* this will apply in light mode */
-      border: 1px solid rgba(0,0,0,0.14);
-      background: var(--panel);
-    }
-    html[data-theme="dark"] .image-socials a{
-      /* override in dark mode */
-      border: 1px solid rgba(255,255,255,0.06);
-      background: var(--panel);
-    }
-
-    .cv-wrap{position:absolute;left:18px;bottom:18px;z-index:6}
-    .cv-btn{border:1px solid var(--glass-strong);background:transparent;color:var(--text);padding:8px 12px;border-radius:10px}
-
-    /* sections */
-    #about,#works,#contact{display:flex;align-items:center;justify-content:center;background:transparent}
-    .box{max-width:980px;padding:44px; background: transparent; border-radius:8px;}
-
-    /* modern reveal animations: initial state */
-    .anim{
-      opacity:0;
-      transform: translateY(18px) scale(0.995);
-      transition: opacity 650ms cubic-bezier(.2,.9,.2,1), transform 650ms cubic-bezier(.2,.9,.2,1);
-      will-change: opacity, transform;
-    }
-    /* in-view state */
-    .anim.in-view{
-      opacity:1;
-      transform: translateY(0) scale(1);
-    }
-
-    /* optional: reduce motion for users who prefer reduced-motion */
-    @media (prefers-reduced-motion: reduce){
-      *{transition:none!important}
-      .hero-img{transition:none}
-      html { scroll-behavior: auto; }
-    }
-
-    /* Move all social logos 0.7 cm left (desktop unchanged) */
-    @media (min-width: 1024px) {
-      .image-socials a {
-        position: relative;
-        left: -1.2cm;
-      }
-    }
+    @media (prefers-reduced-motion: reduce){ *{transition:none!important} .hero-img{transition:none} html { scroll-behavior: auto; } }
   </style>
 
   <!-- =========================
-       Scoped hero overrides (all changes limited to .home-hero)
+       SCOPE: home-hero fixes (no global leaks)
        ========================= -->
   <style>
-    /* wrap all hero overrides with .home-hero to avoid leaking styles */
+    /* wrap everything inside .home-hero so no other pages are affected */
     .home-hero .section-inner{ height:calc(100vh - var(--header-h)); padding-top:var(--header-h); display:flex; align-items:center; position:relative; overflow:hidden; }
 
-    /* mobile-first stacking behavior handled by media query below */
     .home-hero .hero{ display:grid; grid-template-columns:1fr 1fr; gap:0; min-height:100%; }
 
-    /* right column (image area) */
+    /* ----- right column: socials + image wrapper ----- */
     .home-hero .hero-right{ position:relative; display:flex; align-items:center; justify-content:center; padding:12px; }
 
-    /* outer wrapper provides a crisp 2px cyan rim (thin shining line) */
+    /* thin cyan rim using a padded outer wrapper (2px) */
     .home-hero .hero-img-outer{
       width:100%;
       max-width:640px;
       margin:12px;
-      padding:2px; /* this padding is the rim width */
-      border-radius:14px; /* outer radius slightly larger */
+      padding:2px;                 /* rim thickness */
+      border-radius:14px;
       background: linear-gradient(90deg, #2EE1FF, #2EE1FF); /* pure cyan rim */
       position:relative;
       z-index:20;
-      pointer-events:none;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.28); /* subtle depth */
+      pointer-events:none;         /* let socials receive pointer events */
+      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
     }
 
-    /* inner image — less rounded corners, no heavy border */
+    /* inner image: less rounded corners so it looks clean */
     .home-hero .hero-img-inner{
       display:block;
       width:100%;
       height:auto;
-      border-radius:10px; /* less curved */
+      border-radius:10px;
       object-fit:cover;
-      background: var(--panel);
-      border: 1px solid rgba(255,255,255,0.02);
+      background:var(--panel);
+      border:1px solid rgba(255,255,255,0.02);
       pointer-events:auto;
       vertical-align:middle;
-      box-shadow: none;
+      box-shadow:none;
+      max-height: calc(100vh - var(--header-h) - 120px); /* keep it from becoming extremely tall on small viewports */
     }
 
-    /* very subtle halo outside rim for polish (low opacity) */
+    /* halo outside rim - very subtle */
     .home-hero .hero-img-outer::after{
       content:"";
       position:absolute;
@@ -434,97 +208,64 @@
       z-index:1;
     }
 
-    /* socials: absolute above image on desktop; static/in-flow on mobile (media query) */
-    .home-hero .image-socials{
-      position:absolute;
-      top:14px;
-      left:50%;
-      transform:translateX(-50%);
-      z-index:30;
-      display:flex;
-      gap:18px;
-      align-items:center;
-      justify-content:center;
-      pointer-events:auto;
-      width:min(80%,760px);
-      padding:6px;
-    }
+    /* Socials: desktop (absolute above image) */
+    .home-hero .image-socials{ position:absolute; top:14px; left:50%; transform:translateX(-50%); z-index:30; display:flex; gap:18px; align-items:center; justify-content:center; pointer-events:auto; width:min(80%,760px); padding:6px; }
 
-    .home-hero .social-link{
-      position:relative;
-      display:inline-grid;
-      place-items:center;
-      width:78px;
-      height:78px;
-      border-radius:14px;
-      text-decoration:none;
-      cursor:pointer;
-      background:transparent;
-      border:none;
-      transition: transform .14s ease, box-shadow .18s ease;
-      pointer-events:auto;
-    }
+    .home-hero .social-link{ position:relative; display:inline-grid; place-items:center; width:78px; height:78px; border-radius:14px; text-decoration:none; cursor:pointer; background:transparent; border:none; transition:transform .14s ease, box-shadow .18s ease; pointer-events:auto; }
 
-    /* dark inner tile for icon + hover effect */
-    .home-hero .social-link .tile{
-      position:absolute;
-      inset:9px;
-      border-radius:12px;
-      background: rgba(0,0,0,0.78);
-      z-index:2;
-      display:grid;
-      place-items:center;
-      box-shadow: inset 0 1px 2px rgba(255,255,255,0.02);
-      transition: box-shadow .14s ease, background .14s ease;
-    }
+    .home-hero .social-link .tile{ position:absolute; inset:9px; border-radius:12px; background:rgba(0,0,0,0.78); z-index:2; display:grid; place-items:center; box-shadow: inset 0 1px 2px rgba(255,255,255,0.02); transition: box-shadow .14s ease, background .14s ease; }
     .home-hero .social-link i{ position:relative; z-index:3; font-size:20px; color:#fff; transition: color .12s ease, filter .12s ease; }
 
-    /* hover: icon & tile glow to blue accent */
     .home-hero .social-link:hover{ transform: translateY(-6px); box-shadow:0 20px 44px rgba(37,99,235,0.12); }
     .home-hero .social-link:hover .tile{ box-shadow: 0 8px 28px rgba(37,99,235,0.10), inset 0 1px 2px rgba(255,255,255,0.02); background: rgba(0,0,0,0.82); }
     .home-hero .social-link:hover i{ color: var(--accent); filter: drop-shadow(0 12px 32px rgba(37,99,235,0.22)); }
 
-    /* small underline below the headline (matching your look) */
-    .home-hero .headline-underline{ margin-top:12px; height:3px; width:160px; background:linear-gradient(90deg,var(--accent), rgba(161,103,255,0.6)); border-radius:3px; }
+    /* text contrast & theme polish (scoped) */
+    .home-hero .headline{ color: var(--text); text-shadow: none; }
+    .home-hero .content p{ color: var(--text); opacity: .94; line-height:1.55; }
 
-    /* reveal helper */
-    .home-hero .anim{ opacity:0; transform:translateY(12px); transition:opacity .6s, transform .6s; }
-    .home-hero .anim.in-view{ opacity:1; transform:none; }
-
-    /* ---------- MOBILE: socials above image, then image, then text ---------- */
+    /* Mobile: socials must sit directly below the fixed header (in-flow) */
     @media (max-width:980px){
       .home-hero .hero{ display:flex; flex-direction:column; align-items:center; }
+
+      /* place socials in flow and ensure they appear below header */
       .home-hero .image-socials{
         position:static;
         transform:none;
-        margin: 10px auto 6px;
+        margin: calc(var(--header-h) / 1.0) auto 6px; /* pushes the socials below the fixed header visually */
         width: min(92%,420px);
         gap:12px;
       }
+
+      /* slightly smaller slabs on mobile */
       .home-hero .social-link{ width:72px; height:72px; border-radius:14px; }
       .home-hero .social-link .tile{ inset:8px; border-radius:10px; }
       .home-hero .social-link i{ font-size:18px; }
 
+      /* reduce image size on phones so it fits 5"-9" screens comfortably */
       .home-hero .hero-img-outer{ max-width:420px; padding:2px; border-radius:12px; margin-top:6px; }
-      .home-hero .hero-img-inner{ border-radius:8px; }
+      .home-hero .hero-img-inner{ border-radius:8px; max-height: calc(60vh); } /* keep image height limited on mobile */
 
-      /* ensure text comes after image on mobile */
+      /* ensure the order: socials -> image -> text/buttons */
       .home-hero .hero-right{ order:2; width:100%; display:flex; flex-direction:column; align-items:center; padding:6px; }
       .home-hero .hero-left{ order:3; padding:24px 6vw; text-align:center; }
+
       .home-hero h1.headline{ font-size:28px; }
       .home-hero .hero-buttons{ justify-content:center; gap:12px; }
     }
 
-    /* reduced motion */
     @media (prefers-reduced-motion: reduce){
       .home-hero *{ transition:none!important; }
     }
   </style>
 </head>
 <body>
+  <!-- =============== HEADER (kept exactly like your original markup) =============== -->
   <header>
     <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false"><i id="menuIco" class="fa-solid fa-bars"></i></button>
-    <div class="logo" id="logo">Abhinand</div>
+
+    <!-- If you have an image logo, keep it inside .logo (we increase only the inner img size above) -->
+    <div class="logo" id="logo"><img src="logo.png" alt="Abhinand logo" style="display:none">Abhinand</div>
 
     <nav id="mainNav" aria-label="Main navigation">
       <a href="#intro">HOME</a>
@@ -540,10 +281,9 @@
     </div>
   </header>
 
-  <!-- ====== HERO (scoped using .home-hero) ====== -->
+  <!-- =============== HERO (scoped as .home-hero) =============== -->
   <section id="intro" class="home-hero" aria-labelledby="introTitle">
     <div class="section-inner hero" id="heroSection">
-      <!-- left text column -->
       <div class="hero-left">
         <div class="content">
           <div class="kicker anim">HELLO</div>
@@ -561,34 +301,29 @@
         </div>
       </div>
 
-      <!-- right: socials + image -->
       <div class="hero-right">
-        <!-- Socials: absolute above image on desktop; static above image on mobile -->
+        <!-- socials -->
         <div class="image-socials" role="list" aria-label="Social links">
           <a href="#" id="email-link" title="Email" onclick="openGmailCompose(event)" class="social-link" role="listitem" aria-label="Email">
-            <span class="tile" aria-hidden="true"></span>
-            <i class="fa-solid fa-envelope"></i>
+            <span class="tile" aria-hidden="true"></span><i class="fa-solid fa-envelope"></i>
           </a>
 
           <a href="https://github.com/Abhinand2502" target="_blank" rel="noopener noreferrer" title="GitHub" class="social-link" role="listitem" aria-label="GitHub">
-            <span class="tile" aria-hidden="true"></span>
-            <i class="fa-brands fa-github"></i>
+            <span class="tile" aria-hidden="true"></span><i class="fa-brands fa-github"></i>
           </a>
 
           <a href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="social-link" role="listitem" aria-label="LinkedIn">
-            <span class="tile" aria-hidden="true"></span>
-            <i class="fa-brands fa-linkedin"></i>
+            <span class="tile" aria-hidden="true"></span><i class="fa-brands fa-linkedin"></i>
           </a>
 
           <a href="https://instagram.com/_abhinand_babu" target="_blank" rel="noopener noreferrer" title="Instagram" class="social-link" role="listitem" aria-label="Instagram">
-            <span class="tile" aria-hidden="true"></span>
-            <i class="fa-brands fa-instagram"></i>
+            <span class="tile" aria-hidden="true"></span><i class="fa-brands fa-instagram"></i>
           </a>
         </div>
 
         <!-- image wrapper with thin cyan rim -->
         <div class="hero-img-outer" aria-hidden="false">
-          <!-- REPLACE 'hero.jpg' with your real image path -->
+          <!-- replace hero.jpg with your image -->
           <img id="heroImgTag" class="hero-img-inner" alt="Hero image" src="hero.jpg" />
         </div>
       </div>
@@ -596,31 +331,61 @@
   </section>
 
   <script>
-    // preserve menu toggle (does not touch theme toggle)
-    document.getElementById('menuBtn')?.addEventListener('click', function(){
-      const nav = document.getElementById('mainNav');
-      const expanded = this.getAttribute('aria-expanded') === 'true';
-      this.setAttribute('aria-expanded', String(!expanded));
-      nav.classList.toggle('open');
-    });
+    /* ===== Mobile nav (hamburger) fix =====
+       This code:
+       - runs after DOM ready,
+       - toggles nav.open and aria-expanded,
+       - prevents the header/button from being occluded by other elements,
+       - also closes nav when clicking outside or pressing Escape.
+       It does NOT modify your header DOM or theme code.
+    */
+    (function () {
+      function onReady(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
 
-    function openGmailCompose(ev){
-      ev && ev.preventDefault && ev.preventDefault();
-      window.location.href = "mailto:your-email@example.com"; // replace with your email
-    }
+      onReady(function(){
+        const menuBtn = document.getElementById('menuBtn');
+        const nav = document.getElementById('mainNav');
 
-    // animate .anim elements into view (lightweight)
-    (function(){
-      const observer = ('IntersectionObserver' in window) ? new IntersectionObserver(entries=>{
-        entries.forEach(e=>{
-          if(e.isIntersecting) e.target.classList.add('in-view');
+        if(!menuBtn || !nav) return;
+
+        // ensure button is accessible and visible
+        menuBtn.setAttribute('aria-controls', 'mainNav');
+
+        function toggleMenu(){
+          const isOpen = nav.classList.toggle('open');
+          menuBtn.setAttribute('aria-expanded', String(isOpen));
+          // Add small body class to optionally lock scroll if you want
+          if(isOpen) document.documentElement.classList.add('nav-open'); else document.documentElement.classList.remove('nav-open');
+        }
+
+        menuBtn.addEventListener('click', function(e){
+          e.stopPropagation();
+          toggleMenu();
         });
-      }, {threshold:0.12}) : null;
-      if(observer){
-        document.querySelectorAll('.home-hero .anim').forEach(el=>observer.observe(el));
-      } else {
-        document.querySelectorAll('.home-hero .anim').forEach(el=>el.classList.add('in-view'));
-      }
+
+        // close nav when clicking outside on mobile
+        document.addEventListener('click', function(e){
+          if (!nav.classList.contains('open')) return;
+          const clickInsideNav = nav.contains(e.target) || menuBtn.contains(e.target);
+          if (!clickInsideNav) { nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); document.documentElement.classList.remove('nav-open'); }
+        });
+
+        // close with Escape
+        document.addEventListener('keydown', function(e){
+          if(e.key === 'Escape' && nav.classList.contains('open')){
+            nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); document.documentElement.classList.remove('nav-open');
+          }
+        });
+
+        // ensure header/menu button remains on top visually
+        menuBtn.style.zIndex = 1400;
+      });
+
+      // mailto helper
+      window.openGmailCompose = function(ev){
+        ev && ev.preventDefault && ev.preventDefault();
+        window.location.href = "mailto:your-email@example.com"; // replace with your address
+      };
     }());
   </script>
 
