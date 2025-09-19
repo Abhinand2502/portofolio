@@ -162,6 +162,8 @@
       header{backdrop-filter:none}
       html[data-theme="dark"] header{background:linear-gradient(180deg, rgba(8,8,8,0.88), rgba(8,8,8,0.70));}
 
+      /* reduce heavy shadow/filters for items that animate on mobile */
+      .hero-img{ transition: transform .45s cubic-bezier(.2,.9,.2,1), opacity .28s; box-shadow: 0 18px 44px rgba(0,0,0,0.08); }
 
       /* menu button placement for mobile */
       .menu-btn{ display:block; position:absolute; left:14px; top:50%; transform:translateY(-50%); z-index:1400; color:var(--text); font-size:22px; background:none; border:0; }
@@ -229,6 +231,18 @@
 
       .image-socials a:hover{ transform:translateY(-6px); box-shadow:0 18px 36px rgba(0,0,0,0.10); }
 
+      /* push image down so slabs and header spacing look correct
+         + added 0.5cm downward shift per your request */
+      .hero-img{
+        width: min(92%, 420px);
+        height: auto;
+        border-radius:20px;
+        margin: calc(12px + 70px + 0.5cm) auto 18px; /* <- 0.5cm extra downward shift added */
+        box-shadow: 0 20px 60px rgba(0,0,0,0.06);
+        border: 1px solid rgba(0,0,0,0.06);
+        z-index:20;
+        will-change: transform, opacity;
+      }
 
       .cv-wrap{ display:none }
       .menu-btn{ font-size:26px }
@@ -257,7 +271,31 @@
     .btn.primary{ background:var(--primary); color:#fff; border-color:var(--primary); box-shadow:0 14px 36px rgba(225,74,42,0.12); }
 
     .hero-right{position:relative;overflow:hidden;display:flex;align-items:stretch;height:100%}
+    .hero-img{
+      /* slightly smaller so there's a little space around the image */
+      width: calc(100% - 24px);   /* 12px gap each side */
+      height: calc(100% - 24px);  /* 12px gap top & bottom */
+      margin: 12px auto;          /* centers horizontally and creates the gap */
+      display: block;
+      box-sizing: border-box;
 
+      object-fit: cover;
+      object-position: center;
+
+      /* curved corners */
+      border-radius: 28px;
+
+      transition: transform .9s cubic-bezier(.2,.9,.2,1), opacity .45s;
+      will-change: transform, opacity;
+      z-index:1;
+    }
+
+    /* DESKTOP ONLY: move whole image 2.5cm left */
+    @media (min-width: 981px) {
+      .hero-img {
+        margin-left: calc(12px - 2.5cm);
+      }
+    }
 
     .hero-placeholder{width:100%;height:100%;min-height:100%;background:linear-gradient(120deg,#222 0%, #333 100%)}
 
@@ -423,70 +461,6 @@
         left: -1.2cm;
       }
     }
-
-    /* === Mobile fixes — paste at END of your stylesheet === */
-@media (max-width: 980px) {
-  /* Logo stays visible (no need to hide/show anymore) */
-  .logo {
-    display: inline-flex !important;
-    align-items: center;
-    gap: 8px;
-    font-size: 20px !important;
-    padding: 6px 10px !important;
-    margin-left: 48px !important;  /* leaves space for hamburger */
-    z-index: 1450 !important;
-  }
-
-  .logo img {
-    display: block !important;
-    height: 28px !important;
-    width: auto !important;
-  }
-
-  /* Keep menu button tappable */
-  .menu-btn {
-    position: absolute !important;
-    left: 12px !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    z-index: 1500 !important;
-  }
-
-  /* Socials clearly below the header */
-  .image-socials,
-  #intro .image-socials {
-    margin: calc(var(--header-h) + 8px) auto 12px !important;
-    width: min(92%, 420px) !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    gap: 12px !important;
-    z-index: 1100 !important;
-    position: relative !important;
-  }
-
-  .image-socials a,
-  .social-link {
-    width: 56px !important;
-    height: 56px !important;
-    font-size: 20px !important;
-    border-radius: 12px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-
-  /* Push hero image a bit further down so it doesn't collide */
-  #intro .hero-right {
-    margin-top: 20px !important; 
-  }
-
-  #intro .hero-img {
-    border-radius: 24px !important; /* keep rounded edges */
-    display: block;
-    margin: 0 auto;
-  }
-}
-
 </style>
 
 </head>
