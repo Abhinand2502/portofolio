@@ -4,114 +4,173 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Neon Portfolio — Home</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
   <style>
     :root{
       --bg:#050506;
       --panel:#0b0b0c;
       --text:#e7eefc;
-      --muted:rgba(231,238,252,0.6);
-      --accent-c: #2fe7ff;
-      --accent-2:#7bdcff;
-      --header-bg: rgba(0,0,0,0.32);
+      --muted:rgba(231,238,252,0.62);
+      --accent-c:#2fe7ff;    /* cyan */
+      --accent-2:#7bdcff;   /* lighter cyan */
+      --accent-mag:#ff6cf0; /* magenta */
+      --header-bg: rgba(0,0,0,0.36);
     }
     [data-theme="light"]{
-      --bg:#ffffff; --panel:#fbfbfe; --text:#071019; --muted:rgba(11,17,26,0.6); --header-bg: rgba(255,255,255,0.72);
+      --bg:#ffffff; --panel:#fbfbfe; --text:#071019; --muted:rgba(11,17,26,0.6); --header-bg: rgba(255,255,255,0.82);
+      --accent-c:#0b6cff; --accent-mag:#7b3bff;
     }
 
     *{box-sizing:border-box}
-    html,body{height:100%;}
+    html,body{height:100%}
     body{margin:0;font-family:Poppins,system-ui, -apple-system, 'Segoe UI', Roboto, Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+    a{color:inherit;text-decoration:none}
+    img{display:block;max-width:100%}
 
-    /* full-page snap */
-    main{height:100vh;overflow-y:auto;scroll-snap-type:y mandatory}
-    section{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:44px;scroll-snap-align:start}
-
-    /* Header - transparent and subtle */
-    header{position:fixed;left:0;right:0;top:0;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;z-index:120;background:var(--header-bg);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.03);transition:background 300ms ease, border-color 300ms}
+    /* header */
+    header{position:fixed;left:0;right:0;top:0;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;z-index:140;background:var(--header-bg);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.03)}
     .left-group{display:flex;align-items:center;gap:12px}
     .brand{display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:10px}
-    .brand .brand-text{font-family:Playfair Display, serif;font-weight:700}
-    .brand-img{width:36px;height:36px;border-radius:8px;object-fit:cover;border:2px solid rgba(255,255,255,0.06);transition:transform 300ms ease}
+    .brand-img{width:36px;height:36px;border-radius:8px;object-fit:cover;border:2px solid rgba(255,255,255,0.06)}
+    .brand-text{font-family:Playfair Display, serif;font-weight:700;letter-spacing:0.4px}
 
-    /* Navigation - desktop only */
     nav.desktop{display:flex;gap:22px;align-items:center}
     nav.desktop a{color:var(--text);text-decoration:none;font-weight:700;letter-spacing:0.6px;padding:6px;position:relative}
     nav.desktop a.is-active{color:var(--accent-c)}
 
-    /* Theme toggle exact look */
-    .theme-toggle{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;cursor:pointer;border:2px solid rgba(255,255,255,0.04);position:relative;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));box-shadow:0 10px 30px rgba(0,0,0,0.45)}
-    [data-theme="light"] .theme-toggle{background:linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.55));}
-    .theme-toggle svg{width:20px;height:20px}
-    .theme-toggle .sun{display:none}
-    [data-theme="light"] .theme-toggle .sun{display:block}
-    [data-theme="light"] .theme-toggle .moon{display:none}
+    .neon-btn{width:54px;height:54px;border-radius:12px;display:grid;place-items:center;cursor:pointer;border:2px solid rgba(255,255,255,0.04);position:relative;background:rgba(255,255,255,0.02);box-shadow:0 10px 30px rgba(0,0,0,0.5);transition:transform 220ms ease}
+    .neon-btn:active{transform:translateY(2px)}
+    .neon-btn.glow{box-shadow:0 20px 60px rgba(0,0,0,0.5), 0 0 30px var(--accent-c)}
+    .neon-btn .icon{width:22px;height:22px}
 
-    /* Hamburger for mobile only - hidden on desktop */
-    .hamburger{display:none;width:56px;height:56px;border-radius:14px;align-items:center;justify-content:center;cursor:pointer;margin-right:8px;background:transparent;border:2px solid rgba(255,255,255,0.03);position:relative}
-    .hamburger .lines{width:22px;height:18px;display:flex;flex-direction:column;justify-content:space-between}
-    .hamburger .lines span{display:block;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--accent-c),var(--accent-2));transition:transform 300ms ease, opacity 200ms}
+    .hamburger{display:none;padding:0;justify-content:center;align-items:center}
+    .lines{width:22px;height:18px;display:flex;flex-direction:column;justify-content:space-between}
+    .lines span{display:block;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--accent-c),var(--accent-mag));transition:transform 300ms ease, opacity 200ms}
     .hamburger.open .lines span:nth-child(1){transform:translateY(8px) rotate(45deg)}
     .hamburger.open .lines span:nth-child(2){opacity:0}
     .hamburger.open .lines span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 
-    /* Hero layout */
-    .hero{width:100%;max-width:1200px;display:grid;grid-template-columns:1fr 540px;gap:36px;align-items:center}
-    @media (max-width:820px){.hero{grid-template-columns:1fr}}
+    main{padding-top:88px}
+    section{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:44px}
 
+    /* HERO - desktop */
+    .hero{width:100%;max-width:1280px;display:grid;grid-template-columns:1fr 560px;gap:36px;align-items:center}
     .intro small{display:block;color:var(--accent-c);letter-spacing:2px;margin-bottom:12px;font-weight:800}
-    .intro h1{font-family:Playfair Display, serif;font-size:56px;line-height:0.92;margin:0 0 8px}
-    .intro .underline-dots{height:6px;border-bottom:3px solid var(--accent-c);width:72%;margin-bottom:18px;position:relative}
+    .hero-title{font-family:Playfair Display, serif;font-size:66px;line-height:0.98;margin:0 0 8px;font-weight:900;letter-spacing:0.2px}
+    .underline-line{height:6px;border-bottom:3px solid var(--accent-c);width:100%;max-width:420px;margin:14px 0 22px;position:relative}
     .intro p{color:var(--muted);max-width:640px}
-
     .cta{display:flex;gap:18px;margin-top:22px}
     .btn{padding:12px 18px;border-radius:12px;font-weight:800;letter-spacing:0.6px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:12px;transition:transform 220ms ease, box-shadow 220ms}
     .btn.primary{background:linear-gradient(180deg,var(--accent-c),var(--accent-2));color:var(--panel);box-shadow:0 16px 40px rgba(0,0,0,0.45),0 0 30px rgba(0,0,0,0.12) inset}
     .btn.ghost{background:transparent;border:2px solid rgba(255,255,255,0.12);color:var(--text)}
     .btn:hover{transform:translateY(-4px)}
 
-    /* Neon frame refined - thin animated border exactly like screenshot */
-    .neon-frame{position:relative;border-radius:28px;padding:8px;background:var(--panel);box-shadow:0 20px 60px rgba(0,0,0,0.6);overflow:visible}
-    .neon-frame .inner{border-radius:18px;overflow:hidden}
-    .neon-frame img{display:block;width:100%;height:520px;object-fit:cover}
+    /* neon frame */
+    .neon-frame{position:relative;border-radius:28px;padding:14px;background:var(--panel);box-shadow:0 30px 90px rgba(0,0,0,0.65);overflow:visible}
+    .frame-inner{border-radius:18px;overflow:hidden;position:relative;z-index:4}
+    .frame-inner img{display:block;width:100%;height:520px;object-fit:cover;border-radius:14px}
 
-    /* thin animated border using pseudo-element - small thickness */
-    .neon-frame::after{content:"";position:absolute;inset:-8px;border-radius:34px;padding:2px;background:linear-gradient(90deg,var(--accent-c),var(--accent-2));mask:linear-gradient(#000 0 0);-webkit-mask:linear-gradient(#000 0 0);filter:blur(6px);opacity:0.95;z-index:2;pointer-events:none;transition:all 500ms ease}
-    /* inner hairline stroke to give thin border look */
-    .neon-frame::before{content:"";position:absolute;inset:-6px;border-radius:32px;border:2px solid rgba(255,255,255,0.06);z-index:3;pointer-events:none}
-
-    /* social icon squares on top of image */
-    .neon-icons{position:absolute;left:50%;top:18px;transform:translateX(-50%);display:flex;gap:14px;z-index:5}
-    .neon-icons .square{width:62px;height:62px;border-radius:12px;background:rgba(0,0,0,0.45);display:grid;place-items:center;border:2px solid rgba(255,255,255,0.06);backdrop-filter:blur(6px)}
-
-    /* Mobile stacked layout: icons then frame then text */
-    .mobile-stack{display:none;flex-direction:column;align-items:center;gap:18px;width:100%}
-    @media (max-width:820px){
-      .hamburger{display:grid}
-      nav.desktop{display:none}
-      .mobile-stack{display:flex}
-      .neon-frame img{height:420px}
-      header{height:64px}
-      .intro h1{text-align:center}
-      .intro p{text-align:center}
-      .cta{justify-content:center}
+    /* bright blurred gradient border */
+    .neon-frame::after{
+      content:"";
+      position:absolute;
+      inset:-10px;
+      border-radius:36px;
+      background:linear-gradient(90deg,var(--accent-c),var(--accent-mag));
+      filter:blur(10px);
+      opacity:0.98;
+      z-index:2;
+      pointer-events:none;
+    }
+    .neon-frame::before{
+      content:"";
+      position:absolute;
+      inset:-8px;
+      border-radius:34px;
+      border:3px solid rgba(255,255,255,0.06);
+      z-index:3;
+      pointer-events:none;
     }
 
-    /* small demo section styling */
-    .section-card{width:100%;max-width:980px;margin:0 auto;padding:48px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.02));box-shadow:0 20px 50px rgba(0,0,0,0.45)}
+    /* SOCIAL ICONS - anchored to top-right of the frame (desktop/landscape) */
+    /* This block ensures icons are the same size/spacing/position in wide/landscape view */
+    .neon-icons{
+      position:absolute;
+      top:18px;
+      right:22px;          /* anchor to the frame's right edge like your screenshot */
+      left:auto;
+      transform:none;
+      display:flex;
+      gap:18px;
+      z-index:6;
+      align-items:center;
+    }
 
-    /* entrance animation */
+    /* each square exactly sized like screenshot */
+    .neon-icons .square{
+      width:64px;
+      height:64px;
+      border-radius:12px;
+      padding:8px;
+      background:rgba(0,0,0,0.5);
+      display:grid;
+      place-items:center;
+      border:2px solid rgba(255,255,255,0.08);
+      backdrop-filter:blur(6px);
+      box-shadow:
+        0 12px 30px rgba(0,0,0,0.6),
+        0 0 24px rgba(47,231,255,0.12),
+        inset 0 2px 8px rgba(255,255,255,0.02);
+      transition:transform 160ms ease;
+    }
+    .neon-icons .square:hover{ transform:translateY(-6px) scale(1.02); box-shadow: 0 18px 48px rgba(0,0,0,0.6), 0 0 36px rgba(47,231,255,0.22); }
+
+    .neon-icons .square svg{width:26px;height:26px;filter:drop-shadow(0 6px 18px rgba(0,0,0,0.45));}
+
+    /* --- MOBILE STACK --- */
+    .mobile-stack{display:none;flex-direction:column;align-items:center;gap:18px;width:100%;padding-top:28px}
+    .mobile-icons{display:flex;gap:16px;justify-content:center;margin-bottom:6px}
+    .mobile-icons .square{width:72px;height:72px;border-radius:14px;background:rgba(0,0,0,0.45);display:grid;place-items:center;border:2px solid rgba(255,255,255,0.04);backdrop-filter:blur(6px)}
+    .mobile-frame{width:100%;max-width:420px;margin:0 auto}
+    .mobile-frame .neon-frame{padding:12px}
+    .mobile-frame img{width:100%;height:420px;object-fit:cover;border-radius:16px}
+    .mobile-title{font-family:Playfair Display, serif;font-size:36px;font-weight:900;margin:12px 0 8px;text-align:center}
+    .mobile-desc{color:var(--muted);text-align:center;padding:0 14px;max-width:420px}
+
+    .section-card{width:100%;max-width:980px;margin:40px auto;padding:48px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.02));box-shadow:0 20px 50px rgba(0,0,0,0.45)}
     .anim{opacity:0;transform:translateY(12px);transition:opacity 700ms ease, transform 700ms ease}
     .anim.in-view{opacity:1;transform:none}
 
+    @media (max-width:980px){ .hero-title{font-size:52px} .frame-inner img{height:460px} }
+    @media (max-width:820px){
+      .hamburger{display:flex}
+      nav.desktop{display:none}
+      .hero{display:none}
+      .mobile-stack{display:flex}
+      header{height:64px}
+      .brand-text{display:none}
+      main{padding-top:70px}
+    }
+    @media (max-width:420px){
+      .neon-btn{width:52px;height:52px;border-radius:12px}
+      .mobile-icons .square{width:64px;height:64px}
+      .mobile-frame img{height:380px}
+      .mobile-title{font-size:32px}
+    }
+
+    .muted{color:var(--muted)}
+    a, a:visited { text-decoration: none; }
   </style>
 </head>
-<body>
+<body data-theme="dark">
   <header>
     <div class="left-group">
-      <div class="hamburger" id="hamburger" aria-label="menu (mobile)" aria-expanded="false">
-        <div class="lines"><span></span><span></span><span></span></div>
+      <div class="neon-btn hamburger" id="hamburger" aria-label="menu (mobile)" aria-expanded="false" title="Menu">
+        <div class="lines" aria-hidden="true"><span></span><span></span><span></span></div>
       </div>
+
       <div class="brand">
         <img id="brandImg" class="brand-img" src="assets/bg.jpg" alt="brand">
         <div class="brand-text">Abhinand</div>
@@ -119,39 +178,37 @@
     </div>
 
     <nav class="desktop" aria-label="main navigation">
-      <a href="#home" data-target="home">HOME</a>
+      <a href="#home" data-target="home" class="is-active">HOME</a>
       <a href="#about" data-target="about">ABOUT</a>
       <a href="#projects" data-target="projects">PROJECTS</a>
       <a href="#contact" data-target="contact">CONTACT</a>
     </nav>
 
     <div style="display:flex;align-items:center;gap:12px">
-      <div id="themeToggle" class="theme-toggle" title="Toggle theme" role="button" tabindex="0" aria-pressed="false">
-        <!-- moon + sun svgs; CSS toggles which shows -->
-        <svg class="moon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="white" d="M21 12.79A9 9 0 1111.21 3c.41 0 .81.03 1.2.08A7 7 0 0021 12.79z"/></svg>
-        <svg class="sun" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4" fill="#fff"/><g fill="#fff" opacity="0.85"><rect x="11" y="1" width="2" height="3" rx="1"/><rect x="11" y="20" width="2" height="3" rx="1"/><rect x="1" y="11" width="3" height="2" rx="1"/><rect x="20" y="11" width="3" height="2" rx="1"/><rect x="4.2" y="4.2" width="2" height="3" rx="1" transform="rotate(-45 5.2 5.7)"/><rect x="17.8" y="16.8" width="2" height="3" rx="1" transform="rotate(-45 18.8 18.3)"/><rect x="4.2" y="16.8" width="2" height="3" rx="1" transform="rotate(45 5.2 18.3)"/><rect x="17.8" y="4.2" width="2" height="3" rx="1" transform="rotate(45 18.8 5.7)"/></g></svg>
+      <div id="themeToggle" class="neon-btn theme-toggle" title="Toggle theme" role="button" tabindex="0" aria-pressed="false">
+        <svg class="icon moon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="white" d="M21 12.79A9 9 0 1111.21 3c.41 0 .81.03 1.2.08A7 7 0 0021 12.79z"/></svg>
+        <svg class="icon sun" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:none"><circle cx="12" cy="12" r="4" fill="#fff"/></svg>
       </div>
     </div>
   </header>
 
-  <!-- mobile menu -->
   <div id="mobileMenu" style="display:none;position:fixed;left:12px;right:12px;top:76px;background:var(--panel);border-radius:12px;padding:16px;z-index:120;backdrop-filter:blur(8px)">
-    <a href="#home" data-target="home">Home</a><br>
-    <a href="#about" data-target="about">About</a><br>
-    <a href="#projects" data-target="projects">Projects</a><br>
+    <a href="#home" data-target="home">Home</a><br><br>
+    <a href="#about" data-target="about">About</a><br><br>
+    <a href="#projects" data-target="projects">Projects</a><br><br>
     <a href="#contact" data-target="contact">Contact</a>
   </div>
 
   <main>
-    <!-- Hero desktop-first -->
-    <section id="home">
+    <!-- DESKTOP HERO -->
+    <section id="home" aria-label="home hero">
       <div class="hero">
         <div>
           <div class="intro">
             <small>HELLO</small>
-            <h1>I'm Abhinand<br>Babu\\</h1>
-            <div class="underline-dots"></div>
-            <p>B.Tech Computer Science Engineer with a strong foundation in software development and web technologies.</p>
+            <h1 class="hero-title">I'm Abhinand<br>Babu</h1>
+            <div class="underline-line" aria-hidden="true"></div>
+            <p class="muted">B.Tech Computer Science Engineer with a strong foundation in software development and web technologies.</p>
             <div class="cta">
               <a class="btn primary" href="#about" id="moreBtn">MORE ABOUT ME</a>
               <a class="btn ghost" href="#contact" id="contactBtn">GET IN TOUCH</a>
@@ -161,38 +218,56 @@
 
         <div style="position:relative;display:flex;flex-direction:column;align-items:center">
           <div class="neon-frame" id="neonFrame" aria-hidden="false">
-            <div class="neon-icons" aria-hidden="true">
-              <div class="square"><svg viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2" ry="2" fill="rgba(255,255,255,0.02)" stroke="white"/></svg></div>
-              <div class="square"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.54 2.36 1.09 2.93.83.09-.64.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.28.1-2.67 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.8c.85.004 1.71.115 2.51.338 1.9-1.29 2.74-1.02 2.74-1.02.55 1.39.2 2.42.1 2.67.64.7 1.03 1.59 1.03 2.68 0 3.85-2.33 4.7-4.56 4.95.36.31.68.92.68 1.86 0 1.34-.01 2.42-.01 2.75 0 .27.18.59.69.49A10.02 10.02 0 0 0 22 12c0-5.52-4.48-10-10-10z" fill="white"/></svg></div>
-              <div class="square"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" ry="3" fill="none" stroke="white"/></svg></div>
-              <div class="square"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="white"/></svg></div>
+            <!-- anchored top-right icons (desktop/landscape) -->
+            <div class="neon-icons" aria-hidden="false">
+              <a class="square" title="Email" href="mailto:you@example.com" aria-label="email">
+                <svg viewBox="0 0 24 24"><path fill="white" d="M2 6.5V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6.5L12 13 2 6.5zM22 5H2v-.5A2.5 2.5 0 0 1 4.5 2h15A2.5 2.5 0 0 1 22 4.5V5z"/></svg>
+              </a>
+              <a class="square" title="GitHub" href="#" aria-label="github">
+                <svg viewBox="0 0 24 24"><path fill="white" d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-1.8c-3.3.7-4-1.6-4-1.6-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1 1.6 1 .9 1.6 2.4 1.1 3 .8.1-.6.3-1.1.6-1.4-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.4 1.2-3.3-.1-.3-.5-1.3.1-2.6 0 0 1-.3 3.3 1.2a11.6 11.6 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.3.2 2.3.1 2.6.8.9 1.2 2 1.2 3.3 0 4.5-2.7 5.4-5.3 5.8.3.2.6.6.6 1.2v1.8c0 .3.2.6.8.5A12 12 0 0 0 12 .5z"/></svg>
+              </a>
+              <a class="square" title="LinkedIn" href="#" aria-label="linkedin">
+                <svg viewBox="0 0 24 24"><path fill="white" d="M6.94 6.5A1.94 1.94 0 1 1 6.94 2.6a1.94 1.94 0 0 1 0 3.9zM3 8.5h7v13H3zM11.5 8.5h6.7v2.1h.1c.9-1.8 3-3.7 6.1-3.7v6.2h-7.4V21h-5.5z"/></svg>
+              </a>
+              <a class="square" title="Instagram" href="#" aria-label="instagram">
+                <svg viewBox="0 0 24 24"><path fill="white" d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5.5A4.5 4.5 0 1 0 16.5 12 4.5 4.5 0 0 0 12 7.5zM18.5 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg>
+              </a>
             </div>
 
-            <div class="inner"><img id="heroImage" src="assets/bg.jpg" alt="hero image"></div>
+            <div class="frame-inner">
+              <img id="heroImage" src="assets/bg.jpg" alt="hero image">
+            </div>
           </div>
         </div>
-
       </div>
     </section>
 
-    <!-- Mobile stacked: icons then image then text (matching mobile screenshot ordering) -->
+    <!-- MOBILE STACKED HERO -->
     <section id="mobile-stack" style="display:none;">
-      <div class="mobile-stack">
-        <div style="display:flex;gap:14px;justify-content:center;width:100%">
-          <div class="square"><svg viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2" ry="2" fill="rgba(255,255,255,0.02)" stroke="white"/></svg></div>
-          <div class="square"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.54 2.36 1.09 2.93.83.09-.64.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.28.1-2.67 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.8c.85.004 1.71.115 2.51.338 1.9-1.29 2.74-1.02 2.74-1.02.55 1.39.2 2.42.1 2.67.64.7 1.03 1.59 1.03 2.68 0 3.85-2.33 4.7-4.56 4.95.36.31.68.92.68 1.86 0 1.34-.01 2.42-.01 2.75 0 .27.18.59.69.49A10.02 10.02 0 0 0 22 12c0-5.52-4.48-10-10-10z" fill="white"/></svg></div>
-          <div class="square"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" ry="3" fill="none" stroke="white"/></svg></div>
-          <div class="square"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="white"/></svg></div>
+      <div class="mobile-stack" role="region" aria-label="mobile hero area">
+        <div class="mobile-icons" aria-hidden="false">
+          <a class="square" title="Email" href="mailto:you@example.com" aria-label="email">
+            <svg viewBox="0 0 24 24"><path fill="white" d="M2 6.5V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6.5L12 13 2 6.5zM22 5H2v-.5A2.5 2.5 0 0 1 4.5 2h15A2.5 2.5 0 0 1 22 4.5V5z"/></svg>
+          </a>
+          <a class="square" title="GitHub" href="#" aria-label="github">
+            <svg viewBox="0 0 24 24"><path fill="white" d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-1.8c-3.3.7-4-1.6-4-1.6-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1 1.6 1 .9 1.6 2.4 1.1 3 .8.1-.6.3-1.1.6-1.4-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.4 1.2-3.3-.1-.3-.5-1.3.1-2.6 0 0 1-.3 3.3 1.2a11.6 11.6 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.3.2 2.3.1 2.6.8.9 1.2 2 1.2 3.3 0 4.5-2.7 5.4-5.3 5.8.3.2.6.6.6 1.2v1.8c0 .3.2.6.8.5A12 12 0 0 0 12 .5z"/></svg>
+          </a>
+          <a class="square" title="LinkedIn" href="#" aria-label="linkedin">
+            <svg viewBox="0 0 24 24"><path fill="white" d="M6.94 6.5A1.94 1.94 0 1 1 6.94 2.6a1.94 1.94 0 0 1 0 3.9zM3 8.5h7v13H3zM11.5 8.5h6.7v2.1h.1c.9-1.8 3-3.7 6.1-3.7v6.2h-7.4V21h-5.5z"/></svg>
+          </a>
+          <a class="square" title="Instagram" href="#" aria-label="instagram">
+            <svg viewBox="0 0 24 24"><path fill="white" d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5.5A4.5 4.5 0 1 0 16.5 12 4.5 4.5 0 0 0 12 7.5zM18.5 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg>
+          </a>
         </div>
 
-        <div style="width:100%;max-width:540px;margin-top:6px">
-          <div class="neon-frame"><div class="inner"><img src="assets/bg.jpg" alt="mobile hero"></div></div>
+        <div class="mobile-frame">
+          <div class="neon-frame"><div class="frame-inner"><img src="assets/bg.jpg" alt="mobile hero"></div></div>
         </div>
 
         <div style="text-align:center;padding:8px 12px">
           <small style="color:var(--accent-c);letter-spacing:2px">HELLO</small>
-          <h2 style="font-family:Playfair Display, serif">I'm Abhinand<br>Babu\\</h2>
-          <p style="color:var(--muted)">B.Tech Computer Science Engineer with a strong foundation in software development and web technologies.</p>
+          <h2 class="mobile-title">I'm Abhinand<br>Babu</h2>
+          <p class="mobile-desc">B.Tech Computer Science Engineer with a strong foundation in software development and web technologies.</p>
           <div style="margin-top:18px"><a class="btn primary" href="#about">MORE ABOUT ME</a> <a class="btn ghost" href="#contact">GET IN TOUCH</a></div>
         </div>
       </div>
@@ -205,94 +280,70 @@
   </main>
 
   <script>
-    // theme toggle
+    // theme
     const root = document.documentElement;
     const stored = localStorage.getItem('theme');
     if(stored) root.setAttribute('data-theme', stored);
     const themeToggle = document.getElementById('themeToggle');
-    themeToggle.addEventListener('click', ()=>{
-      const cur = root.getAttribute('data-theme') || 'dark';
-      const next = cur === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', next); localStorage.setItem('theme', next);
-      themeToggle.setAttribute('aria-pressed', next === 'light');
-    });
+    const moonSvg = themeToggle.querySelector('.moon');
+    const sunSvg = themeToggle.querySelector('.sun');
+    function setTheme(t){
+      root.setAttribute('data-theme', t);
+      localStorage.setItem('theme', t);
+      themeToggle.setAttribute('aria-pressed', t==='light');
+      if(t==='light'){ moonSvg.style.display='none'; sunSvg.style.display='block'; themeToggle.classList.add('glow'); } else { moonSvg.style.display='block'; sunSvg.style.display='none'; themeToggle.classList.remove('glow'); }
+    }
+    setTheme(stored || 'dark');
+    themeToggle.addEventListener('click', ()=>{ const cur=root.getAttribute('data-theme')||'dark'; setTheme(cur==='dark'?'light':'dark'); });
 
-    // hamburger - mobile only
+    // hamburger
     const ham = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobileMenu');
     ham.addEventListener('click', ()=>{
       const open = ham.classList.toggle('open');
       ham.setAttribute('aria-expanded', open);
       mobileMenu.style.display = open ? 'block' : 'none';
+      ham.classList.toggle('glow', open);
     });
 
-    // responsive mobile stack toggle
+    // layout switch (desktop vs mobile)
+    const mobileStackSection = document.getElementById('mobile-stack');
+    const desktopHeroSection = document.getElementById('home');
     function updateLayout(){
-      const mobileStack = document.getElementById('mobile-stack');
-      if(window.innerWidth <= 820){ mobileStack.style.display = 'flex'; } else { mobileStack.style.display = 'none'; mobileMenu.style.display = 'none'; ham.classList.remove('open'); ham.setAttribute('aria-expanded', false); }
+      if(window.innerWidth <= 820){
+        mobileStackSection.style.display = 'block';
+        desktopHeroSection.style.display = 'none';
+      } else {
+        mobileStackSection.style.display = 'none';
+        desktopHeroSection.style.display = 'block';
+        mobileMenu.style.display = 'none';
+        ham.classList.remove('open'); ham.classList.remove('glow'); ham.setAttribute('aria-expanded', false);
+      }
     }
-    window.addEventListener('resize', updateLayout); updateLayout();
+    window.addEventListener('resize', updateLayout);
+    updateLayout();
 
-    // sample image color and apply to CSS variables for exact color matching; requires assets/bg.jpg to be same-origin
-    function sampleImageColor(img, callback){
-      try{
-        const c = document.createElement('canvas'); c.width=1; c.height=1;
-        const ctx = c.getContext('2d'); ctx.drawImage(img,0,0,1,1);
-        const d = ctx.getImageData(0,0,1,1).data; callback(d);
-      }catch(e){ console.warn('color sampling failed', e); callback([47,231,255,255]); }
-    }
-
-    const hero = document.getElementById('heroImage');
-    const brand = document.getElementById('brandImg');
-    function applySample(d){
-      const r=d[0], g=d[1], b=d[2];
-      const accent = `rgb(${r},${g},${b})`;
-      const accent2 = `rgb(${Math.min(255,r+80)},${Math.min(255,g+80)},${Math.min(255,b+80)})`;
-      root.style.setProperty('--accent-c', accent);
-      root.style.setProperty('--accent-2', accent2);
-      // add glow effect to brand
-      brand.style.boxShadow = `0 12px 30px rgba(0,0,0,0.6), 0 0 18px ${accent}`;
-    }
-
-    if(hero.complete){ sampleImageColor(hero, applySample); } else { hero.addEventListener('load', ()=> sampleImageColor(hero, applySample)); }
-
-    // intersection observer for animations
+    // reveal animation
     const io = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in-view'); }); },{threshold:0.2});
     document.querySelectorAll('.anim').forEach(n=>io.observe(n));
 
-    // NAV: smooth scroll & active link on section in-view
+    // nav & smooth
     const navLinks = Array.from(document.querySelectorAll('nav.desktop a'));
-    const sections = Array.from(document.querySelectorAll('main > section'))
-      .filter(s=>s.id && s.id !== 'mobile-stack');
-
-    // click handlers for links/buttons to smooth scroll
-    function smoothTo(id){
-      const el = document.getElementById(id);
-      if(!el) return;
-      el.scrollIntoView({behavior:'smooth', block:'start'});
-    }
-    // nav links (desktop and mobile menu)
+    const sections = Array.from(document.querySelectorAll('main > section')).filter(s=>s.id && s.id !== 'mobile-stack');
+    function smoothTo(id){ const el = document.getElementById(id); if(!el) return; el.scrollIntoView({behavior:'smooth', block:'start'}); }
     document.querySelectorAll('a[data-target]').forEach(a=>{
-      a.addEventListener('click', (e)=>{ e.preventDefault(); const t=a.getAttribute('data-target'); smoothTo(t); if(window.innerWidth<=820) { mobileMenu.style.display='none'; ham.classList.remove('open'); ham.setAttribute('aria-expanded', false);} });
+      a.addEventListener('click', (e)=>{ e.preventDefault(); const t=a.getAttribute('data-target'); smoothTo(t); if(window.innerWidth<=820) { mobileMenu.style.display='none'; ham.classList.remove('open'); ham.classList.remove('glow'); ham.setAttribute('aria-expanded', false);} });
     });
-    // CTA buttons
     document.getElementById('moreBtn').addEventListener('click', (e)=>{ e.preventDefault(); smoothTo('about'); });
     document.getElementById('contactBtn').addEventListener('click', (e)=>{ e.preventDefault(); smoothTo('contact'); });
 
-    // active section highlighting
     const sectionObserver = new IntersectionObserver((entries)=>{
       entries.forEach(entry=>{
         const id = entry.target.id;
-        if(entry.isIntersecting){
-          navLinks.forEach(a=> a.classList.toggle('is-active', a.getAttribute('data-target')===id));
-        }
+        if(entry.isIntersecting){ navLinks.forEach(a=> a.classList.toggle('is-active', a.getAttribute('data-target')===id)); }
       });
     },{threshold:0.55});
     sections.forEach(s=>sectionObserver.observe(s));
-
-    // close mobile menu on resize >820
-    window.addEventListener('resize', ()=>{ if(window.innerWidth>820){ mobileMenu.style.display='none'; } });
-
   </script>
 </body>
 </html>
