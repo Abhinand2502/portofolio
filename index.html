@@ -16,6 +16,7 @@
       --panel: rgba(255, 255, 255, 0.7);
       --btn-bg: #2563eb;
       --btn-text: #ffffff;
+      --glow: linear-gradient(135deg, #00f0ff, #bc13fe);
     }
     [data-theme="dark"] {
       --bg: #0b0b0b;
@@ -92,16 +93,9 @@
         justify-content: center;
         align-items: center;
       }
-      nav.open {
-        right: 0;
-      }
-      nav ul {
-        flex-direction: column;
-        gap: 20px;
-      }
-      .menu-toggle {
-        display: block;
-      }
+      nav.open { right: 0; }
+      nav ul { flex-direction: column; gap: 20px; }
+      .menu-toggle { display: block; }
     }
 
     /* =====================
@@ -113,8 +107,7 @@
       align-items: center;
       justify-content: center;
       gap: 50px;
-      padding: 80px 5% 40px;
-      scroll-snap-align: start;
+      padding: 100px 5% 40px;
     }
     .hero-content {
       flex: 1;
@@ -140,24 +133,13 @@
       font-weight: 600;
       transition: 0.3s;
     }
-    .btn-primary {
-      background: var(--btn-bg);
-      color: var(--btn-text);
-    }
-    .btn-outline {
-      border: 1px solid var(--text);
-      color: var(--text);
-    }
-    .hero-image {
+    .btn-primary { background: var(--btn-bg); color: var(--btn-text); }
+    .btn-outline { border: 1px solid var(--text); color: var(--text); }
+
+    .hero-right {
       flex: 1;
       text-align: center;
       position: relative;
-    }
-    .hero-image img {
-      max-width: 100%;
-      border-radius: 20px;
-      border: 3px solid transparent;
-      box-shadow: 0 0 25px rgba(0,0,0,0.4);
     }
     .socials {
       display: flex;
@@ -173,39 +155,26 @@
       border-radius: 12px;
       color: #fff;
       font-size: 1.3rem;
-      background: linear-gradient(135deg, #00f0ff, #bc13fe);
+      background: var(--glow);
       box-shadow: 0 0 15px rgba(188,19,254,0.6);
       transition: transform 0.3s;
     }
-    .socials a:hover {
-      transform: translateY(-5px);
+    .socials a:hover { transform: translateY(-5px); }
+    .hero-image img {
+      max-width: 100%;
+      border-radius: 20px;
+      padding: 5px;
+      background: var(--glow);
+      box-shadow: 0 0 25px rgba(0,0,0,0.4);
     }
 
+    /* Mobile layout */
     @media(max-width: 900px) {
-      section.hero {
-        flex-direction: column;
-        text-align: center;
-      }
-      .hero-buttons {
-        justify-content: center;
-      }
-    }
-
-    /* =====================
-       Sections with snap
-    ====================== */
-    main {
-      scroll-snap-type: y mandatory;
-      overflow-y: scroll;
-      height: 100vh;
-    }
-    section {
-      min-height: 100vh;
-      padding: 80px 5%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      scroll-snap-align: start;
+      section.hero { flex-direction: column; text-align: center; }
+      .hero-content { order: 3; }
+      .hero-right { order: 2; }
+      .socials { order: 1; margin-top: 20px; }
+      .hero-buttons { justify-content: center; }
     }
   </style>
 </head>
@@ -227,47 +196,36 @@
     </button>
   </header>
 
-  <!-- Main -->
-  <main>
-    <!-- Hero -->
-    <section class="hero" id="home">
-      <div class="hero-content">
-        <p style="color:var(--primary); font-weight:600;">HELLO</p>
-        <h1>I'm Abhinand<br>Babu</h1>
-        <p>B.Tech Computer Science Engineer with a strong foundation in software development and web technologies.</p>
-        <div class="hero-buttons">
-          <a href="#about" class="btn-primary">More About Me</a>
-          <a href="#contact" class="btn-outline">Get In Touch</a>
-        </div>
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <p style="color:var(--primary); font-weight:600;">HELLO</p>
+      <h1>I'm Abhinand<br>Babu</h1>
+      <p>B.Tech Computer Science Engineer with a strong foundation in software development and web technologies.</p>
+      <div class="hero-buttons">
+        <a href="#about" class="btn-primary">More About Me</a>
+        <a href="#contact" class="btn-outline">Get In Touch</a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="socials">
+        <a href="#"><i class="fas fa-envelope"></i></a>
+        <a href="#"><i class="fab fa-github"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
       </div>
       <div class="hero-image">
-        <div class="socials">
-          <a href="#"><i class="fas fa-envelope"></i></a>
-          <a href="#"><i class="fab fa-github"></i></a>
-          <a href="#"><i class="fab fa-linkedin-in"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-        </div>
         <img src="assets/bg.jpg" alt="Abhinand">
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- About -->
-    <section id="about">
-      <h2>About Me</h2>
-    </section>
+  <!-- Dummy sections -->
+  <section id="about"><h2>About</h2></section>
+  <section id="projects"><h2>Projects</h2></section>
+  <section id="contact"><h2>Contact</h2></section>
 
-    <!-- Projects -->
-    <section id="projects">
-      <h2>Projects</h2>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact">
-      <h2>Contact</h2>
-    </section>
-  </main>
-
-  <!-- Script -->
   <script>
     // Theme Toggle
     const toggleBtn = document.getElementById('theme-toggle');
