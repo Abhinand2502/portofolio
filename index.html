@@ -3,34 +3,28 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Abhinand — Portfolio</title>
+  <title>Abhinand — Portfolio (Demo)</title>
 
-  <!-- Fonts (same as your original) -->
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
   <style>
-    /* -------------------------
-       Your original theme variables (unchanged)
-       ------------------------- */
     :root{
       --header-h:64px;
-
       --bg: #070707;
       --panel: rgba(255,255,255,0.02);
       --text: #e9eef8;
-      --muted: #aab3be;
+      --muted: #9aa6b3;
       --accent: #1e7cff;
       --neon-c1: #33f6ff;
       --neon-c2: #7c4dff;
       --neon-c3: #ff66d0;
       --glass: rgba(255,255,255,0.03);
       --glass-strong: rgba(255,255,255,0.06);
-      --header-bg: rgba(0,0,0,0.6);
+      --header-bg: rgba(0,0,0,0.55);
       --header-text: #dff1ff;
-      --shadow-glow: 0 10px 40px rgba(124,77,255,0.08), 0 6px 24px rgba(51,246,255,0.06);
+      --shadow-glow: 0 12px 40px rgba(124,77,255,0.08), 0 8px 28px rgba(51,246,255,0.06);
     }
-
-    /* light mode overrides (kept same as you specified) */
     body.light{
       --bg: #fafafa;
       --panel: rgba(0,0,0,0.03);
@@ -41,12 +35,9 @@
       --glass-strong: rgba(0,0,0,0.06);
       --header-bg: rgba(255,255,255,0.6);
       --header-text: #071018;
-      --shadow-glow: 0 10px 40px rgba(124,77,255,0.04), 0 6px 24px rgba(51,246,255,0.03);
+      --shadow-glow: 0 10px 30px rgba(124,77,255,0.04), 0 6px 20px rgba(51,246,255,0.03);
     }
 
-    /* -------------------------
-       Globals (kept your original defaults)
-       ------------------------- */
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
@@ -60,41 +51,42 @@
       padding-top: var(--header-h);
       transition: background .35s ease, color .25s ease;
       min-height:100vh;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      -webkit-font-smoothing:antialiased;
     }
-    a{color:inherit;text-decoration:none;cursor:pointer}
+    a{color:inherit;text-decoration:none}
 
+    /* center wrapper */
     .wrap{
       max-width:1180px;
-      margin: 40px auto;
-      padding: 36px;
+      margin: 28px auto;
+      padding: 18px;
     }
 
-    /* -------------------------
-       Header (transparent)
-       ------------------------- */
+    /* Header */
     .site-header{
       position:fixed;
-      left:0; right:0; top:0;
+      left:0; right:0;
+      top:0;
       height:var(--header-h);
       display:flex;
       align-items:center;
-      z-index:1400;
+      justify-content:center;
+      z-index:1200;
       transition: background .28s ease, color .25s ease, backdrop-filter .28s ease;
       background: var(--header-bg);
       backdrop-filter: blur(6px);
       box-shadow: 0 1px 0 rgba(0,0,0,0.35) inset;
     }
-
     .header-inner{
       width:100%;
       max-width:1180px;
-      margin:0 auto;
       display:flex;
       align-items:center;
       gap:12px;
       padding:0 18px;
     }
-
     .brand{ display:flex; align-items:center; gap:12px; margin-right:auto; }
     .logo-pill{
       padding:8px 12px;
@@ -115,7 +107,7 @@
     }
     nav.header-nav a{
       color:var(--header-text);
-      font-weight:600;
+      font-weight:700;
       letter-spacing:0.6px;
       padding:6px 0;
       position:relative;
@@ -133,15 +125,9 @@
       box-shadow: 0 6px 16px rgba(30,124,255,0.18);
     }
 
-    .header-actions{
-      margin-left:auto;
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
+    .header-actions{ margin-left:auto; display:flex; align-items:center; gap:10px; }
 
-    /* hamburger appears only on mobile via CSS */
-    .hamburger, .mode-toggle{
+    .mode-toggle, .menu-toggle{
       width:44px;height:44px;
       display:inline-grid;
       place-items:center;
@@ -154,59 +140,31 @@
       backdrop-filter: blur(4px);
     }
 
-    /* Mobile drawer */
-    .drawer {
-      position: fixed;
-      top: 0;
-      left: -100%;
-      width: 84%;
-      max-width: 360px;
-      height: 100vh;
-      background: var(--header-bg);
-      backdrop-filter: blur(8px);
-      box-shadow: 40px 0 80px rgba(0,0,0,0.6);
-      z-index:1500;
-      transition: left .36s cubic-bezier(.2,.9,.2,1);
-      padding:90px 20px 20px;
-      display:flex;
-      flex-direction:column;
-      gap:18px;
+    /* Mobile menu overlay */
+    .mobile-nav {
+      position:fixed;
+      inset: var(--header-h) 0 0 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.7), rgba(0,0,0,0.85));
+      display:none;
+      z-index:1100;
+      padding:28px;
+      backdrop-filter: blur(6px);
     }
-    .drawer.open { left: 0; }
+    .mobile-nav.open{ display:block }
+    .mobile-nav a{ display:block; padding:14px 0; font-size:20px; color:var(--text); font-weight:700 }
 
-    .drawer a{ color:var(--header-text); font-weight:700; font-size:18px; }
-
-    .drawer-close{
-      position:absolute; top:14px; right:14px; width:44px;height:44px; display:grid;place-items:center; border-radius:10px;
-      background: linear-gradient(180deg, var(--glass-strong), var(--glass));
-      border: 1px solid rgba(255,255,255,0.04);
-      cursor:pointer;
-    }
-
-    /* -------------------------
-       Hero grid (we will reorder in CSS for mobile)
-       ------------------------- */
+    /* Hero grid */
     .hero{
       display:grid;
-      grid-template-columns: 1fr 540px;
+      grid-template-columns: 1fr 520px;
       gap:48px;
       align-items:center;
-      margin-top:20px;
+      margin-top:18px;
       padding-bottom:60px;
     }
 
-    /* left column */
-    .hero-left{
-      max-width:720px;
-      padding-left:20px;
-    }
-    .eyebrow{
-      color:var(--accent);
-      font-weight:700;
-      letter-spacing:2px;
-      font-size:14px;
-      margin-bottom:14px;
-    }
+    .hero-left{ max-width:720px; padding-left:20px; }
+    .eyebrow{ color:var(--accent); font-weight:700; letter-spacing:2px; font-size:14px; margin-bottom:14px; }
 
     h1{
       margin:0 0 20px 0;
@@ -219,209 +177,124 @@
       position:relative;
       display:inline-block;
     }
+    h1 .underline{ display:inline-block; padding-right:8px; border-bottom:3px solid var(--accent); margin-right:8px; }
+    h1 .slash{ color:var(--muted); font-weight:700; margin-left:6px; }
 
-    /* stylized underline with blue rule and caret */
-    h1 .underline{
-      display:inline-block;
-      padding-right:8px;
-      border-bottom:3px solid var(--accent);
-      margin-right:8px;
-    }
-    h1 .slash{
-      color:var(--muted);
-      font-weight:700;
-      margin-left:6px;
-    }
+    p.lead{ color:var(--muted); font-size:16px; max-width:640px; margin-top:18px; line-height:1.7; }
 
-    p.lead{
-      color:var(--muted);
-      font-size:16px;
-      max-width:640px;
-      margin-top:18px;
-      line-height:1.7;
-    }
-
-    .cta{
-      margin-top:26px;
-      display:flex;
-      gap:14px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
+    .cta{ margin-top:26px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
     .btn{
-      padding:12px 20px;
-      border-radius:10px;
-      font-weight:700;
-      cursor:pointer;
-      border:0;
-      transition:transform .12s ease, box-shadow .12s ease;
-      box-shadow: 0 8px 24px rgba(2,6,23,0.35);
+      padding:12px 20px; border-radius:10px; font-weight:700; cursor:pointer; border:0;
+      transition:transform .12s ease, box-shadow .12s ease; box-shadow: 0 8px 24px rgba(2,6,23,0.35);
     }
     .btn-primary{
       background: linear-gradient(180deg,var(--accent), #2a7bff);
-      color:white;
-      text-transform:uppercase;
-      letter-spacing:1px;
-      box-shadow: 0 10px 40px rgba(30,124,255,0.18);
+      color:white; text-transform:uppercase; letter-spacing:1px; box-shadow: 0 10px 40px rgba(30,124,255,0.18);
     }
     .btn-outline{
-      background:transparent;
-      color:var(--text);
+      background:transparent; color:var(--text);
       border:2px solid;
       border-image: linear-gradient(90deg,var(--neon-c1),var(--neon-c2),var(--neon-c3)) 1;
-      padding:10px 18px;
-      border-radius:12px;
-      font-weight:700;
-      text-transform:uppercase;
+      padding:10px 18px; border-radius:12px; font-weight:700; text-transform:uppercase;
     }
-
     .btn:hover{ transform:translateY(-3px) }
 
-    /* -------------------------
-       Right column: neon framed image
-       ------------------------- */
+    /* neon frame (thinner neon line) */
     .neon-frame{
       position:relative;
       border-radius:26px;
-      padding:12px;
+      padding:8px;
       background:
         linear-gradient(180deg, rgba(0,0,0,0.72), rgba(0,0,0,0.55)) padding-box,
         linear-gradient(90deg, var(--neon-c1), var(--neon-c2), var(--neon-c3)) border-box;
-      border:6px solid transparent;
+      border:4px solid transparent; /* thin vibrant border */
       box-shadow: var(--shadow-glow);
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      overflow:visible;
+      display:flex; justify-content:center; align-items:center; overflow:visible;
     }
-    .neon-frame .portrait{
-      width:100%;
+    .portrait{
+      width:100%; border-radius:16px; overflow:hidden; position:relative; background: rgba(0,0,0,0.36);
       border-radius:16px;
-      overflow:hidden;
-      position:relative;
     }
-    .portrait img{
+
+    /* carousel slides inside portrait */
+    .slides{
+      width:100%; height:420px; position:relative; overflow:hidden; border-radius:12px;
       display:block;
-      width:100%;
-      height:420px;
-      object-fit:cover;
-      object-position:center;
-      border-radius:12px;
     }
+    .slide{
+      position:absolute; inset:0; display:block; opacity:0; transform:scale(1.03);
+      transition:opacity .6s ease, transform .6s ease;
+    }
+    .slide img{ width:100%; height:100%; object-fit:cover; display:block; }
 
-    /* socials floating above the image (desktop) */
+    .slide.active{ opacity:1; transform:scale(1); z-index:2; }
+
+    /* socials above image */
     .socials{
-      position:absolute;
-      top:-26px;
-      left:50%;
-      transform:translateX(-50%);
-      gap:18px;
-      display:flex;
-      z-index:20;
-      pointer-events:auto;
+      position:absolute; top:-28px; left:50%; transform:translateX(-50%);
+      gap:18px; display:flex; z-index:20; pointer-events:auto;
     }
-
-    /* improved futuristic social button visuals */
     .social{
-      width:64px;height:64px;
-      border-radius:12px;
-      display:grid;
-      place-items:center;
+      width:64px;height:64px;border-radius:12px;display:grid;place-items:center;
       background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.25));
-      border: 4px solid transparent;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.55), 0 0 20px rgba(0,0,0,0.25);
-      position:relative;
-      cursor:pointer;
-      transition: transform .22s ease, box-shadow .22s ease;
+      border: 4px solid rgba(0,0,0,0.35);
+      position:relative; cursor:pointer;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.55);
     }
-    .social .inner{
-      width:44px;height:44px;
-      border-radius:8px;
-      display:grid;place-items:center;
-      background:linear-gradient(180deg, rgba(0,0,0,0.85), rgba(0,0,0,0.7));
-      border-radius:8px;
-      box-shadow: inset 0 2px 8px rgba(255,255,255,0.02);
-      transition: background .22s ease, transform .22s ease;
-    }
-    .social svg{ width:22px;height:22px; fill:white; opacity:0.95; pointer-events:none }
-
-    /* neon outline for each icon (desktop) */
     .social::before{
-      content:"";
-      position:absolute;
-      inset:-6px;
-      border-radius:14px;
+      content:""; position:absolute; inset:-6px; border-radius:14px;
       background: linear-gradient(90deg,var(--neon-c1),var(--neon-c2));
-      z-index:-1;
-      filter:blur(8px) saturate(140%);
-      opacity:0.9;
-      transition: opacity .22s ease, transform .22s ease;
+      z-index:-1; filter:blur(8px) saturate(140%); opacity:0.9;
     }
+    .social .inner{ width:44px;height:44px;border-radius:8px; display:grid; place-items:center; background:linear-gradient(180deg, rgba(0,0,0,0.85), rgba(0,0,0,0.7)); }
+    .social svg{ width:22px;height:22px; fill:white; opacity:0.95; }
 
-    /* hover: smoother futuristic change to blue accent */
-    .social:hover{
-      transform: translateY(-6px);
-    }
-    .social:hover .inner{
-      background: linear-gradient(180deg,var(--accent), #2a7bff);
-      transform: scale(1.03);
-    }
-    .social:hover::before{
-      filter: blur(14px) saturate(180%);
-      transform: scale(1.05);
-    }
+    /* Sparkle */
+    .sparkle{ position:fixed; right:18px; bottom:36px; width:56px;height:56px; z-index:10; pointer-events:none; opacity:0.8; filter:blur(0.2px); }
 
-    /* small helpers */
-    .muted{ color:var(--muted) }
-
-    /* sparkle decoration bottom-right */
-    .sparkle{
-      position:fixed;
-      right:18px;
-      bottom:36px;
-      width:56px;height:56px;
-      z-index:10;
-      pointer-events:none;
-      opacity:0.8;
-      filter:blur(0.2px);
-    }
-
-    /* -------------------------
-       Mobile: reposition/order + hamburger visible
-       ------------------------- */
+    /* Responsive - mobile */
     @media (max-width:900px){
-      .wrap{ padding:28px 18px; margin-top:8px }
-      /* show hamburger icon and hide desktop nav */
+      .wrap{ padding:18px; margin-top:8px }
+      .hero{ grid-template-columns:1fr; gap:24px; padding-bottom:40px; }
+      .hero-left{ text-align:center; padding:0 8px }
+      h1{ font-size:48px; display:block; }
+      .slides{ height:360px }
       nav.header-nav{ display:none }
-      .hamburger{ display:inline-grid }
-
-      /* change layout order: socials (mobile) -> image -> text */
-      .hero{
-        grid-template-columns:1fr;
-        gap:18px;
-      }
-      /* we will place a mobile-socials element below header (in DOM) and hide .socials on mobile */
-      .socials{ display:none }
-
-      /* mobile portrait sizing */
-      .portrait img{ height:420px; }
-      h1{ font-size:48px; text-align:center }
-      .hero-left{ order:3; text-align:center; padding:0 8px }
-
-      /* we'll show .mobile-socials (DOM element) via CSS (it will be present in HTML) */
-      .mobile-socials{ display:flex; gap:18px; justify-content:center; margin:8px 0 4px; order:1 }
-      .mobile-socials .social{ width:56px;height:56px } .mobile-socials .inner{ width:40px;height:40px }
+      .menu-toggle{ display:inline-grid }
+      .header-actions{ gap:12px }
+      .logo-pill{ font-size:15px }
+      .socials{ position:relative; top:auto; transform:none; left:auto; margin: 0 auto -12px;}
     }
-
     @media (max-width:420px){
       h1{ font-size:40px; line-height:1 }
-      .portrait img{ height:360px }
+      .slides{ height:320px }
       .social{ width:56px;height:56px } .social .inner{ width:40px;height:40px }
     }
 
+    /* Sections for scroll-snapping demo */
+    .sections {
+      margin-top:18px;
+      scroll-snap-type: y mandatory;
+      overflow:visible;
+    }
+    section.demo {
+      min-height:56vh;
+      padding:32px 8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      scroll-snap-align: start;
+      gap:18px;
+    }
+    .demo-card{
+      width:100%; max-width:1000px; display:flex; gap:18px; align-items:center; justify-content:space-between;
+    }
+    .card-img{ width:48%; border-radius:14px; overflow:hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
+    .card-img img{ width:100%; height:300px; object-fit:cover; display:block; }
+    .card-body{ width:48%; color:var(--text) }
+    .muted{ color:var(--muted) }
   </style>
 </head>
-
 <body>
   <!-- Header -->
   <header class="site-header" role="banner" aria-label="Site header">
@@ -430,87 +303,44 @@
         <div class="logo-pill" aria-hidden="true">Abhinand</div>
       </div>
 
-      <!-- desktop nav (hidden on mobile) -->
       <nav class="header-nav" aria-label="Primary navigation">
-        <a href="#home" data-target="home" class="active">HOME</a>
-        <a href="#about" data-target="about">ABOUT</a>
-        <a href="#projects" data-target="projects">PROJECTS</a>
-        <a href="#demo" data-target="demo">DEMO</a>
-        <a href="#contact" data-target="contact">CONTACT</a>
+        <a href="#home" class="nav-link active">HOME</a>
+        <a href="#about" class="nav-link">ABOUT</a>
+        <a href="#projects" class="nav-link">PROJECTS</a>
+        <a href="#contact" class="nav-link">CONTACT</a>
       </nav>
 
       <div class="header-actions">
-        <!-- hamburger (mobile only) -->
-        <button class="hamburger" id="hamburger" aria-label="Open menu" title="Menu" aria-expanded="false">
-          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M3 6h18M3 12h18M3 18h18"></path></svg>
+        <button class="menu-toggle" id="menuToggle" title="Menu" aria-label="Open menu" aria-expanded="false" style="display:none">
+          <!-- animated hamburger -->
+          <svg id="hamburger" width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+            <path id="h1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M3 6h18"></path>
+            <path id="h2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M3 12h18"></path>
+            <path id="h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M3 18h18"></path>
+          </svg>
         </button>
 
-        <!-- mode toggle -->
-        <button class="mode-toggle" id="modeToggle" aria-label="Toggle theme" title="Toggle theme">
-          <!-- icon injected by JS -->
+        <button class="mode-toggle" id="modeToggle" title="Toggle theme" aria-label="Toggle theme">
+          <svg id="modeIcon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M21.64 13.29A9 9 0 1 1 10.71 2.36 7 7 0 0 0 21.64 13.29z"></path>
+          </svg>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- MOBILE: social row directly under header (only visible on mobile via CSS) -->
-  <div class="wrap" style="padding-top:10px;">
-    <div class="mobile-socials" id="mobileSocials" aria-hidden="true" style="display:none;">
-      <!-- same icons but slightly smaller; JS will show/hide based on viewport -->
-      <a class="social" href="#" aria-label="Email (mobile)"><div class="inner">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 6.5 12 12 22 6.5V18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" fill="#fff"/></svg>
-      </div></a>
-
-      <a class="social" href="#" aria-label="Github (mobile)"><div class="inner">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.4-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .07 1.5 1.03 1.5 1.03.9 1.5 2.4 1.09 2.9.83.1-.65.35-1.09.64-1.34-2.2-.25-4.6-1.11-4.6-4.95 0-1.09.4-1.98 1-2.68-.1-.25-.4-1.28.1-2.66 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.8c.85 0 1.7.11 2.5.34 1.9-1.29 2.7-1.02 2.7-1.02.6 1.38.2 2.41.1 2.66.6.7 1 1.59 1 2.68 0 3.85-2.3 4.7-4.6 4.95.4.32.7.94.7 1.9v2.8c0 .27.2.59.7.49A10 10 0 0 0 12 2z" fill="#fff"/></svg>
-      </div></a>
-
-      <a class="social" href="#" aria-label="LinkedIn (mobile)"><div class="inner">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.75 21h4.38V9.75H4.75V21zM9.88 9.75h4.2v1.52h.06c.59-1.11 2.02-2.28 4.17-2.28 4.46 0 5.28 2.94 5.28 6.77V21h-4.38v-5.09c0-1.21 0-2.76-1.68-2.76-1.69 0-1.95 1.31-1.95 2.67V21H9.88V9.75z" fill="#fff"/></svg>
-      </div></a>
-
-      <a class="social" href="#" aria-label="Instagram (mobile)"><div class="inner">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 6a5 5 0 1 0 .001 10.001A5 5 0 0 0 12 8z" fill="#fff"/></svg>
-      </div></a>
-    </div>
+  <!-- mobile overlay nav -->
+  <div id="mobileNav" class="mobile-nav" aria-hidden="true">
+    <a href="#home" class="mobile-link">Home</a>
+    <a href="#about" class="mobile-link">About</a>
+    <a href="#projects" class="mobile-link">Projects</a>
+    <a href="#contact" class="mobile-link">Contact</a>
   </div>
 
-  <!-- Drawer (mobile menu) -->
-  <div class="drawer" id="drawer" aria-hidden="true">
-    <button class="drawer-close" id="drawerClose" aria-label="Close menu">
-      <svg width="16" height="16" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M6 6l12 12M18 6L6 18" fill="none"/></svg>
-    </button>
-
-    <a href="#home" data-target="home" class="drawer-link">HOME</a>
-    <a href="#about" data-target="about" class="drawer-link">ABOUT</a>
-    <a href="#projects" data-target="projects" class="drawer-link">PROJECTS</a>
-    <a href="#demo" data-target="demo" class="drawer-link">DEMO</a>
-    <a href="#contact" data-target="contact" class="drawer-link">CONTACT</a>
-  </div>
-
-  <!-- MAIN CONTENT: hero. Note mobile-socials placed above hero in DOM -->
-  <main class="wrap" id="main">
-    <section id="home" class="hero" aria-labelledby="hero-title">
-      <!-- RIGHT column visually on desktop, but DOM order: portrait first so mobile order (socials -> image -> text) is easy to achieve -->
-      <div class="neon-frame" aria-hidden="false" role="region" aria-label="portrait and socials" style="order:1;">
-        <!-- desktop socials (visible on desktop only) -->
-        <div class="socials" role="list" aria-label="Social links">
-          <a class="social" role="listitem" href="#" aria-label="Email"><div class="inner"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 6.5 12 12 22 6.5V18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" fill="#fff"/></svg></div></a>
-
-          <a class="social" role="listitem" href="#" aria-label="Github"><div class="inner"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.49v-1.71c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.36 1.09 2.94.83.09-.65.35-1.09.64-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.28.1-2.66 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.8c.85.004 1.71.115 2.51.34 1.9-1.29 2.74-1.02 2.74-1.02.56 1.38.21 2.41.1 2.66.64.7 1.03 1.59 1.03 2.68 0 3.85-2.34 4.7-4.57 4.95.36.32.68.94.68 1.9v2.81c0 .27.18.59.69.49A10 10 0 0 0 12 2z" fill="#fff"/></svg></div></a>
-
-          <a class="social" role="listitem" href="#" aria-label="LinkedIn"><div class="inner"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.94 6.6A1.88 1.88 0 1 1 5 4.7a1.88 1.88 0 0 1 1.94 1.9zM4.75 21h4.38V9.75H4.75V21zM9.88 9.75h4.2v1.52h.06c.59-1.11 2.02-2.28 4.17-2.28 4.46 0 5.28 2.94 5.28 6.77V21h-4.38v-5.09c0-1.21 0-2.76-1.68-2.76-1.69 0-1.95 1.31-1.95 2.67V21H9.88V9.75z" fill="#fff"/></svg></div></a>
-
-          <a class="social" role="listitem" href="#" aria-label="Instagram"><div class="inner"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 6a5 5 0 1 0 .001 10.001A5 5 0 0 0 12 8z" fill="#fff"/></svg></div></a>
-        </div>
-
-        <div class="portrait" role="img" aria-label="Abhinand looking at the ocean">
-          <img src="assets/bg.jpg" alt="Abhinand at the beach">
-        </div>
-      </div>
-
-      <!-- LEFT: text content (on desktop shows left; on mobile appears after image) -->
-      <div class="hero-left" style="order:2;">
+  <main class="wrap" id="home" role="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <!-- LEFT -->
+      <div class="hero-left">
         <div class="eyebrow">HELLO</div>
         <h1 id="hero-title" aria-hidden="false">
           <span class="underline">I'm Abhinand</span>
@@ -522,176 +352,264 @@
         </p>
 
         <div class="cta" role="group" aria-label="Call to action buttons">
-          <button class="btn btn-primary" data-scroll="#about">MORE ABOUT ME</button>
-          <button class="btn btn-outline" data-scroll="#contact">GET IN TOUCH</button>
+          <button class="btn btn-primary" onclick="alert('More about me — demo')">MORE ABOUT ME</button>
+          <button class="btn btn-outline" onclick="alert('Get in touch — demo')">GET IN TOUCH</button>
+        </div>
+      </div>
+
+      <!-- RIGHT: neon framed portrait with socials + carousel -->
+      <div class="neon-frame" aria-hidden="false" role="region" aria-label="portrait and socials">
+        <div class="socials" role="list" aria-label="Social links">
+          <a class="social" role="listitem" href="#" aria-label="Email">
+            <div class="inner">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 6.5A2.5 2.5 0 0 1 4.5 4h15A2.5 2.5 0 0 1 22 6.5v11A2.5 2.5 0 0 1 19.5 20h-15A2.5 2.5 0 0 1 2 17.5v-11zM4.5 6L12 11l7.5-5" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </a>
+
+          <a class="social" role="listitem" href="#" aria-label="Github">
+            <div class="inner">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.49v-1.71c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.36 1.09 2.94.83.09-.65.35-1.09.64-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.28.1-2.66 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.8c.85.004 1.71.115 2.51.34 1.9-1.29 2.74-1.02 2.74-1.02.56 1.38.21 2.41.1 2.66.64.7 1.03 1.59 1.03 2.68 0 3.85-2.34 4.7-4.57 4.95.36.32.68.94.68 1.9v2.81c0 .27.18.59.69.49A10 10 0 0 0 12 2z" fill="#fff"/></svg>
+            </div>
+          </a>
+
+          <a class="social" role="listitem" href="#" aria-label="LinkedIn">
+            <div class="inner">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.94 6.6A1.88 1.88 0 1 1 5 4.7a1.88 1.88 0 0 1 1.94 1.9zM4.75 21h4.38V9.75H4.75V21zM9.88 9.75h4.2v1.52h.06c.59-1.11 2.02-2.28 4.17-2.28 4.46 0 5.28 2.94 5.28 6.77V21h-4.38v-5.09c0-1.21 0-2.76-1.68-2.76-1.69 0-1.95 1.31-1.95 2.67V21H9.88V9.75z" fill="#fff"/></svg>
+            </div>
+          </a>
+
+          <a class="social" role="listitem" href="#" aria-label="Instagram">
+            <div class="inner">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 6a5 5 0 1 0 .001 10.001A5 5 0 0 0 12 8zm4.5-.75a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5z" fill="#fff"/></svg>
+            </div>
+          </a>
         </div>
 
-        <!-- Mobile-only socials shown under text on very small screens if desired (kept hidden unless needed) -->
-        <div class="mobile-socials-btm" style="display:none;margin-top:18px;">
-          <!-- optional duplicate if needed -->
+        <div class="portrait" id="portrait">
+          <div class="slides" id="slides" aria-live="polite">
+            <!-- Duplicate demo slides using your assets/bg.jpg — replace with distinct images if you have them -->
+            <div class="slide active"><img src="assets/bg.jpg" alt="portrait slide 1"></div>
+            <div class="slide"><img src="assets/bg.jpg" alt="portrait slide 2"></div>
+            <div class="slide"><img src="assets/bg.jpg" alt="portrait slide 3"></div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- DEMO / content sections -->
-    <section id="demo"><h2 style="font-family:'Playfair Display',serif">Demo Section</h2><p class="muted">This is a demo section for animations / examples.</p></section>
-    <section id="about"><h2 style="font-family:'Playfair Display',serif">About</h2><p class="muted">About content (demo)</p></section>
-    <section id="projects"><h2 style="font-family:'Playfair Display',serif">Projects</h2><p class="muted">Projects content (demo)</p></section>
-    <section id="contact"><h2 style="font-family:'Playfair Display',serif">Contact</h2><p class="muted">Contact content (demo)</p></section>
+    <!-- Additional demo sections (scroll snapping and smooth stop) -->
+    <div class="sections" id="sections">
+      <section id="about" class="demo" aria-labelledby="about-title">
+        <div class="demo-card">
+          <div class="card-img"><img src="assets/bg.jpg" alt="demo image about"></div>
+          <div class="card-body">
+            <h3 id="about-title">About — Demo Section</h3>
+            <p class="muted">This is a scroll-snap demo section. Use full-width scroll to see how sections stop cleanly.</p>
+            <p>Replace content with your real about copy. The carousel to the right pauses when this portrait isn't visible to improve performance.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="projects" class="demo" aria-labelledby="projects-title">
+        <div class="demo-card">
+          <div class="card-body">
+            <h3 id="projects-title">Projects — Demo Section</h3>
+            <p class="muted">Project cards, screenshots, and links live here.</p>
+            <p>Replace the placeholders with project screenshots. Scroll stops at each section for a clean feel.</p>
+          </div>
+          <div class="card-img"><img src="assets/bg.jpg" alt="demo image projects"></div>
+        </div>
+      </section>
+
+      <section id="contact" class="demo" aria-labelledby="contact-title">
+        <div class="demo-card">
+          <div class="card-img"><img src="assets/bg.jpg" alt="demo image contact"></div>
+          <div class="card-body">
+            <h3 id="contact-title">Contact — Demo Section</h3>
+            <p class="muted">Email, links, contact form or socials.</p>
+            <p>Use "Get in Touch" to open a real contact modal or navigate to a contact page.</p>
+          </div>
+        </div>
+      </section>
+    </div>
   </main>
 
   <!-- sparkle -->
   <svg class="sparkle" viewBox="0 0 100 100" aria-hidden="true">
-    <defs>
-      <linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#a78bfa"/></linearGradient>
-    </defs>
-    <g transform="translate(50,50)"><path d="M0 -36 L6 -6 36 0 6 6 0 36 -6 6 -36 0 -6 -6 Z" fill="url(#g)" opacity="0.14"/><circle r="4" fill="#fff" opacity="0.12"/></g>
+    <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs>
+    <g transform="translate(50,50)"><path d="M0 -36 L6 -6 36 0 6 6 0 36 -6 6 -36 0 -6 -6 Z" fill="url(#g)" opacity="0.14"/><circle r="4" fill="#fff" opacity="0.12" /></g>
   </svg>
 
   <script>
-    /*******************************
-      THEME TOGGLE (moon when dark, sun when light)
-    *******************************/
+    // -------------------
+    // Theme toggle with persistence
+    // -------------------
     const body = document.body;
     const modeToggle = document.getElementById('modeToggle');
+    const modeIcon = document.getElementById('modeIcon');
 
-    // initialize from localStorage or default
-    const saved = localStorage.getItem('site-theme');
-    if (saved === 'light') body.classList.add('light');
+    function applyMode(mode){
+      if(mode === 'light') body.classList.add('light');
+      else body.classList.remove('light');
 
-    function renderModeIcon() {
-      const isLight = body.classList.contains('light');
-      // user requested: moon when dark (black) and sun when light (white color).
-      // We'll use an icon with the requested color inside the glass button, keeping original theme.
-      if (isLight) {
-        // Sun icon (white color as you asked)
-        modeToggle.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="#ffffff"/></svg>`;
-      } else {
-        // Moon icon (black fill as you asked)
-        modeToggle.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.64 13.29A9 9 0 1 1 10.71 2.36 7 7 0 0 0 21.64 13.29z" fill="#000000"/></svg>`;
-      }
+      // icon
+      modeIcon.innerHTML = body.classList.contains('light')
+        ? '<path fill="currentColor" d="M6.76 4.84l-1.8-1.79L3.17 4.85l1.79 1.79 1.8-1.8zM1 13h3v-2H1v2zm10 9h2v-3h-2v3zm7.24-1.16l1.8 1.8 1.79-1.8-1.8-1.79-1.79 1.79zM20 11v2h3v-2h-3zM4.22 19.78l1.79-1.79-1.8-1.8-1.79 1.8 1.8 1.79zM12 5a7 7 0 1 0 0 14 7 7 0 0 0 0-14z" />'
+        : '<path fill="currentColor" d="M21.64 13.29A9 9 0 1 1 10.71 2.36 7 7 0 0 0 21.64 13.29z"/>';
     }
-    renderModeIcon();
 
-    modeToggle.addEventListener('click', () => {
-      body.classList.toggle('light');
-      localStorage.setItem('site-theme', body.classList.contains('light') ? 'light' : 'dark');
-      renderModeIcon();
+    // init
+    const storedMode = localStorage.getItem('site-mode') || 'dark';
+    applyMode(storedMode);
+
+    modeToggle.addEventListener('click', ()=>{
+      const mode = body.classList.contains('light') ? 'dark' : 'light';
+      applyMode(mode);
+      localStorage.setItem('site-mode', mode);
     });
 
-    /*******************************
-      SMOOTH SCROLL FOR BUTTONS & NAV
-    *******************************/
-    function smoothScrollTo(selector){
-      const el = document.querySelector(selector);
-      if (!el) return;
-      const top = el.getBoundingClientRect().top + window.scrollY - 72; // account for header
-      window.scrollTo({ top, behavior: 'smooth' });
+    // -------------------
+    // Mobile menu (hamburger) with animation
+    // -------------------
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileNav = document.getElementById('mobileNav');
+    const hamburgerPaths = {
+      h1: document.getElementById('h1'),
+      h2: document.getElementById('h2'),
+      h3: document.getElementById('h3')
+    };
+
+    function setHamburgerOpen(open){
+      if(open){
+        // animate to X
+        hamburgerPaths.h1.setAttribute('d','M4 4 L20 20');
+        hamburgerPaths.h2.setAttribute('d','M12 12 L12 12');
+        hamburgerPaths.h3.setAttribute('d','M20 4 L4 20');
+        menuToggle.setAttribute('aria-expanded','true');
+        mobileNav.classList.add('open');
+        mobileNav.setAttribute('aria-hidden','false');
+      } else {
+        hamburgerPaths.h1.setAttribute('d','M3 6h18');
+        hamburgerPaths.h2.setAttribute('d','M3 12h18');
+        hamburgerPaths.h3.setAttribute('d','M3 18h18');
+        menuToggle.setAttribute('aria-expanded','false');
+        mobileNav.classList.remove('open');
+        mobileNav.setAttribute('aria-hidden','true');
+      }
     }
 
-    // attach to CTA buttons
-    document.querySelectorAll('[data-scroll]').forEach(btn=>{
-      btn.addEventListener('click', (e)=>{
-        const sel = btn.getAttribute('data-scroll');
-        smoothScrollTo(sel);
+    let menuOpen = false;
+    menuToggle.addEventListener('click', ()=>{
+      menuOpen = !menuOpen;
+      setHamburgerOpen(menuOpen);
+    });
+
+    // show menu-toggle on small screens
+    function updateMenuVisibility(){
+      const w = window.innerWidth;
+      if(w <= 900) { menuToggle.style.display = 'inline-grid'; }
+      else { menuToggle.style.display = 'none'; setHamburgerOpen(false); menuOpen = false; mobileNav.classList.remove('open'); }
+    }
+    window.addEventListener('resize', updateMenuVisibility);
+    updateMenuVisibility();
+
+    // mobile nav links
+    document.querySelectorAll('.mobile-link').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        const href = a.getAttribute('href');
+        setHamburgerOpen(false);
+        menuOpen = false;
+        // smooth scroll after closing
+        setTimeout(()=> {
+          const target = document.querySelector(href);
+          if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+        }, 200);
       });
     });
 
-    // attach to desktop nav links
-    document.querySelectorAll('nav.header-nav a').forEach(a=>{
+    // header nav smooth links + active state
+    document.querySelectorAll('.nav-link').forEach(a=>{
       a.addEventListener('click', (ev)=>{
         ev.preventDefault();
         const href = a.getAttribute('href');
-        smoothScrollTo(href);
+        document.querySelectorAll('.nav-link').forEach(x=>x.classList.remove('active'));
+        a.classList.add('active');
+        const target = document.querySelector(href);
+        if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
       });
     });
 
-    /*******************************
-      SCROLL-SPY: highlight nav link + set accent (keeps color/theme same)
-    *******************************/
-    const sections = document.querySelectorAll('main section[id], main section.hero');
-    const navLinks = document.querySelectorAll('nav.header-nav a');
+    // -------------------
+    // Portrait slideshow (auto-rotate, pause on hover & when out of view)
+    // -------------------
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    let slideIndex = 0;
+    let slideInterval = null;
+    let slidePaused = false;
 
+    function showSlide(i){
+      slides.forEach((s, idx)=> s.classList.toggle('active', idx === i));
+    }
+    function nextSlide(){
+      slideIndex = (slideIndex + 1) % slides.length;
+      showSlide(slideIndex);
+    }
+    function startSlides(){
+      if(slideInterval) clearInterval(slideInterval);
+      slideInterval = setInterval(()=> {
+        if(!slidePaused) nextSlide();
+      }, 3000);
+    }
+    function stopSlides(){
+      if(slideInterval) { clearInterval(slideInterval); slideInterval = null; }
+    }
+
+    // pause on hover
+    const portrait = document.getElementById('portrait');
+    portrait.addEventListener('mouseenter', ()=> slidePaused = true);
+    portrait.addEventListener('mouseleave', ()=> slidePaused = false);
+
+    // pause when portrait not visible (IntersectionObserver)
     const io = new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{
+        if(!en.isIntersecting) { slidePaused = true; }
+        else { slidePaused = false; }
+      });
+    }, { threshold: 0.25 });
+    io.observe(portrait);
+
+    // also pause when page hidden (tab change)
+    document.addEventListener('visibilitychange', ()=> {
+      if(document.hidden) slidePaused = true;
+      else slidePaused = false;
+    });
+
+    startSlides();
+
+    // -------------------
+    // Keyboard 't' toggle for quick theme (optional)
+    // -------------------
+    window.addEventListener('keydown', (e)=>{
+      if(e.key === 't' || e.key === 'T'){
+        modeToggle.click();
+      }
+    });
+
+    // -------------------
+    // Focus the right nav link while scrolling (simple)
+    // -------------------
+    const sectionEls = [...document.querySelectorAll('#sections .demo')];
+    const navLinks = [...document.querySelectorAll('.nav-link')];
+
+    const sectionObserver = new IntersectionObserver((entries)=>{
       entries.forEach(entry=>{
         if(entry.isIntersecting){
-          // find corresponding nav link
-          const id = entry.target.id || 'home';
-          navLinks.forEach(link=>{
-            link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
-          });
+          const id = entry.target.id;
+          navLinks.forEach(n=> n.classList.toggle('active', n.getAttribute('href') === `#${id}`));
         }
       });
-    }, { root: null, rootMargin: "-30% 0px -50% 0px", threshold: 0.2 });
+    }, { threshold: 0.45 });
 
-    // observe demo/about/projects/contact and hero container (#home)
-    document.querySelectorAll('main > section[id], main > section.hero').forEach(s => io.observe(s));
-
-    /*******************************
-      HAMBURGER (mobile only) — slide-in drawer
-    *******************************/
-    const hamburger = document.getElementById('hamburger');
-    const drawer = document.getElementById('drawer');
-    const drawerClose = document.getElementById('drawerClose');
-
-    // show/hide the mobile social row depending on viewport
-    const mobileSocialsEl = document.getElementById('mobileSocials');
-    function updateMobileSocialsVisibility(){
-      if (window.innerWidth <= 900) {
-        mobileSocialsEl.style.display = 'flex';
-        mobileSocialsEl.setAttribute('aria-hidden','false');
-      } else {
-        mobileSocialsEl.style.display = 'none';
-        mobileSocialsEl.setAttribute('aria-hidden','true');
-      }
-    }
-    updateMobileSocialsVisibility();
-    window.addEventListener('resize', updateMobileSocialsVisibility);
-
-    // open drawer
-    hamburger.addEventListener('click', ()=>{
-      drawer.classList.add('open');
-      drawer.setAttribute('aria-hidden','false');
-      hamburger.setAttribute('aria-expanded','true');
-    });
-    function closeDrawer(){
-      drawer.classList.remove('open');
-      drawer.setAttribute('aria-hidden','true');
-      hamburger.setAttribute('aria-expanded','false');
-    }
-    drawerClose.addEventListener('click', closeDrawer);
-
-    // make drawer links smooth-scroll + close drawer
-    document.querySelectorAll('.drawer a').forEach(a=>{
-      a.addEventListener('click', (ev)=>{
-        ev.preventDefault();
-        const href = a.getAttribute('href') || ('#' + a.dataset.target);
-        closeDrawer();
-        setTimeout(()=> smoothScrollTo(href), 260); // allow drawer close animation
-      });
-    });
-
-    /*******************************
-      MAKE MOBILE SOCIALS APPEAR BELOW IMAGE -> Already handled by DOM/order + CSS:
-      We placed mobile social row directly under header (in DOM). The hero DOM places image first,
-      hero-left second (order adjusted in CSS) so on mobile you'll see:
-        header -> mobile-socials -> portrait (image) -> hero text
-    *******************************/
-
-    /*******************************
-      Enhance pointer UX: social hover adds subtle focus via JS (optional)
-    *******************************/
-    document.querySelectorAll('.social').forEach(s=>{
-      s.addEventListener('mouseenter', ()=> s.setAttribute('aria-pressed','true'));
-      s.addEventListener('mouseleave', ()=> s.removeAttribute('aria-pressed'));
-    });
-
-    /*******************************
-      Accessibility: close drawer on Escape
-    *******************************/
-    window.addEventListener('keydown', (e)=>{
-      if(e.key === 'Escape') closeDrawer();
-    });
+    sectionEls.forEach(s => sectionObserver.observe(s));
   </script>
 </body>
 </html>
