@@ -41,6 +41,20 @@ html[data-theme="light"] header{background: rgba(0,0,0,0.06);}
   display:flex;align-items:center;justify-content:space-between;gap:18px;
 }
 
+/* Mobile hamburger (hidden on desktop) */
+.hamburger{
+  display:none;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:8px;
+  border-radius:10px;
+  background:transparent;
+  border:0;
+  cursor:pointer;
+}
+.hamburger .bar{width:20px;height:2px;background:currentColor;border-radius:2px;display:block;}
+
 /* Navigation */
 nav{display:flex;gap:18px;align-items:center;}
 nav a{
@@ -111,10 +125,9 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
 }
 
 /* Social icons row */
-/* Social icons row */
 .social-row {
   position: absolute;
-  left: calc(50% - 27px);  /* moved total ~0.7cm left */
+  left: calc(50% - 27px);  /* desktop positioning preserved */
   transform: translateX(-50%);
   top: 28px;                /* adjust as needed */
   z-index: 6;
@@ -122,7 +135,6 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   gap: 20px;
   pointer-events: auto;
 }
-
 
 /* Neon blue-white gradient border */
 .social-square {
@@ -132,40 +144,38 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   height: 64px;
 
   /* OUTER shape (gradient border) */
-  border-radius: 14px;     
-  padding: 3px;           
+  border-radius: 14px;
+  padding: 3px;
   background: linear-gradient(135deg, #1fb3ff, #ffffff); /* blue-white gradient */
 
   cursor: pointer;
-  text-decoration: none;  
+  text-decoration: none;
   transition: transform 200ms ease, box-shadow 200ms ease;
-  overflow: hidden;      
+  overflow: hidden;
 }
 
 /* Inner background */
 .social-square .icon-bg {
   width: 100%;
   height: 100%;
-  border-radius: 11px; 
+  border-radius: 11px;
   display: grid;
   place-items: center;
-  background: var(--bg);  
-  color: var(--text);      /* default icon color (dark/light mode) */
-  transition: color 200ms ease; /* smooth icon color transition */
+  background: var(--bg);
+  color: var(--text);
+  transition: color 200ms ease;
 }
 
 /* SVG */
-/* ensure SVG stroke also uses the current color so hover/active color works */
 .social-square svg {
   width: 28px;
   height: 28px;
-  fill: currentColor;    /* for filled parts */
-  stroke: currentColor;  /* for outlines */
-  stroke-width: 1.6;     /* adjust if outline is too thick */
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 1.6;
   display: block;
   pointer-events: none;
 }
-
 
 /* Hover effect */
 .social-square:hover {
@@ -175,13 +185,13 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
 
 /* Change icon color to blue on hover */
 .social-square:hover .icon-bg {
-  color: #1fb3ff; /* turns logo (SVG) blue */
+  color: #1fb3ff;
 }
 
 /* Active (click) effect */
 .social-square:active .icon-bg {
-  color: #0d8adf; /* slightly darker blue on click */
-  transform: scale(0.96); /* click press feel */
+  color: #0d8adf;
+  transform: scale(0.96);
 }
 
 /* Accessibility: focus ring */
@@ -190,7 +200,7 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   box-shadow: 0 0 0 3px rgba(31, 179, 255, 0.3);
 }
 
-/* Mobile tweaks */
+/* Mobile tweaks (existing) */
 @media (max-width: 520px) {
   .social-row { gap: 12px; top: 20px; }
   .social-square { width: 54px; height: 54px; padding: 2px; border-radius: 12px; }
@@ -198,28 +208,89 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   .social-square svg { width: 24px; height: 24px; }
 }
 
-
-
 /* Dark mode: show moon, hide sun */
-html[data-theme="dark"] .icon-moon { 
-  display: inline-block; 
-  font-size: 1.5rem;  /* increase size here */
+html[data-theme="dark"] .icon-moon {
+  display: inline-block;
+  font-size: 1.5rem;
 }
 html[data-theme="dark"] .icon-sun { display: none; }
 
 /* Light mode: show sun, hide moon */
 html[data-theme="light"] .icon-moon { display: none; }
-html[data-theme="light"] .icon-sun { 
-  display: inline-block; 
-  font-size: 1.5rem;  /* increase size here */
+html[data-theme="light"] .icon-sun {
+  display: inline-block;
+  font-size: 1.5rem;
 }
-
 
 /* Responsive */
 @media (max-width:1100px){.hero-inner{gap:28px}.right{flex:0 0 420px}.neon-image{height:360px;}}
 @media (max-width:860px){.hero-inner{flex-direction:column-reverse;align-items:center}.left{text-align:center} h1{font-size:48px;} nav{display:none;}}
 
-/* Theme variables */
+/* ========== MOBILE-SPECIFIC LAYOUT (ONLY below 520px) ========== */
+/* These rules are added to change layout/order/visibility on small phones.
+   Desktop and tablet rules above remain unchanged. */
+@media (max-width:520px){
+  /* show hamburger on the left, hide desktop nav (nav already hidden at 860px) */
+  .hamburger{display:inline-flex;color:var(--text);order:0;}
+  /* Put theme button to the far right */
+  .theme-btn{order:2;margin-left:auto;}
+  /* header alignment: left hamburger, right theme-btn (nav hidden) */
+  .header-inner{padding:0 14px;align-items:center;}
+  nav{display:none !important;}
+
+  /* Mobile menu overlay */
+  .mobile-menu{
+    position:fixed;inset:72px 12px auto 12px; /* below header */
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));
+    backdrop-filter: blur(8px);
+    border-radius:12px;
+    padding:12px;
+    display:none;
+    flex-direction:column;
+    gap:10px;
+    z-index:110;
+  }
+  .mobile-menu.show{display:flex;}
+
+  .mobile-menu a{padding:12px;border-radius:10px;text-decoration:none;color:var(--text);font-weight:700;border:1px solid rgba(255,255,255,0.03);background:transparent;}
+  .mobile-menu a:hover{background:rgba(255,255,255,0.02);color:var(--accent);}
+
+  /* Reposition social-row to be STATIC and appear above the image (full-width) */
+  .neon-frame { width: 100%; max-width: 420px; padding: 3px; } /* keep gradient border but limit width */
+  .right{flex-basis:100%;display:flex;flex-direction:column;align-items:center;order:1;width:100%;}
+  .neon-frame{position:relative;} /* allow social-row to become static within this block */
+  .social-row{
+    position:static;
+    transform:none;
+    left:auto;
+    top:auto;
+    margin: 10px 0 8px;
+    justify-content:center;
+    width:100%;
+    display:flex;
+    gap:12px;
+  }
+
+  /* make image full width and fluid */
+  .neon-image{height:auto;max-width:100%;border-radius:11px;object-fit:cover;}
+
+  /* center text and buttons under the image */
+  .hero-inner{flex-direction:column;align-items:center;gap:18px;padding-top:24px;}
+  .left{order:2;text-align:center;width:100%;max-width:620px;padding:8px 18px;}
+  .eyebrow{font-size:12px;}
+  h1{font-size:36px;line-height:1;margin-top:2px;}
+  .underline{width:220px;margin:14px auto 18px;}
+  p.lead{padding:0 8px;color:var(--muted);max-width:920px;}
+  .cta{justify-content:center;flex-wrap:wrap;padding-bottom:18px;}
+  .btn{min-width:140px;text-align:center;}
+  .btn.primary{padding:11px 16px;}
+  .btn.ghost{padding:11px 16px;}
+
+  /* reduce hero section padding on small phones so the content fits nicely */
+  section{padding:92px 12px;}
+}
+
+/* Theme variables (unchanged) */
 html[data-theme="dark"]{--bg:var(--bg-dark);--text:var(--text-dark);--muted:var(--muted-dark);}
 html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:var(--muted-light);}
 </style>
@@ -228,27 +299,41 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 <body>
 <header>
   <div class="header-inner">
+    <!-- Hamburger (mobile only) -->
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span class="bar" style="transform:translateY(-5px)"></span>
+      <span class="bar"></span>
+      <span class="bar" style="transform:translateY(5px)"></span>
+    </button>
+
     <nav>
       <a href="#home" data-target="home" class="nav-link active">HOME</a>
       <a href="#about" data-target="about" class="nav-link">ABOUT</a>
       <a href="#projects" data-target="projects" class="nav-link">PROJECTS</a>
       <a href="#contact" data-target="contact" class="nav-link">CONTACT</a>
     </nav>
-<!-- Font Awesome CSS -->
+
+    <!-- Font Awesome CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<!-- Modern theme toggle -->
-<button id="themeBtn" class="theme-btn" aria-label="Toggle theme">
-  <span class="toggle-bg">
-    <i class="fa-solid fa-moon icon-moon"></i>
-    <i class="fa-solid fa-sun icon-sun"></i>
-    <span class="toggle-circle"></span>
-  </span>
-</button>
-
-
+    <!-- Modern theme toggle -->
+    <button id="themeBtn" class="theme-btn" aria-label="Toggle theme">
+      <span class="toggle-bg">
+        <i class="fa-solid fa-moon icon-moon"></i>
+        <i class="fa-solid fa-sun icon-sun"></i>
+        <span class="toggle-circle" aria-hidden="true" style="display:none;"></span>
+      </span>
+    </button>
   </div>
 </header>
+
+<!-- Mobile menu (duplicates nav links for mobile; shown/hidden by JS) -->
+<div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+  <a href="#home" data-target="home" class="mobile-link">HOME</a>
+  <a href="#about" data-target="about" class="mobile-link">ABOUT</a>
+  <a href="#projects" data-target="projects" class="mobile-link">PROJECTS</a>
+  <a href="#contact" data-target="contact" class="mobile-link">CONTACT</a>
+</div>
 
 <main>
 <section id="home">
@@ -265,6 +350,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
     </div>
     <div class="right">
       <div class="neon-frame">
+        <!-- Social row remains here in DOM but our mobile CSS makes it appear above the image -->
         <div class="social-row" role="navigation" aria-label="Social links">
   <a class="social-square" href="mailto:abhinandbabu2502@gmail.com" title="Email" aria-label="Email">
     <span class="icon-bg">
@@ -315,6 +401,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   const htmlEl=document.documentElement;
   const themeBtn=document.getElementById('themeBtn');
   const ctaContact=document.getElementById('ctaContact');
+  const hamburger=document.getElementById('hamburger');
+  const mobileMenu=document.getElementById('mobileMenu');
 
   function setTheme(theme){
     htmlEl.setAttribute('data-theme',theme);
@@ -323,7 +411,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 
   const stored=localStorage.getItem('site-theme');
-  if(stored==='light'||stored==='dark'){ setTheme(stored); } 
+  if(stored==='light'||stored==='dark'){ setTheme(stored); }
   else { setTheme(window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'); }
 
   themeBtn.addEventListener('click',()=>{ setTheme(htmlEl.getAttribute('data-theme')==='light'?'dark':'light'); });
@@ -337,6 +425,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(ctaContact) ctaContact.addEventListener('click',e=>{e.preventDefault();smoothScrollToId('contact');});
 
   const navLinks=document.querySelectorAll('nav a');
+  const mobileLinks=document.querySelectorAll('.mobile-menu a, .mobile-link');
   const sections=document.querySelectorAll('section');
   if('IntersectionObserver' in window){
     const obs=new IntersectionObserver(entries=>{
@@ -352,6 +441,45 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 
   navLinks.forEach(a=>{ a.addEventListener('click',e=>{ e.preventDefault(); smoothScrollToId(a.getAttribute('data-target')); }); });
+
+  // Mobile nav: open/close
+  if(hamburger && mobileMenu){
+    function toggleMobile(show){
+      const willShow = (typeof show === 'boolean') ? show : !mobileMenu.classList.contains('show');
+      if(willShow){
+        mobileMenu.classList.add('show');
+        mobileMenu.setAttribute('aria-hidden','false');
+        hamburger.setAttribute('aria-expanded','true');
+      } else {
+        mobileMenu.classList.remove('show');
+        mobileMenu.setAttribute('aria-hidden','true');
+        hamburger.setAttribute('aria-expanded','false');
+      }
+    }
+    hamburger.addEventListener('click',()=>toggleMobile());
+    // close when a mobile link is clicked (and perform smooth scroll)
+    document.querySelectorAll('#mobileMenu a').forEach(a=>{
+      a.addEventListener('click',e=>{
+        e.preventDefault();
+        const target=a.getAttribute('data-target');
+        toggleMobile(false);
+        smoothScrollToId(target);
+      });
+    });
+
+    // close on escape
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape' && mobileMenu.classList.contains('show')) toggleMobile(false);
+    });
+  }
+
+  // Also wire mobile menu links in header (if visible)
+  document.querySelectorAll('.mobile-link').forEach(a=>{
+    a.addEventListener('click', e=>{
+      e.preventDefault();
+      smoothScrollToId(a.getAttribute('data-target'));
+    });
+  });
 });
 </script>
 </body>
