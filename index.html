@@ -42,7 +42,7 @@ html[data-theme="light"] header{background: rgba(0,0,0,0.06);}
   display:flex;align-items:center;justify-content:space-between;gap:18px;
 }
 
-/* Mobile hamburger (hidden on desktop) - simple 3 bars */
+/* Mobile hamburger (hidden on desktop) - simple 3 bars that morph to X */
 .hamburger{
   display:none;
   align-items:center;
@@ -54,6 +54,7 @@ html[data-theme="light"] header{background: rgba(0,0,0,0.06);}
   cursor:pointer;
   color:var(--text);
 }
+/* bars: visible as 3 horizontal lines by default */
 .hamburger .bar{
   width:26px;
   height:3px;
@@ -61,6 +62,19 @@ html[data-theme="light"] header{background: rgba(0,0,0,0.06);}
   margin:4px 0;
   display:block;
   border-radius:2px;
+  transition: transform .22s ease, opacity .18s ease;
+}
+
+/* when hamburger has .open it becomes an X */
+.hamburger.open .bar:nth-child(1){
+  transform: translateY(7px) rotate(45deg);
+}
+.hamburger.open .bar:nth-child(2){
+  opacity:0;
+  transform: scaleX(0);
+}
+.hamburger.open .bar:nth-child(3){
+  transform: translateY(-7px) rotate(-45deg);
 }
 
 /* Navigation */
@@ -90,6 +104,7 @@ html[data-theme="light"] .theme-btn .icon-sun{display:block;}
 main{height:100vh;scroll-snap-type:y mandatory;scroll-behavior:smooth;overflow-y:auto;}
 section{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 20px;scroll-snap-align:start;}
 .hero-inner{display:flex;gap:56px;align-items:center;justify-content:space-between;max-width:var(--container);width:100%;}
+/* left column */
 .left{flex:1;max-width:640px;}
 .eyebrow{color:var(--accent);font-size:13px;letter-spacing:0.22em;text-transform:uppercase;font-weight:800;margin-bottom:18px;}
 h1{font-family:'Playfair Display';font-size:68px;line-height:0.9;margin:0 0 10px;font-weight:900;}
@@ -101,36 +116,12 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
 .btn.ghost{background:transparent;color:var(--text);border:1px solid rgba(253,252,252,0.06);}
 .btn:hover{transform:translateY(-3px);opacity:0.98;}
 
-/* Neon frame image (no shine, perfectly curved border) */
-.right {
-  flex: 0 0 560px;
-  position: relative;
-}
+/* Neon frame image (no shine) */
+.right { flex: 0 0 560px; position: relative; }
+.neon-frame { display: inline-block; border-radius: 16px; padding: 3px; background: conic-gradient(from 0deg, #fff, #34e6ff, #ff59d0, #fff); box-shadow: none; -webkit-mask: none; mask: none; overflow: hidden; }
+.neon-image { display: block; width: 100%; height: 440px; object-fit: cover; border-radius: 13px; filter: none; box-shadow: none; }
 
-/* Wrapper acts as the border by using a gradient background + small padding */
-.neon-frame {
-  display: inline-block;
-  border-radius: 16px;
-  padding: 3px;
-  background: conic-gradient(from 0deg, #fff, #34e6ff, #ff59d0, #fff);
-  box-shadow: none;
-  -webkit-mask: none;
-  mask: none;
-  overflow: hidden;
-}
-
-/* Image sits inside the wrapper */
-.neon-image {
-  display: block;
-  width: 100%;
-  height: 440px;
-  object-fit: cover;
-  border-radius: 13px;
-  filter: none;
-  box-shadow: none;
-}
-
-/* Social icons row (desktop default: inside container) */
+/* Social row default (desktop inside container) */
 .social-row {
   position: absolute;
   left: calc(50% - 27px);
@@ -142,7 +133,7 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   pointer-events: auto;
 }
 
-/* Social icon tile */
+/* Social tile */
 .social-square {
   display: inline-grid;
   place-items: center;
@@ -156,23 +147,17 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   transition: transform 200ms ease, box-shadow 200ms ease;
   overflow: hidden;
 }
-.social-square .icon-bg {
-  width: 100%;
-  height: 100%;
-  border-radius: 11px;
-  display: grid;
-  place-items: center;
-  background: var(--bg);
-  color: var(--text);
-  transition: color 200ms ease;
-}
+.social-square .icon-bg { width: 100%; height: 100%; border-radius: 11px; display: grid; place-items: center; background: var(--bg); color: var(--text); transition: color 200ms ease; }
 .social-square svg { width: 28px;height: 28px;fill:currentColor;stroke:currentColor;stroke-width:1.6;display:block;pointer-events:none; }
 .social-square:hover { transform: translateY(-6px) scale(1.06); box-shadow: 0 6px 18px rgba(31, 179, 255, 0.15); }
 .social-square:hover .icon-bg { color: #1fb3ff; }
 .social-square:active .icon-bg { color: #0d8adf; transform: scale(0.96); }
 .social-square:focus { outline: none; box-shadow: 0 0 0 3px rgba(31, 179, 255, 0.3); }
 
-/* Mobile tweaks (baseline smaller phones) */
+/* HIDE mobile menu by default (prevents unwanted links under header on desktop) */
+.mobile-menu { display: none; }
+
+/* Mobile baseline tweaks */
 @media (max-width: 520px) {
   .social-row { gap: 12px; top: 20px; }
   .social-square { width: 54px; height: 54px; padding: 2px; border-radius: 12px; }
@@ -180,32 +165,33 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   .social-square svg { width: 24px; height: 24px; }
 }
 
-/* Dark / Light icons visibility */
+/* Dark / Light icon visibility */
 html[data-theme="dark"] .icon-moon { display:inline-block; font-size:1.5rem; }
 html[data-theme="dark"] .icon-sun { display:none; }
 html[data-theme="light"] .icon-moon { display:none; }
 html[data-theme="light"] .icon-sun { display:inline-block; font-size:1.5rem; }
 
-/* Responsive (tablets) */
+/* Tablet / responsive */
 @media (max-width:1100px){.hero-inner{gap:28px}.right{flex:0 0 420px}.neon-image{height:360px;}}
 @media (max-width:860px){.hero-inner{flex-direction:column-reverse;align-items:center}.left{text-align:center} h1{font-size:48px;} nav{display:none;}}
 
 /* ========== MOBILE-SPECIFIC LAYOUT (ONLY below 520px) ========== */
 @media (max-width:520px){
-  /* hamburger left, theme right */
+  /* show hamburger at left, theme at right */
   .hamburger{display:inline-flex;order:0;}
   .theme-btn{order:2;margin-left:auto;}
   .header-inner{padding:0 14px;align-items:center;}
   nav{display:none !important;}
 
-  /* mobile menu overlay (hidden by default) */
+  /* mobile menu overlay: hidden by default, shown only on mobile and when .show present */
   .mobile-menu{
-    position:fixed;inset:var(--header-h) 12px auto 12px;
+    position:fixed;
+    inset:var(--header-h) 12px auto 12px;
     background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));
     backdrop-filter: blur(8px);
     border-radius:12px;
     padding:12px;
-    display:none;
+    display:none;            /* mobile-only override - default remains none on desktop */
     flex-direction:column;
     gap:10px;
     z-index:110;
@@ -214,7 +200,7 @@ html[data-theme="light"] .icon-sun { display:inline-block; font-size:1.5rem; }
   .mobile-menu a{padding:12px;border-radius:10px;text-decoration:none;color:var(--text);font-weight:700;border:1px solid rgba(255,255,255,0.03);background:transparent;}
   .mobile-menu a:hover{background:rgba(255,255,255,0.02);color:var(--accent);}
 
-  /* SOCIAL ROW: placed OUTSIDE container — fixed and centered just below header */
+  /* SOCIAL ROW: placed OUTSIDE container — fixed and centered under header */
   .social-row{
     position:fixed !important;
     top: calc(var(--header-h) + 8px);
@@ -229,19 +215,19 @@ html[data-theme="light"] .icon-sun { display:inline-block; font-size:1.5rem; }
     pointer-events: auto;
   }
 
-  /* increase icon size on mobile to be more visible, while still fitting */
+  /* enlarge icons on mobile and spacing */
   .social-square { width: 68px; height: 68px; }
   .social-square .icon-bg { border-radius:12px; }
   .social-square svg { width:28px; height:28px; }
 
-  /* Ensure the neon-frame sits below the fixed social row */
+  /* make neon frame sit below fixed social row */
   .neon-frame { width: 100%; max-width: 420px; padding: 3px; margin-top: 84px; }
 
-  /* Make image fluid and full width */
+  /* fluid image */
   .right{flex-basis:100%;display:flex;flex-direction:column;align-items:center;order:1;width:100%;}
   .neon-image{height:auto;max-width:100%;border-radius:11px;object-fit:cover;}
 
-  /* center text and buttons under the image and reduce sizes so content fits */
+  /* center text & buttons, reduce sizes to fit */
   .hero-inner{flex-direction:column;align-items:center;gap:12px;padding-top:12px;}
   .left{order:2;text-align:center;width:100%;max-width:620px;padding:6px 14px;}
   .eyebrow{font-size:11px;margin-bottom:10px;}
@@ -267,7 +253,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 <header>
   <div class="header-inner">
     <!-- Hamburger (mobile only) -->
-    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
       <span class="bar" aria-hidden="true"></span>
       <span class="bar" aria-hidden="true"></span>
       <span class="bar" aria-hidden="true"></span>
@@ -293,7 +279,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
   </div>
 </header>
 
-<!-- Mobile menu (shown/hidden by JS) -->
+<!-- Mobile menu (hidden on desktop by default) -->
 <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
   <a href="#home" data-target="home" class="mobile-link">HOME</a>
   <a href="#about" data-target="about" class="mobile-link">ABOUT</a>
@@ -317,7 +303,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 
     <div class="right">
       <div class="neon-frame">
-        <!-- Social row stays in DOM; on mobile CSS makes it fixed and outside container -->
+        <!-- Social row: on mobile it's fixed outside container; desktop it's inside the frame -->
         <div class="social-row" role="navigation" aria-label="Social links">
   <a class="social-square" href="mailto:abhinandbabu2502@gmail.com" title="Email" aria-label="Email">
     <span class="icon-bg">
@@ -405,17 +391,19 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   navLinks.forEach(a=>{ a.addEventListener('click',e=>{ e.preventDefault(); smoothScrollToId(a.getAttribute('data-target')); }); });
 
-  // Mobile nav: open/close
+  // Mobile nav: open/close (also toggles hamburger -> X)
   if(hamburger && mobileMenu){
     function toggleMobile(show){
       const willShow = (typeof show === 'boolean') ? show : !mobileMenu.classList.contains('show');
       if(willShow){
         mobileMenu.classList.add('show');
         mobileMenu.setAttribute('aria-hidden','false');
+        hamburger.classList.add('open');
         hamburger.setAttribute('aria-expanded','true');
       } else {
         mobileMenu.classList.remove('show');
         mobileMenu.setAttribute('aria-hidden','true');
+        hamburger.classList.remove('open');
         hamburger.setAttribute('aria-expanded','false');
       }
     }
@@ -434,9 +422,16 @@ document.addEventListener('DOMContentLoaded',()=>{
     document.addEventListener('keydown', (e)=>{
       if(e.key === 'Escape' && mobileMenu.classList.contains('show')) toggleMobile(false);
     });
+
+    // if viewport is resized to desktop while menu open, ensure it's closed
+    window.addEventListener('resize', ()=>{
+      if(window.innerWidth > 520 && mobileMenu.classList.contains('show')){
+        toggleMobile(false);
+      }
+    });
   }
 
-  // Also wire mobile menu links in header (if visible)
+  // Also wire header mobile-link (if any visible)
   document.querySelectorAll('.mobile-link').forEach(a=>{
     a.addEventListener('click', e=>{
       e.preventDefault();
