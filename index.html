@@ -42,7 +42,7 @@ html[data-theme="light"] header{background: rgba(0,0,0,0.06);}
   display:flex;align-items:center;justify-content:space-between;gap:18px;
 }
 
-/* Mobile hamburger (hidden on desktop) */
+/* Mobile hamburger (hidden on desktop) - simple 3 bars */
 .hamburger{
   display:none;
   align-items:center;
@@ -52,15 +52,15 @@ html[data-theme="light"] header{background: rgba(0,0,0,0.06);}
   background:transparent;
   border:0;
   cursor:pointer;
+  color:var(--text);
 }
-/* Clear 3-line hamburger bars */
 .hamburger .bar{
-  width:22px;
-  height:2px;
+  width:26px;
+  height:3px;
   background:currentColor;
-  margin:3px 0;
+  margin:4px 0;
   display:block;
-  border-radius:1px;
+  border-radius:2px;
 }
 
 /* Navigation */
@@ -110,32 +110,30 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
 /* Wrapper acts as the border by using a gradient background + small padding */
 .neon-frame {
   display: inline-block;
-  border-radius: 16px;              /* outer radius (wrapper) */
-  padding: 3px;                     /* border thickness (change to 1px/2px if you want thinner) */
+  border-radius: 16px;
+  padding: 3px;
   background: conic-gradient(from 0deg, #fff, #34e6ff, #ff59d0, #fff);
-  /* NO glow, NO mask — plain gradient background */
-  box-shadow: none;                 /* remove any shining glow */
-  -webkit-mask: none;               /* ensure no mask is applied accidentally */
+  box-shadow: none;
+  -webkit-mask: none;
   mask: none;
-  overflow: hidden;                 /* ensures inner image follows the same rounded corners */
+  overflow: hidden;
 }
 
-/* Image sits inside the wrapper and uses a slightly smaller radius */
+/* Image sits inside the wrapper */
 .neon-image {
   display: block;
   width: 100%;
   height: 440px;
   object-fit: cover;
-  border-radius: 13px;              /* slightly smaller so gradient border is visible and perfectly curved */
-  /* remove any filters or shadows that cause "shining" */
+  border-radius: 13px;
   filter: none;
   box-shadow: none;
 }
 
-/* Social icons row (default desktop) */
+/* Social icons row (desktop default: inside container) */
 .social-row {
   position: absolute;
-  left: calc(50% - 27px);  /* desktop positioning preserved */
+  left: calc(50% - 27px);
   transform: translateX(-50%);
   top: 28px;
   z-index: 6;
@@ -144,7 +142,7 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   pointer-events: auto;
 }
 
-/* Neon blue-white gradient border */
+/* Social icon tile */
 .social-square {
   display: inline-grid;
   place-items: center;
@@ -158,8 +156,6 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   transition: transform 200ms ease, box-shadow 200ms ease;
   overflow: hidden;
 }
-
-/* Inner background */
 .social-square .icon-bg {
   width: 100%;
   height: 100%;
@@ -170,25 +166,13 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   color: var(--text);
   transition: color 200ms ease;
 }
-
-/* SVG */
-.social-square svg {
-  width: 28px;
-  height: 28px;
-  fill: currentColor;
-  stroke: currentColor;
-  stroke-width: 1.6;
-  display: block;
-  pointer-events: none;
-}
-
-/* Hover / focus effects */
+.social-square svg { width: 28px;height: 28px;fill:currentColor;stroke:currentColor;stroke-width:1.6;display:block;pointer-events:none; }
 .social-square:hover { transform: translateY(-6px) scale(1.06); box-shadow: 0 6px 18px rgba(31, 179, 255, 0.15); }
 .social-square:hover .icon-bg { color: #1fb3ff; }
 .social-square:active .icon-bg { color: #0d8adf; transform: scale(0.96); }
 .social-square:focus { outline: none; box-shadow: 0 0 0 3px rgba(31, 179, 255, 0.3); }
 
-/* Mobile tweaks (existing) */
+/* Mobile tweaks (baseline smaller phones) */
 @media (max-width: 520px) {
   .social-row { gap: 12px; top: 20px; }
   .social-square { width: 54px; height: 54px; padding: 2px; border-radius: 12px; }
@@ -196,27 +180,25 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   .social-square svg { width: 24px; height: 24px; }
 }
 
-/* Dark mode icons */
-html[data-theme="dark"] .icon-moon { display: inline-block; font-size: 1.5rem; }
-html[data-theme="dark"] .icon-sun { display: none; }
-html[data-theme="light"] .icon-moon { display: none; }
-html[data-theme="light"] .icon-sun { display: inline-block; font-size: 1.5rem; }
+/* Dark / Light icons visibility */
+html[data-theme="dark"] .icon-moon { display:inline-block; font-size:1.5rem; }
+html[data-theme="dark"] .icon-sun { display:none; }
+html[data-theme="light"] .icon-moon { display:none; }
+html[data-theme="light"] .icon-sun { display:inline-block; font-size:1.5rem; }
 
-/* Responsive (tablets/desktop behavior preserved) */
+/* Responsive (tablets) */
 @media (max-width:1100px){.hero-inner{gap:28px}.right{flex:0 0 420px}.neon-image{height:360px;}}
 @media (max-width:860px){.hero-inner{flex-direction:column-reverse;align-items:center}.left{text-align:center} h1{font-size:48px;} nav{display:none;}}
 
 /* ========== MOBILE-SPECIFIC LAYOUT (ONLY below 520px) ========== */
 @media (max-width:520px){
-  /* show hamburger on the left, hide desktop nav (nav already hidden at 860px) */
-  .hamburger{display:inline-flex;color:var(--text);order:0;}
-  /* Put theme button to the far right */
+  /* hamburger left, theme right */
+  .hamburger{display:inline-flex;order:0;}
   .theme-btn{order:2;margin-left:auto;}
-  /* header alignment: left hamburger, right theme-btn (nav hidden) */
   .header-inner{padding:0 14px;align-items:center;}
   nav{display:none !important;}
 
-  /* mobile menu overlay (below header) */
+  /* mobile menu overlay (hidden by default) */
   .mobile-menu{
     position:fixed;inset:var(--header-h) 12px auto 12px;
     background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));
@@ -232,49 +214,50 @@ html[data-theme="light"] .icon-sun { display: inline-block; font-size: 1.5rem; }
   .mobile-menu a{padding:12px;border-radius:10px;text-decoration:none;color:var(--text);font-weight:700;border:1px solid rgba(255,255,255,0.03);background:transparent;}
   .mobile-menu a:hover{background:rgba(255,255,255,0.02);color:var(--accent);}
 
-  /* SOCIAL ROW: place outside container (fixed, full-width, centered) */
+  /* SOCIAL ROW: placed OUTSIDE container — fixed and centered just below header */
   .social-row{
     position:fixed !important;
     top: calc(var(--header-h) + 8px);
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    transform: none !important;
-    justify-content: center;
-    z-index: 105;
-    gap: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(96%, 420px);
+    z-index:105;
+    justify-content:space-between;
+    gap: 16px;
     background: transparent;
-    padding: 6px 12px;
+    padding: 6px 8px;
     pointer-events: auto;
   }
-  /* shrink icons slightly when fixed */
-  .social-square { width:56px; height:56px; }
-  .social-square .icon-bg { border-radius:10px; }
 
-  /* move the neon-frame down a bit so it doesn't sit under the fixed social-row */
-  .neon-frame { width: 100%; max-width: 420px; padding: 3px; margin-top: 54px; }
+  /* increase icon size on mobile to be more visible, while still fitting */
+  .social-square { width: 68px; height: 68px; }
+  .social-square .icon-bg { border-radius:12px; }
+  .social-square svg { width:28px; height:28px; }
 
-  /* make image full width and fluid */
+  /* Ensure the neon-frame sits below the fixed social row */
+  .neon-frame { width: 100%; max-width: 420px; padding: 3px; margin-top: 84px; }
+
+  /* Make image fluid and full width */
   .right{flex-basis:100%;display:flex;flex-direction:column;align-items:center;order:1;width:100%;}
   .neon-image{height:auto;max-width:100%;border-radius:11px;object-fit:cover;}
 
-  /* center text and buttons under the image */
-  .hero-inner{flex-direction:column;align-items:center;gap:18px;padding-top:24px;}
-  .left{order:2;text-align:center;width:100%;max-width:620px;padding:8px 18px;}
-  .eyebrow{font-size:12px;}
-  h1{font-size:36px;line-height:1;margin-top:2px;}
-  .underline{width:220px;margin:14px auto 18px;}
-  p.lead{padding:0 8px;color:var(--muted);max-width:920px;}
-  .cta{justify-content:center;flex-wrap:wrap;padding-bottom:18px;}
-  .btn{min-width:140px;text-align:center;}
-  .btn.primary{padding:11px 16px;}
-  .btn.ghost{padding:11px 16px;}
+  /* center text and buttons under the image and reduce sizes so content fits */
+  .hero-inner{flex-direction:column;align-items:center;gap:12px;padding-top:12px;}
+  .left{order:2;text-align:center;width:100%;max-width:620px;padding:6px 14px;}
+  .eyebrow{font-size:11px;margin-bottom:10px;}
+  h1{font-size:34px;line-height:1.02;margin:0 0 6px;}
+  .underline{width:200px;margin:8px auto 12px;height:4px;}
+  p.lead{padding:0 6px;color:var(--muted);max-width:100%;}
+  .cta{justify-content:center;flex-wrap:wrap;padding-bottom:16px;gap:10px;}
+  .btn{min-width:130px;text-align:center;font-size:14px;padding:10px 14px;}
+  .btn.primary{padding:10px 14px;}
+  .btn.ghost{padding:10px 14px;}
 
-  /* increase top padding so hero content doesn't overlap fixed social row */
-  section{padding:124px 12px;}
+  /* reduce overall section padding on small phones to avoid overflow */
+  section{padding:86px 10px;}
 }
 
-/* Theme variables (unchanged) */
+/* Theme variables */
 html[data-theme="dark"]{--bg:var(--bg-dark);--text:var(--text-dark);--muted:var(--muted-dark);}
 html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:var(--muted-light);}
 </style>
@@ -285,9 +268,9 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
   <div class="header-inner">
     <!-- Hamburger (mobile only) -->
     <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
+      <span class="bar" aria-hidden="true"></span>
+      <span class="bar" aria-hidden="true"></span>
+      <span class="bar" aria-hidden="true"></span>
     </button>
 
     <nav>
@@ -297,21 +280,20 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       <a href="#contact" data-target="contact" class="nav-link">CONTACT</a>
     </nav>
 
-    <!-- Font Awesome CSS -->
+    <!-- Font Awesome (kept) -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <!-- Modern theme toggle -->
     <button id="themeBtn" class="theme-btn" aria-label="Toggle theme">
-      <span class="toggle-bg">
+      <span class="toggle-bg" aria-hidden="true">
         <i class="fa-solid fa-moon icon-moon"></i>
         <i class="fa-solid fa-sun icon-sun"></i>
-        <span class="toggle-circle" aria-hidden="true" style="display:none;"></span>
       </span>
     </button>
   </div>
 </header>
 
-<!-- Mobile menu (duplicates nav links for mobile; shown/hidden by JS) -->
+<!-- Mobile menu (shown/hidden by JS) -->
 <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
   <a href="#home" data-target="home" class="mobile-link">HOME</a>
   <a href="#about" data-target="about" class="mobile-link">ABOUT</a>
@@ -332,9 +314,10 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         <a class="btn ghost" href="#contact" id="ctaContact">GET IN TOUCH</a>
       </div>
     </div>
+
     <div class="right">
       <div class="neon-frame">
-        <!-- Social row remains in DOM; mobile CSS moves it visually outside the container (fixed). -->
+        <!-- Social row stays in DOM; on mobile CSS makes it fixed and outside container -->
         <div class="social-row" role="navigation" aria-label="Social links">
   <a class="social-square" href="mailto:abhinandbabu2502@gmail.com" title="Email" aria-label="Email">
     <span class="icon-bg">
@@ -357,11 +340,8 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
   <a class="social-square" href="https://instagram.com/_abhinand_babu" target="_blank" rel="noopener" title="Instagram" aria-label="Instagram">
   <span class="icon-bg">
     <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <!-- Rounded-square outline (stroke only) -->
       <rect x="2.2" y="2.2" width="19.6" height="19.6" rx="5.2" ry="5.2" fill="none" />
-      <!-- Center circle (filled) -->
       <circle cx="12" cy="12" r="3.7" />
-      <!-- Small top-right dot -->
       <circle cx="17.5" cy="6.2" r="0.95" />
     </svg>
   </span>
@@ -409,7 +389,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(ctaContact) ctaContact.addEventListener('click',e=>{e.preventDefault();smoothScrollToId('contact');});
 
   const navLinks=document.querySelectorAll('nav a');
-  const mobileLinks=document.querySelectorAll('.mobile-menu a, .mobile-link');
   const sections=document.querySelectorAll('section');
   if('IntersectionObserver' in window){
     const obs=new IntersectionObserver(entries=>{
