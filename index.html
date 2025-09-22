@@ -20,6 +20,7 @@
   --frame-padding:18px;
   --container:1180px;
   --header-blur:6px;
+  --header-h:72px;
 }
 
 /* Base */
@@ -29,7 +30,7 @@ body{background:var(--bg);color:var(--text);}
 
 /* Header */
 header{
-  position:fixed;top:0;left:0;right:0;height:72px;z-index:100;
+  position:fixed;top:0;left:0;right:0;height:var(--header-h);z-index:100;
   display:flex;align-items:center;justify-content:center;
   backdrop-filter:blur(var(--header-blur));
   transition:background .18s ease, box-shadow .18s ease;
@@ -46,14 +47,21 @@ html[data-theme="light"] header{background: rgba(0,0,0,0.06);}
   display:none;
   align-items:center;
   justify-content:center;
-  gap:8px;
-  padding:8px;
+  padding:10px;
   border-radius:10px;
   background:transparent;
   border:0;
   cursor:pointer;
 }
-.hamburger .bar{width:20px;height:2px;background:currentColor;border-radius:2px;display:block;}
+/* Clear 3-line hamburger bars */
+.hamburger .bar{
+  width:22px;
+  height:2px;
+  background:currentColor;
+  margin:3px 0;
+  display:block;
+  border-radius:1px;
+}
 
 /* Navigation */
 nav{display:flex;gap:18px;align-items:center;}
@@ -124,12 +132,12 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   box-shadow: none;
 }
 
-/* Social icons row */
+/* Social icons row (default desktop) */
 .social-row {
   position: absolute;
   left: calc(50% - 27px);  /* desktop positioning preserved */
   transform: translateX(-50%);
-  top: 28px;                /* adjust as needed */
+  top: 28px;
   z-index: 6;
   display: flex;
   gap: 20px;
@@ -142,12 +150,9 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   place-items: center;
   width: 64px;
   height: 64px;
-
-  /* OUTER shape (gradient border) */
   border-radius: 14px;
   padding: 3px;
-  background: linear-gradient(135deg, #1fb3ff, #ffffff); /* blue-white gradient */
-
+  background: linear-gradient(135deg, #1fb3ff, #ffffff);
   cursor: pointer;
   text-decoration: none;
   transition: transform 200ms ease, box-shadow 200ms ease;
@@ -177,28 +182,11 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   pointer-events: none;
 }
 
-/* Hover effect */
-.social-square:hover {
-  transform: translateY(-6px) scale(1.06);
-  box-shadow: 0 6px 18px rgba(31, 179, 255, 0.15);
-}
-
-/* Change icon color to blue on hover */
-.social-square:hover .icon-bg {
-  color: #1fb3ff;
-}
-
-/* Active (click) effect */
-.social-square:active .icon-bg {
-  color: #0d8adf;
-  transform: scale(0.96);
-}
-
-/* Accessibility: focus ring */
-.social-square:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(31, 179, 255, 0.3);
-}
+/* Hover / focus effects */
+.social-square:hover { transform: translateY(-6px) scale(1.06); box-shadow: 0 6px 18px rgba(31, 179, 255, 0.15); }
+.social-square:hover .icon-bg { color: #1fb3ff; }
+.social-square:active .icon-bg { color: #0d8adf; transform: scale(0.96); }
+.social-square:focus { outline: none; box-shadow: 0 0 0 3px rgba(31, 179, 255, 0.3); }
 
 /* Mobile tweaks (existing) */
 @media (max-width: 520px) {
@@ -208,27 +196,17 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   .social-square svg { width: 24px; height: 24px; }
 }
 
-/* Dark mode: show moon, hide sun */
-html[data-theme="dark"] .icon-moon {
-  display: inline-block;
-  font-size: 1.5rem;
-}
+/* Dark mode icons */
+html[data-theme="dark"] .icon-moon { display: inline-block; font-size: 1.5rem; }
 html[data-theme="dark"] .icon-sun { display: none; }
-
-/* Light mode: show sun, hide moon */
 html[data-theme="light"] .icon-moon { display: none; }
-html[data-theme="light"] .icon-sun {
-  display: inline-block;
-  font-size: 1.5rem;
-}
+html[data-theme="light"] .icon-sun { display: inline-block; font-size: 1.5rem; }
 
-/* Responsive */
+/* Responsive (tablets/desktop behavior preserved) */
 @media (max-width:1100px){.hero-inner{gap:28px}.right{flex:0 0 420px}.neon-image{height:360px;}}
 @media (max-width:860px){.hero-inner{flex-direction:column-reverse;align-items:center}.left{text-align:center} h1{font-size:48px;} nav{display:none;}}
 
 /* ========== MOBILE-SPECIFIC LAYOUT (ONLY below 520px) ========== */
-/* These rules are added to change layout/order/visibility on small phones.
-   Desktop and tablet rules above remain unchanged. */
 @media (max-width:520px){
   /* show hamburger on the left, hide desktop nav (nav already hidden at 860px) */
   .hamburger{display:inline-flex;color:var(--text);order:0;}
@@ -238,9 +216,9 @@ html[data-theme="light"] .icon-sun {
   .header-inner{padding:0 14px;align-items:center;}
   nav{display:none !important;}
 
-  /* Mobile menu overlay */
+  /* mobile menu overlay (below header) */
   .mobile-menu{
-    position:fixed;inset:72px 12px auto 12px; /* below header */
+    position:fixed;inset:var(--header-h) 12px auto 12px;
     background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));
     backdrop-filter: blur(8px);
     border-radius:12px;
@@ -251,27 +229,33 @@ html[data-theme="light"] .icon-sun {
     z-index:110;
   }
   .mobile-menu.show{display:flex;}
-
   .mobile-menu a{padding:12px;border-radius:10px;text-decoration:none;color:var(--text);font-weight:700;border:1px solid rgba(255,255,255,0.03);background:transparent;}
   .mobile-menu a:hover{background:rgba(255,255,255,0.02);color:var(--accent);}
 
-  /* Reposition social-row to be STATIC and appear above the image (full-width) */
-  .neon-frame { width: 100%; max-width: 420px; padding: 3px; } /* keep gradient border but limit width */
-  .right{flex-basis:100%;display:flex;flex-direction:column;align-items:center;order:1;width:100%;}
-  .neon-frame{position:relative;} /* allow social-row to become static within this block */
+  /* SOCIAL ROW: place outside container (fixed, full-width, centered) */
   .social-row{
-    position:static;
-    transform:none;
-    left:auto;
-    top:auto;
-    margin: 10px 0 8px;
-    justify-content:center;
-    width:100%;
-    display:flex;
-    gap:12px;
+    position:fixed !important;
+    top: calc(var(--header-h) + 8px);
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    transform: none !important;
+    justify-content: center;
+    z-index: 105;
+    gap: 12px;
+    background: transparent;
+    padding: 6px 12px;
+    pointer-events: auto;
   }
+  /* shrink icons slightly when fixed */
+  .social-square { width:56px; height:56px; }
+  .social-square .icon-bg { border-radius:10px; }
+
+  /* move the neon-frame down a bit so it doesn't sit under the fixed social-row */
+  .neon-frame { width: 100%; max-width: 420px; padding: 3px; margin-top: 54px; }
 
   /* make image full width and fluid */
+  .right{flex-basis:100%;display:flex;flex-direction:column;align-items:center;order:1;width:100%;}
   .neon-image{height:auto;max-width:100%;border-radius:11px;object-fit:cover;}
 
   /* center text and buttons under the image */
@@ -286,8 +270,8 @@ html[data-theme="light"] .icon-sun {
   .btn.primary{padding:11px 16px;}
   .btn.ghost{padding:11px 16px;}
 
-  /* reduce hero section padding on small phones so the content fits nicely */
-  section{padding:92px 12px;}
+  /* increase top padding so hero content doesn't overlap fixed social row */
+  section{padding:124px 12px;}
 }
 
 /* Theme variables (unchanged) */
@@ -301,9 +285,9 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
   <div class="header-inner">
     <!-- Hamburger (mobile only) -->
     <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
-      <span class="bar" style="transform:translateY(-5px)"></span>
       <span class="bar"></span>
-      <span class="bar" style="transform:translateY(5px)"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
     </button>
 
     <nav>
@@ -350,7 +334,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
     </div>
     <div class="right">
       <div class="neon-frame">
-        <!-- Social row remains here in DOM but our mobile CSS makes it appear above the image -->
+        <!-- Social row remains in DOM; mobile CSS moves it visually outside the container (fixed). -->
         <div class="social-row" role="navigation" aria-label="Social links">
   <a class="social-square" href="mailto:abhinandbabu2502@gmail.com" title="Email" aria-label="Email">
     <span class="icon-bg">
